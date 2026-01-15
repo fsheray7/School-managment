@@ -1,6 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { FaArrowAltCircleRight } from "react-icons/fa";
+import {  } from "react-icons/fa";
 
 const WelcomePage = () => {
   return (
@@ -33,7 +33,7 @@ const WelcomePage = () => {
           type="submit"
           className=" text-center   bg-[#0C46C4] hover:bg-blue-800 active:bg-blue-900 text-white px-10 py-3 rounded-lg sm:rounded-xl md:rounded-2xl text-xs sm:text-sm md:text-base font-bold w-full"
           >
-          Get Started <FaArrowAltCircleRight className="inline-block ml-2" />
+          Get Started 
         </Link>
           </div>
 
