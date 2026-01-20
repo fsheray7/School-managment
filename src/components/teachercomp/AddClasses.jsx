@@ -1,44 +1,39 @@
-import { FaPlus } from "react-icons/fa";
-import { LuPlus } from "react-icons/lu";
+import { FaArrowLeft, FaPlus } from "react-icons/fa";
+import { Link } from "react-router-dom";
 
 const AddClasses = () => {
   return (
-    <section className="relative flex flex-col items-center min-h-screen w-full bg-white overflow-hidden px-4 pt-32 pb-10">
+    <section className="relative flex flex-col items-center justify-between min-h-screen w-full bg-white overflow-hidden px-4 pb-10">
 
-      {/* Top Half Circle */}
-       <div
-        className="absolute rounded-full bg-[#28C2A0] 
-          w-150 h-150 sm:w-200 sm:h-200 md:w-340 md:h-340 lg:w-450 lg:h-450  
-         
-          -top-110 sm:-top-122 md:-top-280 lg:-top-410 
-          transition-all duration-300 "
-      ></div>
+    {/* NAV BAR */}
+      <nav className="w-full flex items-center px-4 py-3 fixed top-0 gap-2 bg-[#0C46C4] z-20">
+        <div className="flex items-center gap-3 w-full">
+          <img
+            src="/teachersection/homeworkwhite.png"
+            alt="attendance icon"
+            className="w-10 h-10 sm:w-12 sm:h-12"
+          />
+          <h1 className="text-xl sm:text-2xl lg:text-3xl text-white uppercase ">
+            Add Classes
+          </h1>
+        </div>
 
+        <div className="flex items-center">
+          <Link
+            to="/teacher-dashboard"
+            className="p-2 rounded-full bg-[#28C2A0] hover:bg-[#22a688]"
+          >
+            <FaArrowLeft className="text-white text-lg" />
+          </Link>
+        </div>
+      </nav>
 
-      {/* Add Photo */}
-       {/* Center Logo Image - Responsive - Moved to Top */}
-      <div
-        className="absolute top-20 sm:top-12 md:top-30 lg:top-12
-          left-1/2 -translate-x-1/2
-          flex rounded-full flex-col items-center justify-center 
-          z-10 w-full"
-      >
-        <img
-          src="./profileselection/Vector.png"
-          alt="Logo Img"
-          className="w-30 h-30 sm:w-90 sm:h-92 md:w-95 md:w-40 md:h-40 lg:w-50 lg:h-50 
-            object-contain transition-all duration-300"
-        />
-       <LuPlus className="  absolute text-gray-400 text-6xl sm:text-4xl lg:text-5xl" />
-
-        <p className=" absolute top-23 md:top-30 lg:top-38   text-xs sm:text-sm md:text-base lg:text-lg text-[#28C2A0] font-medium">Add Photo</p>
-      </div>
      
       {/* Form */}
       <form className="w-full max-w-2xl mt-36 md:mt-45 flex flex-col gap-4">
 
         <div className="flex flex-col">
-          <label className="text-md font-semibold text-[#000000]">Subject</label>
+          <label className="text-md font-semibold text-[#000000]">Class</label>
           <input
             type="text"
             placeholder="Enter Something..."
@@ -47,7 +42,7 @@ const AddClasses = () => {
         </div>
 
         <div className="flex flex-col">
-          <label className="text-md font-semibold text-[#000000]">Section</label>
+          <label className="text-md font-semibold text-[#000000]">Subject</label>
           <input
             type="text"
             placeholder="Enter Something..."
@@ -56,7 +51,7 @@ const AddClasses = () => {
         </div>
 
         <div className="flex flex-col">
-          <label className="text-md font-semibold text-[#000000]">Class</label>
+          <label className="text-md font-semibold text-[#000000]">Section</label>
           <input
             type="text"
             placeholder="Enter Something..."

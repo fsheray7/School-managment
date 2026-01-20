@@ -1,16 +1,17 @@
 import { FaPlus } from "react-icons/fa";
 import { LuPlus } from "react-icons/lu";
+import { Link } from "react-router-dom";
 
 const AddAccount = () => {
   return (
-    <section className="relative flex flex-col items-center min-h-screen w-full bg-white overflow-hidden px-4 pt-32 pb-10">
+    <section className="relative flex flex-col items-center min-h-screen w-full bg-white overflow-hidden px-4 pt-26 pb-10">
 
       {/* Top Half Circle */}
        <div
         className="absolute rounded-full bg-[#28C2A0] 
-          w-150 h-150 sm:w-200 sm:h-200 md:w-340 md:h-340 lg:w-450 lg:h-450  
+          w-150 h-150 sm:w-200 sm:h-200 md:w-340 md:h-340 lg:w-400 lg:h-400  
          
-          -top-110 sm:-top-122 md:-top-280 lg:-top-410 
+          -top-110 sm:-top-122 md:-top-280 lg:-top-370 
           transition-all duration-300 "
       ></div>
 
@@ -26,16 +27,16 @@ const AddAccount = () => {
         <img
           src="./profileselection/Vector.png"
           alt="Logo Img"
-          className="w-30 h-30 sm:w-90 sm:h-92 md:w-95 md:w-40 md:h-40 lg:w-50 lg:h-50 
+          className="w-30 h-30 sm:w-90 sm:h-92 md:w-95 md:w-40 md:h-40 lg:w-30 lg:h-30 
             object-contain transition-all duration-300"
         />
        <LuPlus className="  absolute text-gray-400 text-6xl sm:text-4xl lg:text-5xl" />
 
-        <p className=" absolute top-23 md:top-30 lg:top-38   text-xs sm:text-sm md:text-base lg:text-lg text-[#28C2A0] font-medium">Add Photo</p>
+        <p className=" absolute top-23 md:top-30 lg:top-20   text-xs sm:text-sm md:text-base lg:text-sm text-[#28C2A0] font-medium">Add Photo</p>
       </div>
      
       {/* Form */}
-      <form className="w-full max-w-2xl mt-36 md:mt-45 flex flex-col gap-4">
+      <form className="w-full max-w-2xl mt-36 md:mt-30 grid grid-cols-2 flex-col cols-2 gap-4">
 
         <div className="flex flex-col">
           <label className="text-md font-semibold text-[#000000]">Full Name</label>
@@ -93,10 +94,15 @@ const AddAccount = () => {
 
         {/* Submit */}
         <button
-          className="mt-4 bg-[#0C46C4] hover:bg-[#08308d] text-white font-semibold rounded-md py-3 text-sm"
+          className="mt-4  bg-[#0C46C4] hover:bg-[#08308d] text-white font-semibold rounded-md py-3 text-sm"
         >
           Add Account
         </button>
+        <Link to="/teacher-dashboard" 
+          className="mt-4  text-center bg-[#0C46C4] hover:bg-[#08308d] text-white font-semibold rounded-md py-3 text-md"
+        >
+          Go Back
+        </Link>
       </form>
     </section>
   );

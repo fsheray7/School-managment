@@ -40,10 +40,10 @@ const WelcomePage = () => {
 
       {/* Powered By Text - Fixed at Bottom Center - Responsive */}
       <p
-        className="fixed bottom-10 sm:bottom-10 md:bottom-18 lg:bottom-14 
+        className="fixed bottom-10 
           left-1/2 -translate-x-1/2
           z-50 text-white font-light 
-          text-xs sm:text-sm md:text-xl lg:text-xl
+          text-xs sm:text-sm md:text-xl lg:text-lg
           text-center transition-all duration-300
           w-full px-4"
       >
@@ -53,7 +53,7 @@ const WelcomePage = () => {
       {/* Decorative Background Circle Bottom - Responsive */}
       <div
         className="absolute rounded-full bg-[#0C46C4]
-          w-110 h-110 xs:w-120 xs:h-120 sm:w-180 sm:h-180 md:w-230 md:h-230 lg:w-320 lg:h-320
+          w-100 h-100  sm:w-180 sm:h-180 md:w-210 md:h-210 lg:w-300 lg:h-310
            -bottom-75 sm:-bottom-130 md:-bottom-180 lg:-bottom-285
           transition-top-[520px]
           transition-all duration-300"

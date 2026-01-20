@@ -1,10 +1,10 @@
 import React from "react";
-import TeacherDashboard from "../../pages/teacherpages/TeacherDashboard";
+import StudentDashboard from "../../pages/studentpages/StudentDashboard";
 
-const TeacherLayout = () => {
+const StudentLayout = () => {
   
   return (
-    <section className="relative w-full overflow-hidden lg:h-full bg-none flex flex-col items-center justify-center px-4 sm:px-6 md:px-8">
+    <section className="relative w-full overflow-hidden pb-10   bg-none flex flex-col items-center justify-center px-4 sm:px-6 md:px-8">
       {/* Decorative Background Circle Top - Responsive */}
       <div
         className="absolute rounded-full bg-[#28C2A0] 
@@ -36,10 +36,10 @@ const TeacherLayout = () => {
       </div>
 
       {/* Dynamic Content Area */}
-     <div className="flex w-full items-center flex-col justify-center z-50 mt-30">
+     <div className="flex w-full items-center flex-col justify-center z-50 mt-25">
 
-            <div className="bg-white rounded-lg  flex justify-center items-center w-full max-w-6xl  mt-20 sm:mt-6 md:mt-40 lg:mt-15">   
-    <TeacherDashboard />
+            <div className="bg-white rounded-lg   flex justify-center items-center w-full max-w-6xl  mt-20 sm:mt-6 md:mt-40 lg:mt-20">   
+    <StudentDashboard />
             </div>
       
 </div>
@@ -49,4 +49,4 @@ const TeacherLayout = () => {
   );
 };
 
-export default TeacherLayout;
+export default StudentLayout;

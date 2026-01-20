@@ -2,12 +2,12 @@ import React from "react";
 
 const RoleSelection = ({ onRoleSelect }) => {
   const boxStyle =
-    "flex flex-col p-4 items-center justify-center md:w-28 md:h-28 lg:w-28 lg:h-28 w-20 h-20 bg-blue-700 rounded-xl text-white cursor-pointer hover:bg-blue-800 transition";
+    "flex flex-col p-2 items-center justify-center md:w-28 md:h-28 lg:w-28 lg:h-28 w-10 h-10 bg-blue-700 rounded-xl text-white cursor-pointer hover:bg-blue-800 transition";
 
   return (
-    <div className="flex flex-col justify-center items-center gap-6 sm:gap-8 md:gap-10 mt-12 sm:mt-56 md:mt-62 lg:mt-20 mb-10 ">
+    <div className="flex flex-col justify-center  items-center gap-6 sm:gap-8 md:gap-10 ">
       {/* Heading - Always on Top */}
-      <h1 className="text-[#0C46C4] text-lg sm:text-xl md:text-2xl lg:text-3xl font-bold font-opensans text-center">
+      <h1 className="text-[#0C46C4] text-md sm:text-xl md:text-2xl lg:text-3xl font-bold font-opensans text-center">
         Choose your option
       </h1>
 

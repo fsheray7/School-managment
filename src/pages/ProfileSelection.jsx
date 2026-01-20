@@ -21,7 +21,7 @@ const ProfileSelection = () => {
     if (selectedRole === "teacher") {
       navigate("/teacher-dashboard");
     } else if (selectedRole === "student") {
-      // navigate("/student-dashboard");
+      navigate("/student-dashboard");
       console.log("Student dashboard coming soon");
     } else if (selectedRole === "guest") {
       // navigate("/guest-dashboard");
@@ -30,7 +30,7 @@ const ProfileSelection = () => {
   };
 
   return (
-    <section className="relative w-full overflow-hidden bg-none flex flex-col items-center justify-center px-4 sm:px-6 md:px-8">
+    <section className="relative h-screen w-full overflow-hidden bg-none flex flex-col items-center justify-center px-4 sm:px-6 md:px-8">
       {/* Decorative Background Circle Top - Responsive */}
       <div
         className="absolute rounded-full bg-[#28C2A0] 
@@ -51,7 +51,7 @@ const ProfileSelection = () => {
           src="/profileselection/Vector.png"
           alt="Logo Img"
           className="w-50 h-50 sm:w-90 sm:h-92 md:w-95 md:w-80 md:h-80 lg:w-50 lg:h-50 
-            object-contain transition-all duration-300"
+            object-cover transition-all duration-300"
         />
         <img
           src="/welcomepage/logo.png"
@@ -62,16 +62,16 @@ const ProfileSelection = () => {
       </div>
 
       {/* Dynamic Content Area */}
-     <div className="flex w-full items-center flex-col justify-center z-50 mt-70">
+     <div className=" flex w-full items-center flex-col justify-center z-50 mt-0">
   {!selectedRole ? (
     <RoleSelection onRoleSelect={handleRoleSelect} />
   ) : (
-    <div className="flex w-full justify-center">
+    <div className="flex w-full justify-center ">
       {/* Card Container */}
-      <div className="bg-white rounded-lg md:shadow-lg p-8 w-full max-w-2xl mt-6 sm:mt-6 md:mt-30 lg:mt-10">
+      <div className="bg-white rounded-lg md:shadow-lg w-full max-w-2xl">
         <button
           onClick={handleBackToRoles}
-          className="text-[#0C46C4] text-sm font-opensans hover:underline mb-4"
+          className="text-[#0C46C4] text-sm font-opensans hover:underline"
         >
           ← Back to Role Selection
         </button>
@@ -83,7 +83,7 @@ const ProfileSelection = () => {
         </h2>
 
         {/* FORM FULL WIDTH */}
-        <div className="w-full">
+        <div className="w-full flex ">
           <Login onLoginSuccess={handleLoginSuccess} />
         </div>
       </div>
