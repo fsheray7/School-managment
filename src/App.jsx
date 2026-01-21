@@ -27,6 +27,15 @@ import StudentProfile from "./pages/studentpages/StudentProfile";
 import ExamRoutine from "./components/teachercomp/ExamRoutine";
 import ExamRoutineStudent from "./components/studentcomp/ExamRoutineStudent";
 import QuizScore from "./components/studentcomp/QuizScore";
+import AdminLayout from "./layout/adminlayout/AdminLayout";
+import AddTeacher from "./components/admincomponents/maincomponenets/AddTeacher";
+import AdminDashboard from "./pages/admin/AdminDashboard";
+import Teachers from "./components/admincomponents/sidebarcomponents/Teachers";
+import AttendanceAdmin from "./components/admincomponents/maincomponenets/AttendanceAdmin";
+import StudentsAdmin from "./components/admincomponents/sidebarcomponents/StudentsAdmin";
+import Courses from "./components/admincomponents/sidebarcomponents/Courses";
+import Meetings from "./components/admincomponents/sidebarcomponents/Meetings";
+import Settings from "./components/admincomponents/sidebarcomponents/Settings";
 
 function App() {
   return (
@@ -34,6 +43,20 @@ function App() {
       <Routes>
         <Route path="/select-profile" element={<ProfileSelection />} />
         <Route path="/" element={<WelcomePage />} />
+
+
+        {/* Admin Section Routes */}
+        <Route element={<AdminLayout />}>
+          <Route path="/admin-dashboard" element={<AdminDashboard />} />
+          <Route path="/attendance-admin" element={<AttendanceAdmin />} />
+          <Route path="/teachers" element={<Teachers />} />
+          <Route path="/students" element={<StudentsAdmin />} />
+          <Route path="/courses" element={<Courses />} />
+          <Route path="/meetings" element={<Meetings />} />
+          <Route path="/settings" element={<Settings />} />
+          <Route path="/add-teacher" element={<AddTeacher />} />
+        </Route>
+
 
         {/* Teacher Section Routes */}
         <Route path="/teacher-dashboard" element={<TeacherLayout />} />
@@ -65,7 +88,7 @@ function App() {
           path="/quiz-multiple-options"
           element={<QuizMultipleOptions />}
         />
-        <Route path ='/quiz-score' element= {<QuizScore />} />
+        <Route path='/quiz-score' element={<QuizScore />} />
         <Route path="/student-profile" element={<StudentProfile />} />
       </Routes>
     </Router>

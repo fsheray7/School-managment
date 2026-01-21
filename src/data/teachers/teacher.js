@@ -1,0 +1,49 @@
+const teachersData = [
+    {
+        id: 1,
+        fullName: "Ali Khan",
+        email: "ali.khan@school.edu",
+        subject: "Mathematics",
+        section: "Senior Wing",
+        contact: "0300-1234567",
+        type: "Regular",
+    },
+    {
+        id: 2,
+        fullName: "Ayesha Malik",
+        email: "ayesha.malik@school.edu",
+        subject: "Physics",
+        section: "Senior Wing",
+        contact: "0300-7654321",
+        type: "Contractual",
+    },
+    {
+        id: 3,
+        fullName: "Usman Ahmed",
+        email: "usman.ahmed@school.edu",
+        subject: "Computer Science",
+        section: "Junior Wing",
+        contact: "0321-9876543",
+        type: "Regular",
+    },
+    {
+        id: 4,
+        fullName: "Fatima Bibi",
+        email: "fatima.bibi@school.edu",
+        subject: "English",
+        section: "Junior Wing",
+        contact: "0333-5555555",
+        type: "Regular",
+    },
+    {
+        id: 5,
+        fullName: "Bilal Hussain",
+        email: "bilal.hussain@school.edu",
+        subject: "Chemistry",
+        section: "Senior Wing",
+        contact: "0345-1122334",
+        type: "Contractual",
+    },
+];
+
+export default teachersData;

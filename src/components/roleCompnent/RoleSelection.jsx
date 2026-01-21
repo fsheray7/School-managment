@@ -13,6 +13,16 @@ const RoleSelection = ({ onRoleSelect }) => {
 
       {/* Buttons Container - Responsive */}
       <div className="flex flex-row md:flex-row lg:flex-row justify-center items-center gap-6 sm:gap-8 md:gap-10 flex-wrap">
+        {/* Admin Button */}
+        <div
+          className="flex flex-col items-center cursor-pointer"
+          onClick={() => onRoleSelect && onRoleSelect("admin")}
+        >
+          <div className={boxStyle}>
+            <img src="/profileselection/Person.png" alt="user png" />
+          </div>
+          <span className="mt-2 text-sm sm:text-md">Admin</span>
+        </div>
         {/* Student Button */}
         <div
           className="flex flex-col justify-center items-center cursor-pointer"
@@ -35,16 +45,6 @@ const RoleSelection = ({ onRoleSelect }) => {
           <span className="mt-2 text-sm sm:text-md">Teacher</span>
         </div>
 
-        {/* Guest Button */}
-        <div
-          className="flex flex-col items-center cursor-pointer"
-          onClick={() => onRoleSelect && onRoleSelect("guest")}
-        >
-          <div className={boxStyle}>
-            <img src="/profileselection/Person.png" alt="user png" />
-          </div>
-          <span className="mt-2 text-sm sm:text-md">Guest</span>
-        </div>
       </div>
     </div>
   );

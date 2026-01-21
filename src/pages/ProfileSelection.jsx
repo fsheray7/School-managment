@@ -23,9 +23,9 @@ const ProfileSelection = () => {
     } else if (selectedRole === "student") {
       navigate("/student-dashboard");
       console.log("Student dashboard coming soon");
-    } else if (selectedRole === "guest") {
+    } else if (selectedRole === "admin") {
       // navigate("/guest-dashboard");
-      console.log("Guest dashboard coming soon");
+      console.log("Admin dashboard coming soon");
     }
   };
 
@@ -79,7 +79,7 @@ const ProfileSelection = () => {
         <h2 className="text-[#0C46C4] text-2xl font-bold font-opensans text-center mb-6">
           {selectedRole === "student" }
           {selectedRole === "teacher" }
-          {selectedRole === "guest" }
+          {selectedRole === "admin" }
         </h2>
 
         {/* FORM FULL WIDTH */}

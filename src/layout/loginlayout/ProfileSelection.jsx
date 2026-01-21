@@ -22,9 +22,10 @@ const ProfileSelection = () => {
       navigate("/teacher-dashboard");
     } else if (selectedRole === "student") {
       navigate("/student-dashboard");
-    } else if (selectedRole === "guest") {
-      // You can define a guest route later or redirect to home
-      navigate("/");
+    } else if (selectedRole === "admin") {
+      navigate("/admin-dashboard")
+      
+
     }
   };
 
@@ -78,7 +79,7 @@ const ProfileSelection = () => {
               <h2 className="text-[#0C46C4] text-2xl font-bold font-opensans text-center ">
                 {selectedRole === "student"}
                 {selectedRole === "teacher"}
-                {selectedRole === "guest"}
+                {selectedRole === "Admin"}
               </h2>
 
               {/* FORM FULL WIDTH */}
