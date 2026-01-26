@@ -44,6 +44,15 @@ const teachersData = [
         contact: "0345-1122334",
         type: "Contractual",
     },
+    {
+        id: 6,
+        fullName: "Hassan Ali",
+        email: "hassan.ali@school.edu",
+        subject: "Physics",
+        section: "Senior Wing",
+        contact: "0341-1122334",
+        type: "Regular",
+    },
 ];
 
 export default teachersData;

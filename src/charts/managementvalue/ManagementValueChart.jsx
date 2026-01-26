@@ -14,26 +14,57 @@ import data from "../../data/chartdata/managementvalue/data";
 
 
 const ManagementValueChart = ({ className }) => {
+  const [visibleSeries, setVisibleSeries] = React.useState({
+    absent: true,
+    present: true,
+  });
+
+  const toggleSeries = (series) => {
+    setVisibleSeries((prev) => {
+      // If the clicked series is the ONLY one currently visible, show ALL
+      if (prev[series] && !prev[series === "absent" ? "present" : "absent"]) {
+        return { absent: true, present: true };
+      }
+      // Otherwise, show ONLY the clicked series
+      return {
+        absent: series === "absent",
+        present: series === "present",
+      };
+    });
+  };
+
   return (
-    <div className={`w-full bg-white rounded-2xl p-4 sm:p-6 hover:scale-102 hover:shadow-lg transition-all duration-300 shadow ${className}`}>
-      
+    <div
+      className={`w-full bg-white rounded-2xl p-4 sm:p-6 hover:scale-102 hover:shadow-lg transition-all duration-300 shadow md:border-t-8 border-[#0C46C4] ${className}`}
+    >
       {/* Header */}
       <div className="flex flex-col sm:flex-row items-center justify-between mb-4 gap-2">
         <h3 className="text-base sm:text-lg font-semibold text-gray-800">
           Management Value
         </h3>
 
-        {/* Legend Pills */}
+        {/* Legend Buttons */}
         <div className="flex flex-wrap justify-center sm:justify-end gap-2 text-xs">
-          <span className="px-2 py-1 md:px-3 rounded-full border border-purple-400 text-purple-500">
-            Earning
-          </span>
-          <span className="px-2 py-1 md:px-3 rounded-full border border-cyan-400 text-cyan-500">
-            Absent
-          </span>
-          <span className="px-2 py-1 md:px-3 rounded-full bg-orange-400 text-white">
+          <button
+            onClick={() => toggleSeries("present")}
+            className={`px-3 py-1 rounded-full transition-colors cursor-pointer duration-200 border ${
+              visibleSeries.present
+                ? "bg-[#0C46C4] text-white  border-[#0C46C4]"
+                : "border-[#0C46C4] text-[#0C46C4] hover:bg-[#0C46C4]"
+            }`}
+          >
             Present
-          </span>
+          </button>
+          <button
+            onClick={() => toggleSeries("absent")}
+            className={`px-3 py-1 rounded-full transition-colors cursor-pointer duration-200 border ${
+              visibleSeries.absent
+                ? "bg-cyan-400 text-white border-cyan-400"
+                : "border-cyan-400 text-cyan-500 hover:bg-cyan-50"
+            }`}
+          >
+            Absent
+          </button>
         </div>
       </div>
 
@@ -46,37 +77,35 @@ const ManagementValueChart = ({ className }) => {
             <YAxis tickLine={false} axisLine={false} />
             <Tooltip />
 
-            {/* Background soft area (present) */}
-            <Area
-              type="monotone"
-              dataKey="present"
-              fill="rgba(251,146,60,0.15)"
-              stroke="none"
-            />
+            {/* Background soft area (present) - Only show if present is visible */}
+            {visibleSeries.present && (
+              <Area
+                type="monotone"
+                dataKey="present"
+                fill="rgba(251,146,60,0.15)"
+                stroke="none"
+              />
+            )}
 
-            <Line
-              type="monotone"
-              dataKey="earning"
-              stroke="#A78BFA"
-              strokeWidth={2}
-              dot={false}
-            />
+            {visibleSeries.absent && (
+              <Line
+                type="monotone"
+                dataKey="absent"
+                stroke="#22D3EE"
+                strokeWidth={2}
+                dot={false}
+              />
+            )}
 
-            <Line
-              type="monotone"
-              dataKey="absent"
-              stroke="#22D3EE"
-              strokeWidth={2}
-              dot={false}
-            />
-
-            <Line
-              type="monotone"
-              dataKey="present"
-              stroke="#FB923C"
-              strokeWidth={3}
-              dot={{ r: 5, strokeWidth: 2, fill: "#FB923C" }}
-            />
+            {visibleSeries.present && (
+              <Line
+                type="monotone"
+                dataKey="present"
+                stroke="#FB923C"
+                strokeWidth={3}
+                dot={{ r: 5, strokeWidth: 2, fill: "#FB923C" }}
+              />
+            )}
           </LineChart>
         </ResponsiveContainer>
       </div>

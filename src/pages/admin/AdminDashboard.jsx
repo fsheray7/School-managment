@@ -8,7 +8,7 @@ import ManagementValueChart from "../../charts/managementvalue/ManagementValueCh
 const AdminDashboard = () => {
     const navigate = useNavigate();
     return (
-        <section className="flex flex-col items-center justify-start w-full bg-white overflow-hidden gap-2  pb-10 pt-20 transition-all duration-300">
+        <section className="flex flex-col items-center justify-start w-full bg-white  gap-2  pb-10 pt-20 transition-all duration-300">
 
             {/* Top  Card */}
             <div className="w-full bg-gray-100 text-white rounded-xl  p-2 sm:p-6 shadow-md">

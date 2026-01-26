@@ -5,22 +5,23 @@ import {
     Cell,
     ResponsiveContainer,
 } from "recharts";
-
+import { FaFemale, FaMale } from "react-icons/fa";
 import data from "../../data/chartdata/attendancedata/attendance";
+import { IoMdFemale, IoMdMale } from "react-icons/io";
 
 const GenderDonutChart = ({ className }) => {
     return (
-        <div className={`w-full max-w-sm bg-white rounded-2xl p-6 shadow hover:scale-102 hover:shadow-lg transition-all duration-300 ${className}`}>
+        <div className={`w-full max-w-sm bg-white rounded-2xl p-6 shadow hover:scale-102 md:border-t-8 border-[#0C46C4] hover:shadow-lg transition-all duration-300 ${className}`}>
 
             {/* Top Labels */}
             <div className="flex justify-between text-sm mb-2">
                 <div className="text-center mb-3">
                     <p className="text-sm font-semibold text-black">60%</p>
-                    <p className="text-gray-500 text-sm">Male</p>
+                    <p className="text-blue-500 text-md"><IoMdMale /></p>
                 </div>
                 <div className="text-gray-500 text-center">
                     <p className="font-semibold text-black">35%</p>
-                    <p>Female</p>
+                    <p className="text-red-500 text-md"><IoMdFemale /></p>
                 </div>
             </div>
 
@@ -44,10 +45,7 @@ const GenderDonutChart = ({ className }) => {
   </ResponsiveContainer>
 </div>
 
-            <div className="text-gray-500 text-sm mb-3 text-center">
-                <p className="font-semibold text-black">5%</p>
-                <p>Out of the Sex</p>
-            </div>
+            
 
             {/* Bottom Label */}
 
