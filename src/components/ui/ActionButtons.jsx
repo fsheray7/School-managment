@@ -7,7 +7,9 @@ const ActionButtons = ({ onView, onEdit, onDelete, itemName }) => {
             {onView && (
                 <button
                     onClick={onView}
-                    className="text-blue-500 hover:text-blue-700 transition-colors p-2 cursor-pointer rounded-full hover:bg-blue-50"
+                    className="text-blue-500 hover:text-blue-700 transition-colors p-2 cursor-pointer rounded-full 
+                    hover:scale-110
+                   transition-all duration-300 hover:bg-blue-50"
                     title={`View ${itemName || 'Details'}`}
                 >
                     <FaEye size={16} />
@@ -17,7 +19,9 @@ const ActionButtons = ({ onView, onEdit, onDelete, itemName }) => {
             {onEdit && (
                 <button 
                     onClick={onEdit}
-                    className="text-green-600 hover:text-green-800 transition-colors p-2 cursor-pointer rounded-full hover:bg-green-50" 
+                    className="text-green-600 hover:text-green-800 transition-colors p-2 cursor-pointer rounded-full 
+                    hover:scale-110
+                   transition-all duration-300  hover:bg-green-50" 
                     title={`Edit ${itemName || 'Item'}`}
                 >
                     <FaEdit size={16} />
@@ -27,7 +31,9 @@ const ActionButtons = ({ onView, onEdit, onDelete, itemName }) => {
             {onDelete && (
                 <button 
                     onClick={onDelete}
-                    className="text-red-500 hover:text-red-800 transition-colors p-2 cursor-pointer rounded-full hover:bg-red-50" 
+                    className="text-red-500 hover:text-red-800 transition-colors p-2 cursor-pointer rounded-full 
+                    hover:scale-110
+                   transition-all duration-300      hover:bg-red-50" 
                     title={`Delete ${itemName || 'Item'}`}
                 >
                     <FaTrash size={16} />

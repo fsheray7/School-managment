@@ -27,18 +27,20 @@ const DetailsModal = ({
         >
           {field.gridFields.map((gridField) => (
             <div key={gridField.key}>
-              <label className="text-xs text-gray-500 uppercase font-bold">
+              <label className="text-xs text-gray-500 uppercase font-bold ">
                 {gridField.label}
               </label>
               {isEditMode ? (
                 gridField.type === "select" ? (
-                  <div className="mt-1">
+                  <div className="mt-1 ">
                     <CustomDropdown
                       options={gridField.options}
                       value={data[gridField.key] || ""}
                       onChange={(val) => handleChange(gridField.key, val)}
                       placeholder={`Select ${gridField.label}`}
                       containerClassName="w-full"
+                      triggerClassName="text-red-500"
+                      searchable={gridField.searchable || false}
                     />
                   </div>
                 ) : (
@@ -76,6 +78,7 @@ const DetailsModal = ({
                 onChange={(val) => handleChange(field.key, val)}
                 placeholder={`Select ${field.label}`}
                 containerClassName="w-full"
+                searchable={field.searchable || false}
               />
             </div>
           ) : (

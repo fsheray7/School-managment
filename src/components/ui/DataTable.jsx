@@ -8,10 +8,10 @@ const DataTable = ({
   emptyMessage = "No data found.",
 }) => {
   return (
-    <div className="w-full px-6">
+    <div className="w-full">
       {/* ================= TABLE (Tablet + Desktop) ================= */}
-      <div className="hidden md:block w-full bg-white rounded-xl shadow-sm border border-gray-200 mt-4 overflow-x-hidden">
-        <table className="w-full table-fixed text-left border-collapse">
+      <div className="hidden md:block w-full bg-white rounded-xl shadow-sm border border-gray-200 mt-4 overflow-hidden  ">
+        <table className="w-full table-fixed   text-left border-collapse">
           <thead className="bg-[#E8F8F6] text-[#0C46C4] uppercase text-xs font-bold">
             <tr>
               {columns.map((col, index) => {
@@ -19,8 +19,8 @@ const DataTable = ({
                 return (
                   <th
                     key={index}
-                    className={`px-3 py-4 truncate ${
-                      col.hiddenOnMobile ? "hidden xl:table-cell" : ""
+                    className={`px-4 py-3 truncate ${
+                      col.hiddenOnMobile ? "xl:table-cell" : ""
                     } ${col.center ? "text-center" : ""}`}
                   >
                     {col.header}
@@ -28,12 +28,12 @@ const DataTable = ({
                 );
               })}
               {renderActions && (
-                <th className="px-3 py-4 text-center">Actions</th>
+                <th className="px-4 py-4 text-center">Actions</th>
               )}
             </tr>
           </thead>
 
-          <tbody className="divide-y divide-gray-100 text-sm text-gray-700">
+          <tbody className="divide-y divide-gray-100 px-4 text-sm text-gray-700">
             {data.map((item, rowIndex) => (
               <tr
                 key={item.id || rowIndex}
@@ -44,8 +44,8 @@ const DataTable = ({
                   return (
                     <td
                       key={colIndex}
-                      className={`px-3 py-4 truncate ${
-                        col.hiddenOnMobile ? "hidden xl:table-cell" : ""
+                      className={`px-4 py-3 truncate ${
+                        col.hiddenOnMobile ? " xl:table-cell" : ""
                       } ${col.fontBold ? "font-medium" : ""}`}
                     >
                       {col.render ? col.render(item) : item[col.key]}
@@ -53,7 +53,7 @@ const DataTable = ({
                   );
                 })}
                 {renderActions && (
-                  <td className="px-3 py-4 text-center">
+                  <td className="px-4 py-2 text-center">
                     {renderActions(item)}
                   </td>
                 )}

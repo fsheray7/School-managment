@@ -1,12 +1,18 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import studentsData from "../../data/admindata/students/students";
+import {
+  CLASS_OPTIONS,
+  GENDER_OPTIONS,
+  getSectionsByClass,
+} from "../../constants/DropDownOptions";
 import StudentFilters from "../../components/ui/Filters";
 import DeleteModal from "../../components/ui/DeleteModal";
 import DetailsModal from "../../components/ui/DetailsModal";
 import DataTable from "../../components/ui/DataTable";
 import ActionButtons from "../../components/ui/ActionButtons";
 import DataCard from "../../components/ui/DataCard";
+import Pagination from "../../components/ui/Pagination";
 
 const StudentsAdmin = () => {
   const navigate = useNavigate();
@@ -21,6 +27,10 @@ const StudentsAdmin = () => {
   const [genderFilter, setGenderFilter] = useState("");
   const [classFilter, setClassFilter] = useState("");
   const [sectionFilter, setSectionFilter] = useState("");
+
+  // Pagination State
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 10;
 
   const handleViewDetails = (student) => {
     setSelectedStudent(student);
@@ -66,12 +76,8 @@ const StudentsAdmin = () => {
     setGenderFilter("");
     setClassFilter("");
     setSectionFilter("");
+    setCurrentPage(1);
   };
-
-  const uniqueClasses = [...new Set(students.map((item) => item.class))].sort();
-  const uniqueSections = [
-    ...new Set(students.map((item) => item.section)),
-  ].sort();
 
   const filteredStudents = students.filter((student) => {
     const matchesSearch = student.fullName
@@ -86,12 +92,18 @@ const StudentsAdmin = () => {
     return matchesSearch && matchesGender && matchesClass && matchesSection;
   });
 
+  // Pagination Logic
+  const totalPages = Math.ceil(filteredStudents.length / itemsPerPage);
+  const paginatedStudents = filteredStudents.slice(
+    (currentPage - 1) * itemsPerPage,
+    currentPage * itemsPerPage,
+  );
+
   const columns = [
     { header: "Full Name", key: "fullName", fontBold: true },
     { header: "Gd.Name", key: "guardianName" },
     { header: "Gender", key: "gender" },
     { header: "Email", key: "email", hiddenOnMobile: true },
-    { header: "Subject", key: "subject", hiddenOnMobile: true },
     { header: "Class", key: "class" },
     { header: "Section", key: "section" },
     { header: "Gd.Contact", key: "guardianContact", hiddenOnMobile: true },
@@ -108,7 +120,6 @@ const StudentsAdmin = () => {
         { label: "Section", key: "section", type: "text" },
       ],
     },
-    { label: "Subject", key: "subject", type: "text" },
     { label: "Guardian Contact", key: "guardianContact", type: "text" },
   ];
 
@@ -119,7 +130,6 @@ const StudentsAdmin = () => {
         { label: "Guardian", value: student.guardianName },
         { label: "Email", value: student.email },
         { label: "Gender", value: student.gender },
-        { label: "Subject", value: student.subject },
         { label: "Class", value: student.class },
         { label: "Section", value: student.section },
         { label: "Contact", value: student.guardianContact },
@@ -137,7 +147,7 @@ const StudentsAdmin = () => {
 
   return (
     <section className="flex flex-col items-center justify-start w-full bg-white  gap-4  pt-20">
-      <div className="w-full px-4 md:px-6">
+      <div className="w-full">
         <StudentFilters
           searchQuery={searchQuery}
           setSearchQuery={setSearchQuery}
@@ -149,19 +159,22 @@ const StudentsAdmin = () => {
             {
               value: genderFilter,
               onChange: setGenderFilter,
-              options: ["Male", "Female"],
+              options: GENDER_OPTIONS,
               placeholder: "Gender",
             },
             {
               value: classFilter,
-              onChange: setClassFilter,
-              options: uniqueClasses,
+              onChange: (val) => {
+                setClassFilter(val);
+                setSectionFilter("");
+              },
+              options: CLASS_OPTIONS,
               placeholder: "Class",
             },
             {
               value: sectionFilter,
               onChange: setSectionFilter,
-              options: uniqueSections,
+              options: getSectionsByClass(classFilter),
               placeholder: "Section",
             },
           ]}
@@ -170,7 +183,7 @@ const StudentsAdmin = () => {
 
       <DataTable
         columns={columns}
-        data={filteredStudents}
+        data={paginatedStudents}
         renderActions={(student) => (
           <ActionButtons
             onView={() => handleViewDetails(student)}
@@ -183,9 +196,14 @@ const StudentsAdmin = () => {
         emptyMessage="No students found."
       />
 
-      {filteredStudents.length === 0 && (
-        <div className="p-8 text-center text-gray-500">No students found.</div>
-      )}
+      {/* Pagination */}
+      <Pagination
+        currentPage={currentPage}
+        totalPages={totalPages}
+        onPageChange={setCurrentPage}
+        totalItems={filteredStudents.length}
+        itemsPerPage={itemsPerPage}
+      />
 
       {/* ================= MODAL ================= */}
       <DetailsModal

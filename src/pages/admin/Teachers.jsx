@@ -8,6 +8,8 @@ import DetailsModal from "../../components/ui/DetailsModal";
 import DataTable from "../../components/ui/DataTable";
 import ActionButtons from "../../components/ui/ActionButtons";
 import DataCard from "../../components/ui/DataCard";
+import Pagination from "../../components/ui/Pagination";
+import { TEACHER_TYPE } from "../../constants/DropDownOptions";
 
 const Teachers = () => {
   const navigate = useNavigate();
@@ -22,6 +24,10 @@ const Teachers = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [subjectFilter, setSubjectFilter] = useState("");
   const [sectionFilter, setSectionFilter] = useState("");
+
+  // Pagination State
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 10;
   const [typeFilter, setTypeFilter] = useState("");
 
   const handleViewDetails = (teacher) => {
@@ -68,6 +74,7 @@ const Teachers = () => {
     setSubjectFilter("");
     setSectionFilter("");
     setTypeFilter("");
+    setCurrentPage(1);
   };
 
   // Derive unique options
@@ -93,6 +100,19 @@ const Teachers = () => {
 
     return matchesSearch && matchesSubject && matchesSection && matchesType;
   });
+
+  // Pagination Logic
+  const totalPages = Math.ceil(filteredTeachers.length / itemsPerPage);
+  const paginatedTeachers = filteredTeachers.slice(
+    (currentPage - 1) * itemsPerPage,
+    currentPage * itemsPerPage,
+  );
+
+  // Reset to page 1 when filters change
+  const handleFilterChange = (filterSetter, value) => {
+    filterSetter(value);
+    setCurrentPage(1);
+  };
 
   const columns = [
     { header: "Full Name", key: "fullName", fontBold: true },
@@ -175,7 +195,7 @@ const Teachers = () => {
 
   return (
     <section className="flex flex-col items-center justify-start w-full bg-white gap-4  pt-20">
-      <div className="w-full px-4 md:px-6">
+      <div className="w-full ">
         <Filters
           searchQuery={searchQuery}
           setSearchQuery={setSearchQuery}
@@ -189,11 +209,12 @@ const Teachers = () => {
               onChange: setSubjectFilter,
               options: uniqueSubjects,
               placeholder: "Subject",
+              searchable: true,
             },
             {
               value: typeFilter,
               onChange: setTypeFilter,
-              options: uniqueTypes,
+              options: TEACHER_TYPE,
               placeholder: "Type",
             },
             {
@@ -208,7 +229,7 @@ const Teachers = () => {
 
       <DataTable
         columns={columns}
-        data={filteredTeachers}
+        data={paginatedTeachers}
         renderActions={(teacher) => (
           <ActionButtons
             onView={() => handleViewDetails(teacher)}
@@ -219,6 +240,15 @@ const Teachers = () => {
         )}
         renderMobileCard={renderMobileCard}
         emptyMessage="No teachers found."
+      />
+
+      {/* Pagination */}
+      <Pagination
+        currentPage={currentPage}
+        totalPages={totalPages}
+        onPageChange={setCurrentPage}
+        totalItems={filteredTeachers.length}
+        itemsPerPage={itemsPerPage}
       />
 
       {/* ================= MODAL ================= */}

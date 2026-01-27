@@ -1,7 +1,13 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { LuPlus } from "react-icons/lu";
 import CustomDropdown from "../../components/ui/CustomDropdown";
+import {
+  CLASS_OPTIONS,
+  getSectionsByClass,
+  COURSE_STATUS,
+} from "../../constants/DropDownOptions";
+import Button from "../../components/ui/Button";
+import { IoArrowBack } from "react-icons/io5";
 
 const AddCourse = () => {
   const navigate = useNavigate();
@@ -27,35 +33,21 @@ const AddCourse = () => {
   };
 
   return (
-    <section className="relative flex flex-col items-center  w-full bg-white overflow-hidden px-8 ">
-      {/* Top Half Circle Decor - Shared Theme */}
-      {/* <div
-        className="absolute rounded-full bg-[#28C2A0] 
-          w-150 h-150 sm:w-200 sm:h-200 md:w-340 md:h-340 lg:w-400 lg:h-405   
-          -top-110 sm:-top-122 md:-top-280 lg:-top-370 
-          transition-all duration-300 "
-      ></div> */}
-
-      {/* Decorative Icon Area */}
-      {/* <div
-        className="absolute top-20 sm:top-12 md:top-30 lg:top-16
-          left-1/2 -translate-x-1/2
-          flex rounded-full flex-col items-center justify-center 
-          z-10 w-full"
-      >
-        <div className="relative flex items-center justify-center w-24 h-24 bg-white/20 backdrop-blur-md rounded-full border-2 border-white/50">
-          <LuPlus className="text-white text-5xl" />
-        </div>
-        <p className="mt-2 text-[#28C2A0] font-medium">New Course</p>
-      </div> */}
+    <section className="relative flex flex-col justify-center items-center max-w-4xl  w-full bg-white md:px-8 ">
 
       <form
-        className="w-full mt-20 grid grid-cols-1 sm:grid-cols-2 gap-4 bg-white p-8 rounded-2xl relative z-20"
+        className="w-full mt-20 grid grid-cols-2 sm:grid-cols-2 gap-4 bg-white  md:p-8 rounded-2xl relative z-20"
         onSubmit={handleSubmit}
       >
-        <h3 className="col-span-1 sm:col-span-2 text-2xl font-bold text-[#0C46C4] mb-2">
-          Course Information
-        </h3>
+        <div className="col-span-2 sm:col-span-2 flex items-center justify-between">
+          <h3 className=" text-2xl font-bold text-[#0C46C4] ">
+            Course Information
+          </h3>
+          <Button onClick={() => navigate("/courses")}
+          variant="ghost"
+          icon={<IoArrowBack size={20} />}
+           />
+        </div>
 
         <div className="flex flex-col gap-2">
           <label className="text-md font-semibold text-[#000000]">
@@ -68,7 +60,7 @@ const AddCourse = () => {
             onChange={handleChange}
             placeholder="Enter Course Name..."
             required
-            className="border border-[#0C46C4] placeholder-[#5B58AD] rounded-md p-2 text-sm focus:outline-none"
+            className="border border-[#0C46C4] placeholder-[#5B58AD] rounded-md p-1.5 md:p-2 text-xs md:text-sm focus:outline-none"
           />
         </div>
 
@@ -83,7 +75,7 @@ const AddCourse = () => {
             onChange={handleChange}
             placeholder="Enter Course Code..."
             required
-            className="border border-[#0C46C4] placeholder-[#5B58AD] rounded-md p-2 text-sm focus:outline-none"
+            className="border border-[#0C46C4] placeholder-[#5B58AD] rounded-md p-1.5 md:p-2 text-xs md:text-sm focus:outline-none"
           />
         </div>
 
@@ -98,29 +90,31 @@ const AddCourse = () => {
             onChange={handleChange}
             placeholder="Search Instructor..."
             required
-            className="border border-[#0C46C4] placeholder-[#5B58AD] rounded-md p-2 text-sm focus:outline-none"
+            className="border border-[#0C46C4] placeholder-[#5B58AD] rounded-lg p-1.5 md:p-2 text-xs md:text-sm focus:outline-none"
           />
         </div>
 
         <div className="flex flex-col gap-2">
           <label className="text-md font-semibold text-[#000000]">Status</label>
           <CustomDropdown
-            options={["Active", "Inactive"]}
+            options={COURSE_STATUS}
             value={courseData.status}
             onChange={(val) => setCourseData({ ...courseData, status: val })}
             placeholder="Select Status"
-            containerClassName="w-full"
+            containerClassName="w-full "
+            triggerClassName="border border-[#0C46C4] rounded-lg"
           />
         </div>
 
         <div className="flex flex-col gap-2">
           <label className="text-md font-semibold text-[#000000]">Class</label>
           <CustomDropdown
-            options={["1", "2", "3"]}
+            options={CLASS_OPTIONS}
             value={courseData.class}
             onChange={(val) => setCourseData({ ...courseData, class: val })}
             placeholder="Select Class"
             containerClassName="w-full"
+            triggerClassName="border border-[#0C46C4] rounded-lg"
           />
         </div>
 
@@ -129,29 +123,23 @@ const AddCourse = () => {
             Section
           </label>
           <CustomDropdown
-            options={["A", "B", "C"]}
+            options={getSectionsByClass(courseData.class)}
             value={courseData.section}
             onChange={(val) => setCourseData({ ...courseData, section: val })}
             placeholder="Select Section"
             containerClassName="w-full"
+            triggerClassName="border border-[#0C46C4] rounded-lg"
           />
         </div>
 
         {/* Action Buttons */}
-        <div className="col-span-1 sm:col-span-2 flex justify-between mt-6">
-          <div className="ml-auto flex gap-2 w-full">
+        <div className="col-span-2 sm:col-span-2 flex justify-center items-center mt-6">
+          <div className=" flex justify-center items-center gap-2 w-full">
             <button
               type="submit"
-              className="flex-1 bg-[#0C46C4] hover:bg-[#08308d] text-white font-semibold rounded-md py-2 px-4 text-sm transition-all cursor-pointer"
+              className="flex-1 bg-[#0C46C4] max-w-[220px] hover:bg-[#08308d] text-white font-semibold rounded-md py-2 hover:scale-105 transition-transform duration-300 px-4 text-sm transition-all cursor-pointer"
             >
               Add Course
-            </button>
-            <button
-              type="button"
-              onClick={() => navigate("/courses")}
-              className="flex-1 bg-gray-300 hover:bg-gray-400 text-gray-700 font-semibold rounded-md py-2 px-4 text-sm transition-all cursor-pointer"
-            >
-              Go Back
             </button>
           </div>
         </div>

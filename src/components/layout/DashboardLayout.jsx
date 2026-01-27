@@ -152,7 +152,7 @@ const DashboardLayout = () => {
   };
 
   return (
-    <div className="relative w-full  bg-gray-50">
+    <div className="relative w-full  ">
       <Sidebar
         role={role}
         isOpen={isSidebarOpen}

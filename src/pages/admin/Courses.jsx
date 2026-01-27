@@ -1,6 +1,5 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { FaEdit, FaTrash, FaEye, FaTimes } from "react-icons/fa";
 import coursesData from "../../data/admindata/courses";
 import Filters from "../../components/ui/Filters";
 import DeleteModal from "../../components/ui/DeleteModal";
@@ -8,6 +7,11 @@ import DetailsModal from "../../components/ui/DetailsModal";
 import DataTable from "../../components/ui/DataTable";
 import ActionButtons from "../../components/ui/ActionButtons";
 import DataCard from "../../components/ui/DataCard";
+import Pagination from "../../components/ui/Pagination";
+import {
+  CLASS_OPTIONS,
+  getSectionsByClass,
+} from "../../constants/DropDownOptions";
 
 const Courses = () => {
   const navigate = useNavigate();
@@ -23,6 +27,15 @@ const Courses = () => {
   const [courseFilter, setCourseFilter] = useState("");
   const [classFilter, setClassFilter] = useState("");
   const [sectionFilter, setSectionFilter] = useState("");
+
+  // Pagination State
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 10;
+
+  // Reset section filter when class filter changes
+  useEffect(() => {
+    setSectionFilter("");
+  }, [classFilter]);
 
   const handleViewDetails = (course) => {
     setSelectedCourse(course);
@@ -68,6 +81,7 @@ const Courses = () => {
     setCourseFilter("");
     setClassFilter("");
     setSectionFilter("");
+    setCurrentPage(1);
   };
 
   // Derive unique options
@@ -93,6 +107,13 @@ const Courses = () => {
 
     return matchesSearch && matchesCourse && matchesClass && matchesSection;
   });
+
+  // Pagination Logic
+  const totalPages = Math.ceil(filteredCourses.length / itemsPerPage);
+  const paginatedCourses = filteredCourses.slice(
+    (currentPage - 1) * itemsPerPage,
+    currentPage * itemsPerPage,
+  );
 
   const columns = [
     { header: "Course Name", key: "courseName", fontBold: true },
@@ -129,13 +150,13 @@ const Courses = () => {
           label: "Class",
           key: "class",
           type: "select",
-          options: ["1", "2", "3"],
+          options: CLASS_OPTIONS,
         },
         {
           label: "Section",
           key: "section",
           type: "select",
-          options: ["A", "B", "C"],
+          options: getSectionsByClass(selectedCourse?.class || ""),
         },
       ],
     },
@@ -189,7 +210,7 @@ const Courses = () => {
 
   return (
     <section className="flex flex-col items-center justify-start w-full bg-white gap-4  pt-20">
-      <div className="w-full px-4 md:px-6">
+      <div className="w-full">
         <Filters
           searchQuery={searchQuery}
           setSearchQuery={setSearchQuery}
@@ -202,18 +223,19 @@ const Courses = () => {
               value: courseFilter,
               onChange: setCourseFilter,
               options: uniqueCourseNames,
-              placeholder: "Course",
+              placeholder: "Subject",
+              searchable: true,
             },
             {
               value: classFilter,
               onChange: setClassFilter,
-              options: uniqueClasses,
+              options: CLASS_OPTIONS,
               placeholder: "Class",
             },
             {
               value: sectionFilter,
               onChange: setSectionFilter,
-              options: uniqueSections,
+              options: getSectionsByClass(classFilter),
               placeholder: "Section",
             },
           ]}
@@ -222,7 +244,7 @@ const Courses = () => {
 
       <DataTable
         columns={columns}
-        data={filteredCourses}
+        data={paginatedCourses}
         renderActions={(course) => (
           <ActionButtons
             onView={() => handleViewDetails(course)}
@@ -233,6 +255,15 @@ const Courses = () => {
         )}
         renderMobileCard={renderMobileCard}
         emptyMessage="No courses found."
+      />
+
+      {/* Pagination */}
+      <Pagination
+        currentPage={currentPage}
+        totalPages={totalPages}
+        onPageChange={setCurrentPage}
+        totalItems={filteredCourses.length}
+        itemsPerPage={itemsPerPage}
       />
 
       {/* ================= MODAL ================= */}

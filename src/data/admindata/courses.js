@@ -1,47 +1,440 @@
 const coursesData = [
+    // Play Group Courses
     {
         id: 1,
-        courseName: "Advanced Mathematics",
-        courseCode: "MATH-401",
-        instructor: "Ali Khan",
-        class: "10",
+        courseName: "Fun with Colors",
+        courseCode: "PG-101",
+        instructor: "Sadia Noor",
+        class: "Play Group",
         section: "A",
         status: "Active"
     },
     {
         id: 2,
-        courseName: "Quantum Physics",
-        courseCode: "PHYS-302",
-        instructor: "Ayesha Malik",
-        class: "11",
+        courseName: "Basic Shapes",
+        courseCode: "PG-102",
+        instructor: "Rubina Khatoon",
+        class: "Play Group",
         section: "B",
         status: "Active"
     },
+    // Nursery Courses
     {
         id: 3,
-        courseName: "Introduction to CS",
-        courseCode: "CS-101",
-        instructor: "Usman Ahmed",
-        class: "9",
+        courseName: "Alphabets Introduction",
+        courseCode: "NUR-101",
+        instructor: "Amna Bibi",
+        class: "Nursery",
         section: "A",
         status: "Active"
     },
     {
         id: 4,
-        courseName: "English Literature",
-        courseCode: "ENG-205",
-        instructor: "Fatima Bibi",
-        class: "10",
-        section: "C",
-        status: "Inactive"
+        courseName: "Number Recognition",
+        courseCode: "NUR-102",
+        instructor: "Tahira Begum",
+        class: "Nursery",
+        section: "B",
+        status: "Active"
     },
+    // KG Courses
     {
         id: 5,
-        courseName: "Organic Chemistry",
-        courseCode: "CHEM-305",
-        instructor: "Bilal Hussain",
-        class: "11",
+        courseName: "Reading Basics",
+        courseCode: "KG-101",
+        instructor: "Nasreen Akhtar",
+        class: "KG",
         section: "A",
+        status: "Active"
+    },
+    {
+        id: 6,
+        courseName: "Counting Fun",
+        courseCode: "KG-102",
+        instructor: "Saima Rashid",
+        class: "KG",
+        section: "B",
+        status: "Active"
+    },
+    // Class 1 Courses
+    {
+        id: 7,
+        courseName: "English Level 1",
+        courseCode: "ENG-101",
+        instructor: "Khalida Parveen",
+        class: "Class 1",
+        section: "A",
+        status: "Active"
+    },
+    {
+        id: 8,
+        courseName: "Mathematics Level 1",
+        courseCode: "MATH-101",
+        instructor: "Rashida Bibi",
+        class: "Class 1",
+        section: "B",
+        status: "Active"
+    },
+    {
+        id: 9,
+        courseName: "Urdu Level 1",
+        courseCode: "URD-101",
+        instructor: "Farida Begum",
+        class: "Class 1",
+        section: "C",
+        status: "Active"
+    },
+    // Class 2 Courses
+    {
+        id: 10,
+        courseName: "English Level 2",
+        courseCode: "ENG-102",
+        instructor: "Zahida Khan",
+        class: "Class 2",
+        section: "A",
+        status: "Active"
+    },
+    {
+        id: 11,
+        courseName: "Mathematics Level 2",
+        courseCode: "MATH-102",
+        instructor: "Nazia Malik",
+        class: "Class 2",
+        section: "B",
+        status: "Active"
+    },
+    {
+        id: 12,
+        courseName: "General Knowledge",
+        courseCode: "GK-102",
+        instructor: "Shabana Ahmed",
+        class: "Class 2",
+        section: "C",
+        status: "Active"
+    },
+    // Class 3 Courses
+    {
+        id: 13,
+        courseName: "English Level 3",
+        courseCode: "ENG-103",
+        instructor: "Asma Javed",
+        class: "Class 3",
+        section: "A",
+        status: "Active"
+    },
+    {
+        id: 14,
+        courseName: "Mathematics Level 3",
+        courseCode: "MATH-103",
+        instructor: "Bushra Tariq",
+        class: "Class 3",
+        section: "B",
+        status: "Active"
+    },
+    {
+        id: 15,
+        courseName: "Elementary Science",
+        courseCode: "SCI-103",
+        instructor: "Samina Abbas",
+        class: "Class 3",
+        section: "C",
+        status: "Active"
+    },
+    // Class 4 Courses
+    {
+        id: 16,
+        courseName: "English Level 4",
+        courseCode: "ENG-104",
+        instructor: "Riffat Ahmad",
+        class: "Class 4",
+        section: "A",
+        status: "Active"
+    },
+    {
+        id: 17,
+        courseName: "Mathematics Level 4",
+        courseCode: "MATH-104",
+        instructor: "Shazia Nawaz",
+        class: "Class 4",
+        section: "B",
+        status: "Active"
+    },
+    {
+        id: 18,
+        courseName: "Science Level 4",
+        courseCode: "SCI-104",
+        instructor: "Rabia Iqbal",
+        class: "Class 4",
+        section: "C",
+        status: "Active"
+    },
+    // Class 5 Courses
+    {
+        id: 19,
+        courseName: "English Level 5",
+        courseCode: "ENG-105",
+        instructor: "Naila Shah",
+        class: "Class 5",
+        section: "A",
+        status: "Active"
+    },
+    {
+        id: 20,
+        courseName: "Mathematics Level 5",
+        courseCode: "MATH-105",
+        instructor: "Farzana Bibi",
+        class: "Class 5",
+        section: "B",
+        status: "Active"
+    },
+    {
+        id: 21,
+        courseName: "Science Level 5",
+        courseCode: "SCI-105",
+        instructor: "Javeria Noor",
+        class: "Class 5",
+        section: "C",
+        status: "Active"
+    },
+    // Class 6 Courses
+    {
+        id: 22,
+        courseName: "Mathematics Level 6",
+        courseCode: "MATH-106",
+        instructor: "Ahmed Raza",
+        class: "Class 6",
+        section: "A",
+        status: "Active"
+    },
+    {
+        id: 23,
+        courseName: "English Level 6",
+        courseCode: "ENG-106",
+        instructor: "Zainab Khan",
+        class: "Class 6",
+        section: "B",
+        status: "Active"
+    },
+    {
+        id: 24,
+        courseName: "General Science",
+        courseCode: "SCI-106",
+        instructor: "Imran Ali",
+        class: "Class 6",
+        section: "C",
+        status: "Active"
+    },
+    {
+        id: 25,
+        courseName: "Urdu Level 6",
+        courseCode: "URD-106",
+        instructor: "Huma Batool",
+        class: "Class 6",
+        section: "D",
+        status: "Active"
+    },
+    // Class 7 Courses
+    {
+        id: 26,
+        courseName: "Mathematics Level 7",
+        courseCode: "MATH-107",
+        instructor: "Muhammad Tariq",
+        class: "Class 7",
+        section: "A",
+        status: "Active"
+    },
+    {
+        id: 27,
+        courseName: "English Level 7",
+        courseCode: "ENG-107",
+        instructor: "Sara Ahmed",
+        class: "Class 7",
+        section: "B",
+        status: "Active"
+    },
+    {
+        id: 28,
+        courseName: "Science Level 7",
+        courseCode: "SCI-107",
+        instructor: "Hassan Raza",
+        class: "Class 7",
+        section: "C",
+        status: "Active"
+    },
+    {
+        id: 29,
+        courseName: "Urdu Literature",
+        courseCode: "URD-107",
+        instructor: "Aisha Nawaz",
+        class: "Class 7",
+        section: "D",
+        status: "Active"
+    },
+    // Class 8 Courses
+    {
+        id: 30,
+        courseName: "Algebra",
+        courseCode: "MATH-108",
+        instructor: "Nida Fatima",
+        class: "Class 8",
+        section: "A",
+        status: "Active"
+    },
+    {
+        id: 31,
+        courseName: "English Grammar",
+        courseCode: "ENG-108",
+        instructor: "Fatima Bibi",
+        class: "Class 8",
+        section: "B",
+        status: "Active"
+    },
+    {
+        id: 32,
+        courseName: "Pakistan Studies",
+        courseCode: "PAK-108",
+        instructor: "Kashif Mahmood",
+        class: "Class 8",
+        section: "C",
+        status: "Active"
+    },
+    {
+        id: 33,
+        courseName: "General Science Advanced",
+        courseCode: "SCI-108",
+        instructor: "Saeed Ahmed",
+        class: "Class 8",
+        section: "D",
+        status: "Active"
+    },
+    // Class 9 Courses
+    {
+        id: 34,
+        courseName: "Computer Science",
+        courseCode: "CS-109",
+        instructor: "Usman Ahmed",
+        class: "Class 9",
+        section: "A",
+        status: "Active"
+    },
+    {
+        id: 35,
+        courseName: "English Literature",
+        courseCode: "ENG-109",
+        instructor: "Rabia Hussain",
+        class: "Class 9",
+        section: "B",
+        status: "Active"
+    },
+    {
+        id: 36,
+        courseName: "Biology Basics",
+        courseCode: "BIO-109",
+        instructor: "Sana Malik",
+        class: "Class 9",
+        section: "C",
+        status: "Active"
+    },
+    // Class 10 Courses
+    {
+        id: 37,
+        courseName: "Advanced Mathematics",
+        courseCode: "MATH-110",
+        instructor: "Ali Khan",
+        class: "Class 10",
+        section: "A",
+        status: "Active"
+    },
+    {
+        id: 38,
+        courseName: "Physics Fundamentals",
+        courseCode: "PHYS-110",
+        instructor: "Imran Sheikh",
+        class: "Class 10",
+        section: "B",
+        status: "Active"
+    },
+    {
+        id: 39,
+        courseName: "Chemistry Lab",
+        courseCode: "CHEM-110",
+        instructor: "Maryam Noor",
+        class: "Class 10",
+        section: "C",
+        status: "Active"
+    },
+    // Class 11 Courses
+    {
+        id: 40,
+        courseName: "Chemistry (Pre-Medical)",
+        courseCode: "CHEM-311",
+        instructor: "Bilal Hussain",
+        class: "Class 11",
+        section: "Pre-Medical",
+        status: "Active"
+    },
+    {
+        id: 41,
+        courseName: "Physics (Pre-Engineering)",
+        courseCode: "PHYS-311",
+        instructor: "Ayesha Malik",
+        class: "Class 11",
+        section: "Pre-Engineering",
+        status: "Active"
+    },
+    {
+        id: 42,
+        courseName: "Computer Science (ICS)",
+        courseCode: "CS-311",
+        instructor: "Tariq Aziz",
+        class: "Class 11",
+        section: "ICS",
+        status: "Active"
+    },
+    {
+        id: 43,
+        courseName: "Principles of Accounting",
+        courseCode: "ACC-311",
+        instructor: "Asad Iqbal",
+        class: "Class 11",
+        section: "Commerce",
+        status: "Active"
+    },
+    // Class 12 Courses
+    {
+        id: 44,
+        courseName: "Biology Advanced",
+        courseCode: "BIO-412",
+        instructor: "Sara Ahmed",
+        class: "Class 12",
+        section: "Pre-Medical",
+        status: "Active"
+    },
+    {
+        id: 45,
+        courseName: "Advanced Physics",
+        courseCode: "PHYS-412",
+        instructor: "Hassan Ali",
+        class: "Class 12",
+        section: "Pre-Engineering",
+        status: "Active"
+    },
+    {
+        id: 46,
+        courseName: "Advanced Computer Science",
+        courseCode: "CS-412",
+        instructor: "Hina Abbas",
+        class: "Class 12",
+        section: "ICS",
+        status: "Active"
+    },
+    {
+        id: 47,
+        courseName: "Business Studies",
+        courseCode: "BUS-412",
+        instructor: "Kamran Javed",
+        class: "Class 12",
+        section: "Commerce",
         status: "Active"
     }
 ];

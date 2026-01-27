@@ -1,7 +1,13 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { LuPlus } from "react-icons/lu";
 import CustomDropdown from "../../components/ui/CustomDropdown";
+import {
+  GENDER_OPTIONS,
+  CLASS_OPTIONS,
+  getSectionsByClass,
+} from "../../constants/DropDownOptions";
+import Button from "../../components/ui/Button";
+import { IoArrowBack } from "react-icons/io5";
 
 const AddStudent = () => {
   const navigate = useNavigate();
@@ -49,18 +55,26 @@ const AddStudent = () => {
   };
 
   return (
-    <section className="relative flex flex-col items-center rounded-xl w-full bg-white py-4 overflow-hidden mt-20 px-8 ">
+    <section className="relative flex flex-col items-center rounded-xl w-full bg-white  py-4  mt-20 px-8 ">
       {/* Tabs */}
-      <form className="w-full flex flex-col gap-4" onSubmit={handleSubmit}>
+      <form
+        className="w-full flex flex-col max-w-xl gap-4"
+        onSubmit={handleSubmit}
+      >
         {/* Tab 1: Basic Info */}
         {activeTab === 1 && (
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <h3 className="col-span-2 text-[#0C46C4] font-semibold text-lg mb-2">
-              Student Info
-            </h3>
+          <div className="grid grid-cols-2 sm:grid-cols-2 gap-4">
+            <div className="col-span-2 sm:col-span-2 flex items-center justify-between">
+              <h3 className="text-[#0C46C4] font-semibold text-lg mb-2">
+                Student Info
+              </h3>
+              <Button onClick={() => navigate("/students")}
+              variant="ghost"
+              icon={<IoArrowBack   size={20}/>} />
+            </div>
             <div className="flex flex-col gap-2">
               <label className="text-md font-semibold  text-[#000000]">
-                Student ID
+                Student ID <span className="text-red-500">*</span>
               </label>
               <input
                 type="text"
@@ -68,13 +82,14 @@ const AddStudent = () => {
                 value={studentData.studentId}
                 onChange={handleChange}
                 placeholder="Enter Student ID..."
-                className="border border-[#0C46C4] placeholder-[#5B58AD] rounded-md p-2 text-sm focus:outline-none"
+                className="border border-[#0C46C4] placeholder-gray-400 rounded-lg p-2 text-sm focus:outline-none"
+                required
               />
             </div>
 
             <div className="flex flex-col gap-2">
               <label className="text-md font-semibold text-[#000000]">
-                Full Name
+                Full Name <span className="text-red-500">*</span>
               </label>
               <input
                 type="text"
@@ -82,47 +97,50 @@ const AddStudent = () => {
                 value={studentData.fullName}
                 onChange={handleChange}
                 placeholder="Enter Full Name..."
-                className="border border-[#0C46C4] placeholder-[#5B58AD] rounded-md p-2 text-sm focus:outline-none"
+                className="border border-[#0C46C4] placeholder-gray-400 rounded-md p-2 text-sm focus:outline-none"
+                required
               />
             </div>
 
             <div className="flex flex-col gap-2">
               <label className="text-md font-semibold text-[#000000]">
-                Gender
+                Gender <span className="text-red-500">*</span>
               </label>
               <CustomDropdown
-                options={["Male", "Female", "Other"]}
+                options={GENDER_OPTIONS}
                 value={studentData.gender}
                 onChange={(val) =>
                   setStudentData({ ...studentData, gender: val })
                 }
                 placeholder="Select Gender"
-                containerClassName="w-full"
+                triggerClassName="text-[#0C46C4] py-2 "
               />
             </div>
 
             <div className="flex flex-col gap-2">
               <label className="text-md font-semibold text-[#000000]">
-                Date of Birth
+                Date of Birth <span className="text-red-500">*</span>
               </label>
               <input
                 type="date"
                 name="dob"
                 value={studentData.dob}
                 onChange={handleChange}
-                className="border border-[#0C46C4] rounded-md p-2 text-sm text-[#5B58AD] focus:outline-none"
+                className="border border-[#0C46C4] rounded-md p-2 text-sm text-gray-400 focus:outline-none"
+                required
               />
             </div>
 
-            <div className="flex flex-col gap-2 col-span-1 sm:col-span-2">
+            <div className="flex flex-col gap-2 col-span-2 sm:col-span-2">
               <label className="text-md font-semibold text-[#000000]">
-                Profile Photo
+                Profile Photo <span className="text-red-500">*</span>
               </label>
               <input
                 type="file"
                 name="profilePhoto"
                 onChange={handleChange}
-                className="border border-[#0C46C4] text-[#5B58AD] rounded-md p-2 text-sm focus:outline-none"
+                className="border border-[#0C46C4] text-gray-400 rounded-md p-2 text-sm focus:outline-none"
+                required
               />
             </div>
           </div>
@@ -130,44 +148,49 @@ const AddStudent = () => {
 
         {/* Tab 2: Academic Info */}
         {activeTab === 2 && (
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <h3 className="col-span-2 text-[#0C46C4] font-semibold text-lg mb-2">
-              Academic Info
-            </h3>
+          <div className="grid grid-cols-2 sm:grid-cols-2 gap-4">
+            <div className="flex justify-between col-span-2 text-[#0C46C4]">
+              <h3 className=" font-semibold text-lg ">Academic Info</h3>
+              <Button onClick={handleBack}
+              variant="ghost"
+              icon={<IoArrowBack   size={20}/>} />
+            </div>
 
             <div className="flex flex-col gap-2">
               <label className="text-md font-semibold text-[#000000]">
-                Class/Grade
+                Class/Grade <span className="text-red-500">*</span>
               </label>
               <CustomDropdown
-                options={["1", "2", "3"]}
+                options={CLASS_OPTIONS}
                 value={studentData.classGrade}
                 onChange={(val) =>
                   setStudentData({ ...studentData, classGrade: val })
                 }
                 placeholder="Select Class"
                 containerClassName="w-full"
+                triggerClassName="text-[#0C46C4] py-2"
               />
             </div>
 
             <div className="flex flex-col gap-2">
               <label className="text-md font-semibold text-[#000000]">
-                Section
+                Section <span className="text-red-500">*</span>
               </label>
               <CustomDropdown
-                options={["A", "B"]}
+                options={getSectionsByClass(studentData.classGrade)}
                 value={studentData.section}
                 onChange={(val) =>
                   setStudentData({ ...studentData, section: val })
                 }
                 placeholder="Select Section"
                 containerClassName="w-full"
+                triggerClassName="text-[#0C46C4] py-2"
               />
             </div>
 
             <div className="flex flex-col gap-2">
               <label className="text-md font-semibold text-[#000000]">
-                Academic Year
+                Academic Year <span className="text-red-500">*</span>
               </label>
               <input
                 type="text"
@@ -175,13 +198,14 @@ const AddStudent = () => {
                 value={studentData.academicYear}
                 onChange={handleChange}
                 placeholder="Enter Academic Year..."
-                className="border border-[#0C46C4] placeholder-[#5B58AD] rounded-md p-2 text-sm focus:outline-none"
+                className="border border-[#0C46C4] placeholder-gray-400 rounded-md p-2 text-sm focus:outline-none"
+                required
               />
             </div>
 
             <div className="flex flex-col gap-2">
               <label className="text-md font-semibold text-[#000000]">
-                Roll Number
+                Roll Number <span className="text-red-500">*</span>
               </label>
               <input
                 type="text"
@@ -189,7 +213,8 @@ const AddStudent = () => {
                 value={studentData.rollNumber}
                 onChange={handleChange}
                 placeholder="Enter Roll Number..."
-                className="border border-[#0C46C4] placeholder-[#5B58AD] rounded-md p-2 text-sm focus:outline-none"
+                className="border border-[#0C46C4] placeholder-gray-400 rounded-md p-2 text-sm focus:outline-none"
+                required
               />
             </div>
           </div>
@@ -197,14 +222,19 @@ const AddStudent = () => {
 
         {/* Tab 3: Contact Info */}
         {activeTab === 3 && (
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <h3 className="col-span-2 text-[#0C46C4] font-semibold text-lg mb-2">
-              Contact Info
-            </h3>
+          <div className="grid grid-cols-2 sm:grid-cols-2 gap-4">
+            <div className="col-span-2 flex justify-between items-center">
+              <h3 className=" text-[#0C46C4] font-semibold text-lg mb-2">
+                Contact Info
+              </h3>
+              <Button onClick={handleBack}
+              variant="ghost"
+              icon={<IoArrowBack   size={20}/>} />
+            </div>
 
             <div className="flex flex-col gap-2">
               <label className="text-md font-semibold text-[#000000]">
-                Student Phone (Optional)
+                Student Phone
               </label>
               <input
                 type="text"
@@ -212,13 +242,13 @@ const AddStudent = () => {
                 value={studentData.studentPhone}
                 onChange={handleChange}
                 placeholder="Enter Phone..."
-                className="border border-[#0C46C4] placeholder-[#5B58AD] rounded-md p-2 text-sm focus:outline-none"
+                className="border border-[#0C46C4] placeholder-gray-400 rounded-md p-2 text-sm focus:outline-none"
               />
             </div>
 
             <div className="flex flex-col gap-2">
               <label className="text-md font-semibold text-[#000000]">
-                Parent Name
+                Parent Name <span className="text-red-500">*</span>
               </label>
               <input
                 type="text"
@@ -226,13 +256,14 @@ const AddStudent = () => {
                 value={studentData.parentName}
                 onChange={handleChange}
                 placeholder="Enter Parent Name..."
-                className="border border-[#0C46C4] placeholder-[#5B58AD] rounded-md p-2 text-sm focus:outline-none"
+                className="border border-[#0C46C4] placeholder-gray-400 rounded-md p-2 text-sm focus:outline-none"
+                required
               />
             </div>
 
             <div className="flex flex-col gap-2">
               <label className="text-md font-semibold text-[#000000]">
-                Parent Phone
+                Parent Phone <span className="text-red-500">*</span>
               </label>
               <input
                 type="text"
@@ -240,13 +271,14 @@ const AddStudent = () => {
                 value={studentData.parentPhone}
                 onChange={handleChange}
                 placeholder="Enter Parent Phone..."
-                className="border border-[#0C46C4] placeholder-[#5B58AD] rounded-md p-2 text-sm focus:outline-none"
+                className="border border-[#0C46C4] placeholder-gray-400 rounded-md p-2 text-sm focus:outline-none"
+                required
               />
             </div>
 
             <div className="flex flex-col gap-2">
               <label className="text-md font-semibold text-[#000000]">
-                Parent Email
+                Parent Email <span className="text-red-500">*</span>
               </label>
               <input
                 type="email"
@@ -254,51 +286,39 @@ const AddStudent = () => {
                 value={studentData.parentEmail}
                 onChange={handleChange}
                 placeholder="Enter Parent Email..."
-                className="border border-[#0C46C4] placeholder-[#5B58AD] rounded-md p-2 text-sm focus:outline-none"
+                className="border border-[#0C46C4] placeholder-gray-400 rounded-md p-2 text-sm focus:outline-none"
+                required
               />
             </div>
 
-            <div className="flex flex-col col-span-1 sm:col-span-2 gap-2">
+            <div className="flex flex-col col-span-2 sm:col-span-2 gap-2">
               <label className="text-md font-semibold text-[#000000]">
-                Address
+                Address <span className="text-red-500">*</span>
               </label>
               <textarea
                 name="address"
                 value={studentData.address}
                 onChange={handleChange}
                 placeholder="Enter Address..."
-                className="border border-[#0C46C4] placeholder-[#5B58AD] rounded-md p-2 text-sm focus:outline-none"
+                className="border border-[#0C46C4] placeholder-gray-400 rounded-md p-4 text-sm focus:outline-none"
+                required
               />
             </div>
           </div>
         )}
 
         {/* Buttons */}
-        <div className="flex justify-between mt-6">
-          {activeTab > 1 && (
-            <button
-              type="button"
-              onClick={handleBack}
-              className="bg-gray-300 hover:bg-gray-400 text-gray-700 font-semibold rounded-md py-2 px-4 text-sm"
-            >
-              Go Back
-            </button>
-          )}
-
-          <div className="ml-auto flex gap-2">
-            <button
+        <div className="flex justify-center  items-center mt-6">
+          <div className=" flex justify-center items-center gap-6">
+            <Button
               type="submit"
-              className="bg-[#0C46C4] hover:bg-[#08308d] text-white font-semibold rounded-md py-2 px-4 text-sm"
+              variant="primary"
+              className="w-50"
+             
             >
               {activeTab < 3 ? "Next" : "Save"}
-            </button>
-            <button
-              type="button"
-              onClick={() => navigate("/students")}
-              className="bg-gray-300 hover:bg-gray-400 text-gray-700 font-semibold rounded-md py-2 px-4 text-sm"
-            >
-              Cancel
-            </button>
+            </Button>
+           
           </div>
         </div>
       </form>
