@@ -50,7 +50,7 @@ const ProfileSelection = () => {
           <img
             src="./profileselection/Vector.png"
             alt="Vector Back"
-            className="w-full object-contain opacity-20"
+            className="w-full object-contain "
           />
           <img
             src="./welcomepage/logo.png"
