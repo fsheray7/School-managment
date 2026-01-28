@@ -1,7 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
 
-
 const WelcomePage = () => {
   return (
     <section className="relative w-full h-screen overflow-hidden bg-white flex flex-col items-center justify-center px-4 sm:px-6 md:px-8">
@@ -27,16 +26,15 @@ const WelcomePage = () => {
             object-contain transition-all duration-300"
         />
       </div>
-        <div className="z-10 mt-8 md:mt-8 lg:mt-0 mb-20 w-full   text-center">
-
-       <Link to="/select-profile"
+      <div className="z-10 mt-8 md:mt-8 lg:mt-0 mb-20 w-full   text-center">
+        <Link
+          to="/select-profile"
           type="submit"
           className=" text-center   bg-[#0C46C4] hover:bg-blue-800 active:bg-blue-900 text-white px-10 py-3 rounded-lg sm:rounded-xl md:rounded-2xl text-xs sm:text-sm md:text-base font-bold w-full"
-          >
-          Get Started 
+        >
+          Get Started
         </Link>
-          </div>
-
+      </div>
 
       {/* Powered By Text - Fixed at Bottom Center - Responsive */}
       <p
@@ -53,7 +51,7 @@ const WelcomePage = () => {
       {/* Decorative Background Circle Bottom - Responsive */}
       <div
         className="absolute rounded-full bg-[#0C46C4]
-          w-100 h-100  sm:w-180 sm:h-180 md:w-210 md:h-210 lg:w-300 lg:h-310
+          w-120 h-120  sm:w-180 sm:h-180 md:w-210 md:h-210 lg:w-300 lg:h-320
            -bottom-75 sm:-bottom-130 md:-bottom-180 lg:-bottom-285
           transition-top-[520px]
           transition-all duration-300"
