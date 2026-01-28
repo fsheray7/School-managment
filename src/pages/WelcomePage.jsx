@@ -38,7 +38,7 @@ const WelcomePage = () => {
 
       {/* Powered By Text - Fixed at Bottom Center - Responsive */}
       <p
-        className="fixed bottom-10 
+        className="fixed bottom-2
           left-1/2 -translate-x-1/2
           z-50 text-white font-light 
           text-xs sm:text-sm md:text-xl lg:text-lg
@@ -51,7 +51,7 @@ const WelcomePage = () => {
       {/* Decorative Background Circle Bottom - Responsive */}
       <div
         className="absolute rounded-full bg-[#0C46C4]
-          w-120 h-120  sm:w-180 sm:h-180 md:w-210 md:h-210 lg:w-300 lg:h-320
+          w-100 h-100  sm:w-180 sm:h-180 md:w-210 md:h-210 lg:w-300 lg:h-320
            -bottom-75 sm:-bottom-130 md:-bottom-180 lg:-bottom-285
           transition-top-[520px]
           transition-all duration-300"
