@@ -4,10 +4,10 @@ import { FaUserGraduate } from "react-icons/fa6";
 
 const RoleSelection = ({ onRoleSelect }) => {
   const boxStyle =
-    "flex flex-col p-2 items-center justify-center md:w-28 md:h-28 lg:w-28 lg:h-28 w-10 h-10 bg-blue-700 rounded-xl text-white cursor-pointer hover:bg-blue-800 transition";
+    "flex flex-col p-2 items-center justify-center md:w-28 md:h-28 lg:w-25 lg:h-22 w-10 h-10 bg-blue-700 rounded-xl text-white cursor-pointer hover:bg-blue-800 transition";
 
   return (
-    <div className="flex flex-col justify-center  items-center gap-6 sm:gap-8 md:gap-10 ">
+    <div className="flex flex-col mt-10 justify-center  items-center gap-6 sm:gap-8 md:gap-10 ">
       {/* Heading - Always on Top */}
       <h1 className="text-[#0C46C4] text-md sm:text-xl md:text-2xl lg:text-3xl font-bold font-opensans text-center">
         Choose your option
@@ -22,7 +22,7 @@ const RoleSelection = ({ onRoleSelect }) => {
         >
           <div className={boxStyle}>
             {/* <img src="/profileselection/Person.png" alt="user png" /> */}
-            <FaUser size={64} />
+            <FaUser size={44} />
           </div>
           <span className="mt-2 text-md font-semibold sm:text-md">Admin</span>
         </div>

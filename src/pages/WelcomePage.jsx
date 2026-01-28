@@ -1,7 +1,36 @@
-import React from "react";
-import { Link } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 
 const WelcomePage = () => {
+  const navigate = useNavigate();
+  const [progress, setProgress] = useState(0);
+
+  useEffect(() => {
+    const duration = 5000; // 5 seconds
+    const intervalTime = 50; // Update every 50ms
+    const step = (intervalTime / duration) * 100;
+
+    const timer = setInterval(() => {
+      setProgress((prev) => {
+        if (prev >= 100) {
+          clearInterval(timer);
+          return 100;
+        }
+        return prev + step;
+      });
+    }, intervalTime);
+
+    // Redirect after 5 seconds
+    const redirectTimeout = setTimeout(() => {
+      navigate("/select-profile");
+    }, duration);
+
+    return () => {
+      clearInterval(timer);
+      clearTimeout(redirectTimeout);
+    };
+  }, [navigate]);
+
   return (
     <section className="relative w-full h-screen overflow-hidden bg-white flex flex-col items-center justify-center px-4 sm:px-6 md:px-8">
       {/* Decorative Background Circle Top - Responsive */}
@@ -14,26 +43,24 @@ const WelcomePage = () => {
       ></div>
 
       {/* Center Logo Image - Responsive */}
-      <div
-        className="flex flex-col items-center justify-center 
-           lg:pb-10 
-          z-10 w-full"
-      >
+      <div className="flex flex-col items-center justify-center z-10 w-full mb-10">
         <img
           src="./welcomepage/logo.png"
           alt="Logo Img"
           className="w-40 h-45 sm:w-50 sm:h-56 md:w-60 md:h-72 lg:w-[240px] lg:h-[280px] 
-            object-contain transition-all duration-300"
+            object-contain transition-all duration-300 mb-8"
         />
-      </div>
-      <div className="z-10 mt-8 md:mt-8 lg:mt-0 mb-20 w-full   text-center">
-        <Link
-          to="/select-profile"
-          type="submit"
-          className=" text-center   bg-[#0C46C4] hover:bg-blue-800 active:bg-blue-900 text-white px-10 py-3 rounded-lg sm:rounded-xl md:rounded-2xl text-xs sm:text-sm md:text-base font-bold w-full"
-        >
-          Get Started
-        </Link>
+
+        {/* Loading Bar Container */}
+        <div className="w-64 sm:w-80 h-1.5 bg-gray-100 rounded-full overflow-hidden shadow-inner flex items-center">
+          <div
+            className="h-full bg-[#0C46C4] transition-all duration-75 ease-linear rounded-full shadow-[0_0_10px_rgba(12,70,196,0.5)]"
+            style={{ width: `${progress}%` }}
+          ></div>
+        </div>
+        <p className="mt-4 text-gray-500 font-medium text-sm animate-pulse">
+          Loading... {Math.round(progress)}%
+        </p>
       </div>
 
       {/* Powered By Text - Fixed at Bottom Center - Responsive */}
@@ -51,7 +78,7 @@ const WelcomePage = () => {
       {/* Decorative Background Circle Bottom - Responsive */}
       <div
         className="absolute rounded-full bg-[#0C46C4]
-          w-100 h-100  sm:w-180 sm:h-180 md:w-210 md:h-210 lg:w-300 lg:h-320
+          w-100 h-100  sm:w-180 sm:h-180 md:w-210 md:h-210 lg:w-300 lg:h-310
            -bottom-75 sm:-bottom-130 md:-bottom-180 lg:-bottom-285
           transition-top-[520px]
           transition-all duration-300"
