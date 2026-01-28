@@ -1,7 +1,7 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import "./App.css";
 import WelcomePage from "./pages/WelcomePage";
-import ProfileSelection from "./components/layout/ProfileSelection";
+import ProfileSelection from "./pages/ProfileSelection";
 import TeacherDashboard from "./pages/teacher/TeacherDashboard";
 import AddAccount from "./pages/teacher/AddAcoount";
 import AddClasses from "./pages/teacher/AddClasses";

@@ -31,7 +31,36 @@ const ProfileSelection = () => {
 
   return (
     <section className="relative w-full min-h-screen overflow-hidden bg-white flex flex-col items-center justify-center px-4 sm:px-6 md:px-8">
-      <div className="flex w-full items-center flex-col justify-center z-50">
+      {/* Decorative Background Circle Top - Responsive */}
+      <div
+        className="absolute rounded-full bg-[#28C2A0] 
+          w-150 h-150 sm:w-200 sm:h-200 md:w-340 md:h-340 lg:w-420 lg:h-440  
+          -top-120 sm:-top-122 md:-top-260 lg:-top-410 
+          transition-all duration-300 "
+      ></div>
+
+      {/* Center Logo Image - Responsive - Top Header */}
+      <div
+        className="absolute top-12 sm:top-12 md:top-20 lg:top-8
+          left-1/2 -translate-x-1/2
+          flex flex-col items-center justify-center 
+          z-10 w-full"
+      >
+        <div className="relative flex items-center justify-center w-full max-w-[160px] md:max-w-[200px]">
+          <img
+            src="./profileselection/Vector.png"
+            alt="Vector Back"
+            className="w-full object-contain opacity-20"
+          />
+          <img
+            src="./welcomepage/logo.png"
+            alt="Main Logo"
+            className="absolute w-1/2 object-contain"
+          />
+        </div>
+      </div>
+
+      <div className="flex w-full items-center flex-col justify-center z-50 mt-20 md:mt-32">
         {!selectedRole ? (
           <div className="flex flex-col mt-10 justify-center items-center gap-6 sm:gap-8 md:gap-10">
             <h1 className="text-[#0C46C4] text-md sm:text-xl md:text-2xl lg:text-3xl font-bold font-opensans text-center">
