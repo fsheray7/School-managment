@@ -1,4 +1,9 @@
 // Gender options
+
+import teachersData from "../data/teachers/teacher.js"
+
+export const TEACHERS = teachersData.map((teacher) => teacher.fullName);
+
 export const GENDER_OPTIONS = ["Male", "Female", "Others"];
 
 // Class + Section mapping
@@ -68,6 +73,9 @@ export const CLASS_SECTION_OPTIONS = [
 // Sirf classes nikalne ke liye
 export const CLASS_OPTIONS = CLASS_SECTION_OPTIONS.map(
   (item) => item.class
+);
+export const SECTION_OPTIONS = CLASS_SECTION_OPTIONS.map(
+  (item) => item.sections
 );
 
 // Selected class se sections nikalne ke liye

@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import CustomDropdown from "../../components/ui/CustomDropdown";
 import {
   GENDER_OPTIONS,
   CLASS_OPTIONS,
@@ -8,12 +7,11 @@ import {
 } from "../../constants/DropDownOptions";
 import Button from "../../components/ui/Button";
 import { IoArrowBack } from "react-icons/io5";
+import DynamicForm from "../../components/ui/DynamicForm";
 
 const AddStudent = () => {
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState(1);
-
-  // Form state
   const [studentData, setStudentData] = useState({
     studentId: "",
     fullName: "",
@@ -31,17 +29,142 @@ const AddStudent = () => {
     address: "",
   });
 
-  const handleChange = (e) => {
-    const { name, value, files } = e.target;
-    if (name === "profilePhoto") {
-      setStudentData({ ...studentData, profilePhoto: files[0] });
-    } else {
-      setStudentData({ ...studentData, [name]: value });
-    }
+  const tabConfigs = {
+    1: {
+      title: "Student Info",
+      fields: [
+        {
+          name: "studentId",
+          type: "input",
+          inputType: "text",
+          label: "Student ID",
+          placeholder: "Enter Student ID...",
+          required: true,
+        },
+        {
+          name: "fullName",
+          type: "input",
+          inputType: "text",
+          label: "Full Name",
+          placeholder: "Enter Full Name...",
+          required: true,
+        },
+        {
+          name: "gender",
+          type: "dropdown",
+          label: "Gender",
+          options: GENDER_OPTIONS,
+          placeholder: "Select Gender",
+          required: true,
+        },
+        {
+          name: "dob",
+          type: "input",
+          inputType: "date",
+          label: "Date of Birth",
+          required: true,
+        },
+        {
+          name: "profilePhoto",
+          type: "input",
+          inputType: "file",
+          label: "Profile Photo",
+          fullWidth: true,
+          required: true,
+        },
+      ],
+    },
+    2: {
+      title: "Academic Info",
+      fields: [
+        {
+          name: "classGrade",
+          type: "dropdown",
+          label: "Class/Grade",
+          options: CLASS_OPTIONS,
+          placeholder: "Select Class",
+          required: true,
+        },
+        {
+          name: "section",
+          type: "dropdown",
+          label: "Section",
+          options: (data) => getSectionsByClass(data.classGrade),
+          placeholder: "Select Section",
+          required: true,
+        },
+        {
+          name: "academicYear",
+          type: "input",
+          inputType: "text",
+          label: "Academic Year",
+          placeholder: "Enter Academic Year...",
+          required: true,
+        },
+        {
+          name: "rollNumber",
+          type: "input",
+          inputType: "text",
+          label: "Roll Number",
+          placeholder: "Enter Roll Number...",
+          required: true,
+        },
+      ],
+    },
+    3: {
+      title: "Contact Info",
+      fields: [
+        {
+          name: "studentPhone",
+          type: "input",
+          inputType: "text",
+          label: "Student Phone",
+          placeholder: "Enter Phone...",
+        },
+        {
+          name: "parentName",
+          type: "input",
+          inputType: "text",
+          label: "Parent Name",
+          placeholder: "Enter Parent Name...",
+          required: true,
+        },
+        {
+          name: "parentPhone",
+          type: "input",
+          inputType: "text",
+          label: "Parent Phone",
+          placeholder: "Enter Parent Phone...",
+          required: true,
+        },
+        {
+          name: "parentEmail",
+          type: "input",
+          inputType: "email",
+          label: "Parent Email",
+          placeholder: "Enter Parent Email...",
+          required: true,
+        },
+        {
+          name: "address",
+          type: "textarea",
+          label: "Address",
+          placeholder: "Enter Address...",
+          fullWidth: true,
+          required: true,
+        },
+      ],
+    },
   };
 
-  const handleNext = () => setActiveTab(activeTab + 1);
-  const handleBack = () => setActiveTab(activeTab - 1);
+  const handleNext = () => setActiveTab((prev) => prev + 1);
+  const handleBack = () => {
+    if (activeTab > 1) {
+      setActiveTab((prev) => prev - 1);
+    } else {
+      navigate("/students");
+    }
+  };
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -54,275 +177,27 @@ const AddStudent = () => {
     }
   };
 
+  const currentConfig = tabConfigs[activeTab];
+
   return (
-    <section className="relative flex flex-col items-center rounded-xl w-full bg-white  py-4  mt-20 px-8 ">
-      {/* Tabs */}
-      <form
-        className="w-full flex flex-col max-w-xl gap-4"
+    <div className="flex justify-start items-center">
+      <DynamicForm
+        title={currentConfig.title}
+        fields={currentConfig.fields}
+        formData={studentData}
+        setFormData={setStudentData}
         onSubmit={handleSubmit}
+        headerActions={
+          <Button
+            onClick={handleBack}
+            variant="ghost"
+            icon={<IoArrowBack size={20} />}
+          />
+        }
       >
-        {/* Tab 1: Basic Info */}
-        {activeTab === 1 && (
-          <div className="grid grid-cols-2 sm:grid-cols-2 gap-4">
-            <div className="col-span-2 sm:col-span-2 flex items-center justify-between">
-              <h3 className="text-[#0C46C4] font-semibold text-lg mb-2">
-                Student Info
-              </h3>
-              <Button onClick={() => navigate("/students")}
-              variant="ghost"
-              icon={<IoArrowBack   size={20}/>} />
-            </div>
-            <div className="flex flex-col gap-2">
-              <label className="text-md font-semibold  text-[#000000]">
-                Student ID <span className="text-red-500">*</span>
-              </label>
-              <input
-                type="text"
-                name="studentId"
-                value={studentData.studentId}
-                onChange={handleChange}
-                placeholder="Enter Student ID..."
-                className="border border-[#0C46C4] placeholder-gray-400 rounded-lg p-2 text-sm focus:outline-none"
-                required
-              />
-            </div>
-
-            <div className="flex flex-col gap-2">
-              <label className="text-md font-semibold text-[#000000]">
-                Full Name <span className="text-red-500">*</span>
-              </label>
-              <input
-                type="text"
-                name="fullName"
-                value={studentData.fullName}
-                onChange={handleChange}
-                placeholder="Enter Full Name..."
-                className="border border-[#0C46C4] placeholder-gray-400 rounded-md p-2 text-sm focus:outline-none"
-                required
-              />
-            </div>
-
-            <div className="flex flex-col gap-2">
-              <label className="text-md font-semibold text-[#000000]">
-                Gender <span className="text-red-500">*</span>
-              </label>
-              <CustomDropdown
-                options={GENDER_OPTIONS}
-                value={studentData.gender}
-                onChange={(val) =>
-                  setStudentData({ ...studentData, gender: val })
-                }
-                placeholder="Select Gender"
-                triggerClassName="text-[#0C46C4] py-2 "
-              />
-            </div>
-
-            <div className="flex flex-col gap-2">
-              <label className="text-md font-semibold text-[#000000]">
-                Date of Birth <span className="text-red-500">*</span>
-              </label>
-              <input
-                type="date"
-                name="dob"
-                value={studentData.dob}
-                onChange={handleChange}
-                className="border border-[#0C46C4] rounded-md p-2 text-sm text-gray-400 focus:outline-none"
-                required
-              />
-            </div>
-
-            <div className="flex flex-col gap-2 col-span-2 sm:col-span-2">
-              <label className="text-md font-semibold text-[#000000]">
-                Profile Photo <span className="text-red-500">*</span>
-              </label>
-              <input
-                type="file"
-                name="profilePhoto"
-                onChange={handleChange}
-                className="border border-[#0C46C4] text-gray-400 rounded-md p-2 text-sm focus:outline-none"
-                required
-              />
-            </div>
-          </div>
-        )}
-
-        {/* Tab 2: Academic Info */}
-        {activeTab === 2 && (
-          <div className="grid grid-cols-2 sm:grid-cols-2 gap-4">
-            <div className="flex justify-between col-span-2 text-[#0C46C4]">
-              <h3 className=" font-semibold text-lg ">Academic Info</h3>
-              <Button onClick={handleBack}
-              variant="ghost"
-              icon={<IoArrowBack   size={20}/>} />
-            </div>
-
-            <div className="flex flex-col gap-2">
-              <label className="text-md font-semibold text-[#000000]">
-                Class/Grade <span className="text-red-500">*</span>
-              </label>
-              <CustomDropdown
-                options={CLASS_OPTIONS}
-                value={studentData.classGrade}
-                onChange={(val) =>
-                  setStudentData({ ...studentData, classGrade: val })
-                }
-                placeholder="Select Class"
-                containerClassName="w-full"
-                triggerClassName="text-[#0C46C4] py-2"
-              />
-            </div>
-
-            <div className="flex flex-col gap-2">
-              <label className="text-md font-semibold text-[#000000]">
-                Section <span className="text-red-500">*</span>
-              </label>
-              <CustomDropdown
-                options={getSectionsByClass(studentData.classGrade)}
-                value={studentData.section}
-                onChange={(val) =>
-                  setStudentData({ ...studentData, section: val })
-                }
-                placeholder="Select Section"
-                containerClassName="w-full"
-                triggerClassName="text-[#0C46C4] py-2"
-              />
-            </div>
-
-            <div className="flex flex-col gap-2">
-              <label className="text-md font-semibold text-[#000000]">
-                Academic Year <span className="text-red-500">*</span>
-              </label>
-              <input
-                type="text"
-                name="academicYear"
-                value={studentData.academicYear}
-                onChange={handleChange}
-                placeholder="Enter Academic Year..."
-                className="border border-[#0C46C4] placeholder-gray-400 rounded-md p-2 text-sm focus:outline-none"
-                required
-              />
-            </div>
-
-            <div className="flex flex-col gap-2">
-              <label className="text-md font-semibold text-[#000000]">
-                Roll Number <span className="text-red-500">*</span>
-              </label>
-              <input
-                type="text"
-                name="rollNumber"
-                value={studentData.rollNumber}
-                onChange={handleChange}
-                placeholder="Enter Roll Number..."
-                className="border border-[#0C46C4] placeholder-gray-400 rounded-md p-2 text-sm focus:outline-none"
-                required
-              />
-            </div>
-          </div>
-        )}
-
-        {/* Tab 3: Contact Info */}
-        {activeTab === 3 && (
-          <div className="grid grid-cols-2 sm:grid-cols-2 gap-4">
-            <div className="col-span-2 flex justify-between items-center">
-              <h3 className=" text-[#0C46C4] font-semibold text-lg mb-2">
-                Contact Info
-              </h3>
-              <Button onClick={handleBack}
-              variant="ghost"
-              icon={<IoArrowBack   size={20}/>} />
-            </div>
-
-            <div className="flex flex-col gap-2">
-              <label className="text-md font-semibold text-[#000000]">
-                Student Phone
-              </label>
-              <input
-                type="text"
-                name="studentPhone"
-                value={studentData.studentPhone}
-                onChange={handleChange}
-                placeholder="Enter Phone..."
-                className="border border-[#0C46C4] placeholder-gray-400 rounded-md p-2 text-sm focus:outline-none"
-              />
-            </div>
-
-            <div className="flex flex-col gap-2">
-              <label className="text-md font-semibold text-[#000000]">
-                Parent Name <span className="text-red-500">*</span>
-              </label>
-              <input
-                type="text"
-                name="parentName"
-                value={studentData.parentName}
-                onChange={handleChange}
-                placeholder="Enter Parent Name..."
-                className="border border-[#0C46C4] placeholder-gray-400 rounded-md p-2 text-sm focus:outline-none"
-                required
-              />
-            </div>
-
-            <div className="flex flex-col gap-2">
-              <label className="text-md font-semibold text-[#000000]">
-                Parent Phone <span className="text-red-500">*</span>
-              </label>
-              <input
-                type="text"
-                name="parentPhone"
-                value={studentData.parentPhone}
-                onChange={handleChange}
-                placeholder="Enter Parent Phone..."
-                className="border border-[#0C46C4] placeholder-gray-400 rounded-md p-2 text-sm focus:outline-none"
-                required
-              />
-            </div>
-
-            <div className="flex flex-col gap-2">
-              <label className="text-md font-semibold text-[#000000]">
-                Parent Email <span className="text-red-500">*</span>
-              </label>
-              <input
-                type="email"
-                name="parentEmail"
-                value={studentData.parentEmail}
-                onChange={handleChange}
-                placeholder="Enter Parent Email..."
-                className="border border-[#0C46C4] placeholder-gray-400 rounded-md p-2 text-sm focus:outline-none"
-                required
-              />
-            </div>
-
-            <div className="flex flex-col col-span-2 sm:col-span-2 gap-2">
-              <label className="text-md font-semibold text-[#000000]">
-                Address <span className="text-red-500">*</span>
-              </label>
-              <textarea
-                name="address"
-                value={studentData.address}
-                onChange={handleChange}
-                placeholder="Enter Address..."
-                className="border border-[#0C46C4] placeholder-gray-400 rounded-md p-4 text-sm focus:outline-none"
-                required
-              />
-            </div>
-          </div>
-        )}
-
-        {/* Buttons */}
-        <div className="flex justify-center  items-center mt-6">
-          <div className=" flex justify-center items-center gap-6">
-            <Button
-              type="submit"
-              variant="primary"
-              className="w-50"
-             
-            >
-              {activeTab < 3 ? "Next" : "Save"}
-            </Button>
-           
-          </div>
-        </div>
-      </form>
-    </section>
+        {activeTab < 3 ? "Next" : "Save Student"}
+      </DynamicForm>
+    </div>
   );
 };
 
