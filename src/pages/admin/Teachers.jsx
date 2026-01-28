@@ -9,7 +9,7 @@ import DataTable from "../../components/ui/DataTable";
 import ActionButtons from "../../components/ui/ActionButtons";
 import DataCard from "../../components/ui/DataCard";
 import Pagination from "../../components/ui/Pagination";
-import { TEACHER_TYPE } from "../../constants/DropDownOptions";
+import { CLASS_OPTIONS, getSectionsByClass, TEACHER_TYPE } from "../../constants/DropDownOptions";
 
 const Teachers = () => {
   const navigate = useNavigate();
@@ -24,6 +24,7 @@ const Teachers = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [subjectFilter, setSubjectFilter] = useState("");
   const [sectionFilter, setSectionFilter] = useState("");
+  const [classFilter,setClassFilter]=useState("");
 
   // Pagination State
   const [currentPage, setCurrentPage] = useState(1);
@@ -73,7 +74,7 @@ const Teachers = () => {
     setSearchQuery("");
     setSubjectFilter("");
     setSectionFilter("");
-    setTypeFilter("");
+    
     setCurrentPage(1);
   };
 
@@ -211,16 +212,17 @@ const Teachers = () => {
               placeholder: "Subject",
               searchable: true,
             },
+            
             {
-              value: typeFilter,
-              onChange: setTypeFilter,
-              options: TEACHER_TYPE,
-              placeholder: "Type",
+              value:classFilter,
+              onChange:setClassFilter,
+              options:CLASS_OPTIONS,
+              placeholder:"Class",
             },
             {
               value: sectionFilter,
               onChange: setSectionFilter,
-              options: uniqueSections,
+              options: getSectionsByClass(classFilter),
               placeholder: "Section",
             },
           ]}

@@ -16,6 +16,7 @@ import {
   FaLightbulb,
   FaTrophy,
   FaUserCircle,
+  FaFileInvoice,
 } from "react-icons/fa";
 import { IoLogOutSharp, IoPeople, IoNotifications } from "react-icons/io5";
 
@@ -36,6 +37,8 @@ const DashboardLayout = () => {
         "/add-teacher",
         "/add-student",
         "/add-course",
+        "/generate-fee",
+        "/notice",
       ].includes(location.pathname)
     ) {
       return "admin";
@@ -69,6 +72,12 @@ const DashboardLayout = () => {
       },
       { label: "Courses", path: "/courses", icon: <FaBook size={20} /> },
       { label: "Meetings", path: "/meetings", icon: <IoPeople size={20} /> },
+      {
+        label: "Fees",
+        path: "/generate-fee",
+        icon: <FaFileInvoice size={20} />,
+      },
+      { label: "Notice", path: "/notice", icon: <IoNotifications size={20} /> },
       { label: "Settings", path: "/settings", icon: <FaCog size={20} /> },
     ],
     teacher: [

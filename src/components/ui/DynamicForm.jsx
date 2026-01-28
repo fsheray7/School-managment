@@ -11,7 +11,7 @@ const DynamicForm = ({
   title,
   children,
   headerActions,
-  className = "mt-20 grid grid-cols-2 gap-4 max-w-3xl bg-white md:p-8 rounded-2xl relative",
+  className = "mt-10 grid grid-cols-2 gap-4 max-w-3xl bg-white md:p-8 rounded-2xl relative",
   showDefaultHeader = true,
   buttonAreaClassName = "col-span-2 flex flex-col items-center justify-center mt-6",
   submitButtonClassName = "",
