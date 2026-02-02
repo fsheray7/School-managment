@@ -7,9 +7,11 @@ const Button = ({
   icon,
   children,
   className = "",
+  disabled = false,
+  ...props
 }) => {
   const base =
-    "flex justify-center items-center gap-2 font-semibold transition-all duration-300";
+    "flex justify-center items-center gap-2 font-semibold transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed";
 
   const variants = {
     primary:
@@ -34,7 +36,9 @@ const Button = ({
     <button
       type={type}
       onClick={onClick}
+      disabled={disabled}
       className={`${base} ${variants[variant]} ${className}`}
+      {...props}
     >
       {icon && icon}
       {children}

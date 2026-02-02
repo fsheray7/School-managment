@@ -60,6 +60,8 @@ const Navbar = ({ onToggleSidebar, isSidebarOpen, role = "admin" }) => {
     "/settings": "Settings",
     "/add-teacher": "Add Teacher",
     "/add-student": "Add Student",
+    "/generate-fee": "Generate Fee",
+    "/finance": "Finance",
     // Teacher Routes
     "/teacher-dashboard": "Teacher Dashboard",
     "/attendance": "Attendance",

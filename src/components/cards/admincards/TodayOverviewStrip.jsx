@@ -48,18 +48,20 @@ const TodayOverviewStrip = () => {
   ];
 
   return (
-    <div className="w-full bg-white rounded-xl shadow-sm border-t-5 border-blue-600 p-2 overflow-x-auto no-scrollbar">
-      <div className="flex items-center justify-between min-w-[900px] lg:min-w-0 lg:flex-nowrap gap-2 px-2">
+    <div className="w-full bg-white rounded-xl shadow-sm border-t-5 border-[#0C46C4] p-4 lg:p-2">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:flex lg:flex-row lg:items-center lg:justify-between gap-4 lg:gap-0 w-full">
         {overviewData.map((item) => (
           <div
             key={item.id}
-            className="flex items-center gap-3 px-4 py-2 border-r last:border-r-0 border-gray-100 flex-1 justify-center whitespace-nowrap"
+            className="flex items-center gap-3 p-3 rounded-lg lg:p-2 lg:rounded-none lg:border-none lg:shadow-none border border-gray-100 shadow-sm bg-gray-50 lg:bg-transparent lg:border-r lg:last:border-r-0 lg:border-gray-200 lg:flex-1 lg:justify-center whitespace-nowrap transition-all duration-200 hover:shadow-md lg:hover:shadow-none"
           >
-            <div className={`text-xl ${item.color} bg-gray-50 p-2 rounded-lg`}>
+            <div
+              className={`text-xl ${item.color} bg-white lg:bg-gray-50 p-2 rounded-lg shadow-sm lg:shadow-none`}
+            >
               {item.icon}
             </div>
             <div className="flex flex-col">
-              <span className="text-[10px] uppercase font-bold text-gray-400 tracking-wider">
+              <span className="text-[10px] uppercase font-bold text-gray-500 lg:text-gray-400 tracking-wider">
                 {item.label}
               </span>
               <span className="text-sm font-bold text-gray-800">

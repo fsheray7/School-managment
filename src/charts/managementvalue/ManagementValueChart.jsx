@@ -10,8 +10,9 @@ import {
   Area,
 } from "recharts";
 
-import data from "../../data/chartdata/managementvalue/data";
+import { managementChartData } from "../../data/finance/ManagementChartData";
 
+const data = managementChartData;
 
 const ManagementValueChart = ({ className }) => {
   const [visibleSeries, setVisibleSeries] = React.useState({
@@ -35,7 +36,7 @@ const ManagementValueChart = ({ className }) => {
 
   return (
     <div
-      className={`w-full bg-white rounded-2xl p-4 sm:p-6 hover:scale-102 hover:shadow-lg transition-all duration-300 shadow md:border-t-8 border-[#0C46C4] ${className}`}
+      className={`w-full bg-white rounded-2xl p-4 sm:p-6 hover:scale-102 hover:shadow-lg transition-all duration-300 shadow border-t-5 border-[#0C46C4] ${className}`}
     >
       {/* Header */}
       <div className="flex flex-col sm:flex-row items-center justify-between mb-4 gap-2">

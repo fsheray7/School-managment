@@ -56,7 +56,7 @@ const AlertsQuickActions = () => {
   return (
     <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 w-full">
       {/* Quick Actions */}
-      <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
+      <div className="bg-white p-6 rounded-xl shadow-sm border-t-5 border-[#0C46C4]">
         <h3 className="text-lg font-bold text-gray-800 mb-4 flex items-center gap-2">
           <FaShieldAlt className="text-blue-600" /> Quick Actions
         </h3>
@@ -75,7 +75,7 @@ const AlertsQuickActions = () => {
       </div>
 
       {/* Alerts */}
-      <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
+      <div className="bg-white p-6 rounded-xl shadow-sm border-t-5  border-red-500">
         <h3 className="text-lg font-bold text-gray-800 mb-4 flex items-center gap-2">
           <FaBell className="text-red-500" /> Critical Alerts
         </h3>

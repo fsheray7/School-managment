@@ -120,8 +120,8 @@ const Pagination = ({
           className={`flex items-center justify-center w-9 h-9 rounded-lg transition-all duration-300 
             ${
               currentPage === totalPages
-                ? "text-gray-300 cursor-not-allowed"
-                : "text-gray-600 hover:bg-blue-100 hover:text-blue-500 cursor-pointer"
+                ? "text-gray-500 cursor-not-allowed"
+                : "text-gray-600 hover:bg-blue-300 hover:text-blue-500 cursor-pointer"
             }`}
         >
           <IoChevronForward size={18} />

@@ -37,6 +37,7 @@ import Settings from "./pages/admin/Settings";
 import AddStudent from "./features/admin/AddStudent";
 import AddCourse from "./features/admin/AddCourse";
 import GenerateFee from "./features/admin/GenerateFee";
+import Finance from "./pages/admin/Finance";
 
 function App() {
   return (
@@ -58,6 +59,7 @@ function App() {
           <Route path="/add-student" element={<AddStudent />} />
           <Route path="/add-course" element={<AddCourse />} />
           <Route path="/generate-fee" element={<GenerateFee />} />
+          <Route path="/finance" element={<Finance />} />
 
           {/* Teacher Routes */}
           <Route path="/teacher-dashboard" element={<TeacherDashboard />} />

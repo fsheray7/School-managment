@@ -17,6 +17,7 @@ import {
   FaTrophy,
   FaUserCircle,
   FaFileInvoice,
+  FaWallet,
 } from "react-icons/fa";
 import { IoLogOutSharp, IoPeople, IoNotifications } from "react-icons/io5";
 
@@ -38,6 +39,7 @@ const DashboardLayout = () => {
         "/add-student",
         "/add-course",
         "/generate-fee",
+        "/finance",
         "/notice",
       ].includes(location.pathname)
     ) {
@@ -76,6 +78,11 @@ const DashboardLayout = () => {
         label: "Fees",
         path: "/generate-fee",
         icon: <FaFileInvoice size={20} />,
+      },
+      {
+        label: "Finance",
+        path: "/finance",
+        icon: <FaWallet size={20} />,
       },
       { label: "Notice", path: "/notice", icon: <IoNotifications size={20} /> },
       { label: "Settings", path: "/settings", icon: <FaCog size={20} /> },
@@ -174,7 +181,7 @@ const DashboardLayout = () => {
         isSidebarOpen={isSidebarOpen}
       />
       <main className="w-full flex    lg:pl-64  transition-all duration-300 ">
-        <div className="py-4 w-full px-6">
+        <div className="py-4 w-full px-3 md:px-6">
           <Outlet />
         </div>
       </main>

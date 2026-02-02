@@ -68,7 +68,7 @@ const ProfileSelection = () => {
         </div>
       </div>
 
-      <div className="z-50 w-full max-w-lg mt-24 sm:mt-28 md:mt-0 flex flex-col items-center">
+      <div className="z-50 w-full max-w-lg mt-50 sm:mt-28 md:mt-0 flex flex-col items-center">
         {!selectedRole ? (
           <div className="flex flex-col items-center gap-8 sm:gap-10">
             <h1 className="text-[#0C46C4] text-xl md:text-3xl font-bold font-opensans text-center">

@@ -9,21 +9,16 @@ import {
   ResponsiveContainer,
 } from "recharts";
 
-const data = [
-  { month: "Jan", collection: 4000000 },
-  { month: "Feb", collection: 4200000 },
-  { month: "Mar", collection: 4800000 },
-  { month: "Apr", collection: 4500000 },
-  { month: "May", collection: 5100000 },
-  { month: "Jun", collection: 5450000 },
-];
+import { trendChartData } from "../../data/finance/TrendChartData";
+
+const data = trendChartData;
 
 const FinanceTrendChart = () => {
   return (
-    <div className="w-full bg-white p-6 rounded-xl shadow-sm border border-gray-100 flex flex-col gap-4">
+    <div className="w-full bg-white p-2 md:p-6 rounded-xl shadow-sm border-t-5 border-[#0C46C4] flex flex-col gap-4">
       <div className="flex items-center justify-between">
         <h3 className="text-lg font-bold text-gray-800">
-          Monthly Fee Collection Trend
+          Monthly Fee Collection
         </h3>
         <span className="text-xs font-semibold text-green-600 bg-green-50 px-2 py-1 rounded-full">
           +12% from last month
