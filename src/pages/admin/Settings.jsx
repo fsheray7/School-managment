@@ -155,7 +155,7 @@ const Settings = () => {
                     <img
                       src={localSettings.schoolLogo}
                       alt="Logo"
-                      className="w-full h-full object-cover"
+                      className="w-full h-full object-contain"
                     />
                   </div>
                   <div className="flex-1">
