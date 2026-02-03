@@ -56,7 +56,7 @@ const Navbar = ({ onToggleSidebar, isSidebarOpen, role = "admin" }) => {
   const pageTitles = {
     "/admin-dashboard": "Admin Dashboard",
     "/teachers": "Teachers",
-    "/students": "StudentsAdmin",
+    "/students": "Students",
     "/courses": "Courses",
     "/meetings": "Meetings",
     "/settings": "Settings",

@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import CustomDropdown from "../ui/CustomDropdown";
 import Button from "../ui/Button";
+import FileUpload from "../ui/FileUpload";
 import { IoEye, IoEyeOff } from "react-icons/io5";
 
 const DynamicForm = ({
@@ -60,8 +61,8 @@ const DynamicForm = ({
             )}
 
             <div className="relative w-full">
-              {/* INPUT (text, email, password, date, file, etc.) */}
-              {field.type === "input" && (
+              {/* INPUT (text, email, password, date, etc.) */}
+              {field.type === "input" && field.inputType !== "file" && (
                 <div className="relative">
                   <input
                     type={
@@ -72,11 +73,7 @@ const DynamicForm = ({
                         : field.inputType
                     }
                     name={field.name}
-                    value={
-                      field.inputType === "file"
-                        ? undefined
-                        : formData[field.name] || ""
-                    }
+                    value={formData[field.name] || ""}
                     onChange={(e) =>
                       handleChange(
                         field.name,
@@ -114,6 +111,25 @@ const DynamicForm = ({
                     )
                   )}
                 </div>
+              )}
+
+              {/* FILE UPLOAD (handled by FileUpload component) */}
+              {field.type === "input" && field.inputType === "file" && (
+                <FileUpload
+                  file={formData[field.name]}
+                  onChange={(e) =>
+                    handleChange(
+                      field.name,
+                      e.target.value,
+                      field.inputType,
+                      e.target.files,
+                    )
+                  }
+                  onClear={() =>
+                    setFormData((prev) => ({ ...prev, [field.name]: null }))
+                  }
+                  helperText="" // DynamicForm usually handles its own labels/context
+                />
               )}
 
               {/* TEXTAREA */}

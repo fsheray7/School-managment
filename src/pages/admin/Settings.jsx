@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 import { useSettings } from "../../context/SettingsContext";
 import Button from "../../components/ui/Button";
-import { FaUpload, FaMoon, FaSun, FaCheck } from "react-icons/fa";
+import FileUpload from "../../components/ui/FileUpload";
+import { FaMoon, FaSun, FaCheck } from "react-icons/fa";
 
 import { useToast } from "../../context/ToastContext";
 
@@ -113,22 +114,22 @@ const Settings = () => {
     <section className="flex flex-col items-center w-full bg-gray-50/50 min-h-screen gap-8 px-4 pb-20 pt-20">
       <div className="w-full max-w-5xl flex flex-col gap-8">
         {/* Header */}
-        <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
-          <div>
-            <h1 className="text-xl font-extrabold  tracking-tight"
-            style={{ color: "var(--primary-color)" }}
+        <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 bg-white p-4 rounded-2xl shadow-sm border border-gray-100">
+          <div className="flex flex-col gap-2">
+            <h1
+              className="text-xl font-extrabold  tracking-tight"
+              style={{ color: "var(--primary-color)" }}
             >
               System Settings
             </h1>
-            <p className="text-gray-500 font-medium">
+            <p className="text-gray-500 ">
               Configure your school's global identity and preferences.
             </p>
           </div>
           <Button
             onClick={handleSave}
-            className="  text-sm shadow-lg shadow-blue-100"
+            className="  text-sm shadow-lg shadow-blue-100 border border-[var(--primary-color)]"
             variant="ghost"
-            style={{ borderColor: "var(--primary-color)" }}
           >
             Save Changes
           </Button>
@@ -149,34 +150,22 @@ const Settings = () => {
               />
 
               <div className="flex flex-col gap-2">
-                <label className="text-xs font-bold text-gray-500 uppercase tracking-wider">
-                  School Logo
-                </label>
-                <div className="flex flex-col sm:flex-row items-center gap-6 border-2 border-dashed border-gray-200 p-6 rounded-2xl bg-gray-50/50 transition-colors hover:bg-gray-50">
+                <div className="flex flex-col sm:flex-row items-center gap-6 border border-gray-100 p-6 rounded-2xl bg-gray-50/50 transition-colors">
                   <div className="w-24 h-24 rounded-2xl bg-white flex items-center justify-center overflow-hidden border border-gray-100 shadow-sm p-2">
                     <img
                       src={localSettings.schoolLogo}
                       alt="Logo"
-                      className="w-full h-full object-contain"
+                      className="w-full h-full object-cover"
                     />
                   </div>
-                  <div className="flex-1 text-center sm:text-left">
-                    <h3 className="text-sm font-bold text-gray-700 mb-1">
-                      Update Brand Logo
-                    </h3>
-                    <p className="text-xs text-gray-400 mb-4">
-                      Recommended: Square PNG/JPG, min 500x500px
-                    </p>
-                    <label className="inline-flex items-center gap-2 px-6 py-2.5 bg-white border border-gray-200 rounded-xl cursor-pointer hover:bg-gray-50 transition-all font-bold text-gray-600 text-sm shadow-sm active:scale-95">
-                      <FaUpload className="text-[#0C46C4]" />
-                      <span>Choose File</span>
-                      <input
-                        type="file"
-                        hidden
-                        accept="image/*"
-                        onChange={handleLogoUpload}
-                      />
-                    </label>
+                  <div className="flex-1">
+                    <FileUpload
+                      label="School Logo"
+                      file={localSettings.schoolLogo}
+                      onChange={handleLogoUpload}
+                      accept="image/*"
+                      helperText="Recommended: Square PNG/JPG, min 500x500px"
+                    />
                   </div>
                 </div>
               </div>

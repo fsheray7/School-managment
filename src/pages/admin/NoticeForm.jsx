@@ -1,7 +1,7 @@
 import React, { useState } from "react";
-import { FaUpload, FaTimes } from "react-icons/fa";
 import CustomDropdown from "../../components/ui/CustomDropdown";
 import Button from "../../components/ui/Button";
+import FileUpload from "../../components/ui/FileUpload";
 
 import { useSettings } from "../../context/SettingsContext";
 
@@ -81,7 +81,7 @@ const NoticeForm = () => {
 
   return (
     <div className="w-full max-w-3xl bg-white overflow-hidden">
-      <form onSubmit={handleSubmit} className="p-1 md:p-4 space-y-3">
+      <form onSubmit={handleSubmit} className="p-1 md:p-4 space-y-3 ">
         {/* Notice Title */}
         <div className="flex flex-col gap-2">
           <label className="text-sm font-semibold text-gray-700">
@@ -184,83 +184,41 @@ const NoticeForm = () => {
         </div>
 
         {/* Important Toggle */}
-        <div className="flex items-center gap-4 px-2 py-2">
-          <label className="relative inline-flex items-center cursor-pointer">
-            <input
-              type="checkbox"
-              name="isImportant"
-              checked={formData.isImportant}
-              onChange={handleChange}
-              className="sr-only peer"
-            />
-            <div
-              className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all"
-              style={{
-                "--tw-ring-color": "var(--primary-color)",
-                backgroundColor: formData.isImportant
-                  ? "var(--primary-color)"
-                  : "",
-              }}
-            ></div>
-            <span className="ml-3 text-sm font-semibold text-gray-700">
-              Mark as Important
-            </span>
-          </label>
-          <span className="text-xs text-gray-500 italic">pinned on top</span>
-        </div>
-
-        {/* Attachment Upload */}
-        <div className="flex flex-col gap-2">
-          <label className="text-sm font-semibold text-gray-700">
-            Upload Attachment
-          </label>
-          <div className="flex items-center gap-4">
-            <label
-              className="flex items-center gap-2 px-4 py-1 bg-white border rounded-lg cursor-pointer hover:brightness-95 transition-colors font-medium"
-              style={{
-                borderColor: "var(--primary-color)",
-                color: "var(--primary-color)",
-              }}
-            >
-              <FaUpload size={14} />
-              <span className="text-sm">Choose File</span>
+        <div className="flex items-center gap-4 justify-between md:flex-row flex-col animate-fade-in">
+          <div className="flex  items-center gap-4 px-2 py-2">
+            <label className="relative inline-flex items-center cursor-pointer">
               <input
-                type="file"
-                className="hidden"
-                onChange={handleFileChange}
-                accept=".jpg,.png,.pdf"
+                type="checkbox"
+                name="isImportant"
+                checked={formData.isImportant}
+                onChange={handleChange}
+                className="sr-only peer"
               />
-            </label>
-            {formData.attachment && (
               <div
-                className="flex items-center gap-2 px-3 py-1.5 rounded-md text-sm font-medium border"
+                className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all"
                 style={{
-                  backgroundColor: "var(--primary-color)",
-                  color: "white",
-                  opacity: 0.1,
+                  "--tw-ring-color": "var(--primary-color)",
+                  backgroundColor: formData.isImportant
+                    ? "var(--primary-color)"
+                    : "",
                 }}
-              >
-                <div className="flex items-center gap-2" style={{ opacity: 1 }}>
-                  <span className="truncate max-w-[200px]">
-                    {formData.attachment.name}
-                  </span>
-                </div>
-                <button
-                  type="button"
-                  onClick={() =>
-                    setFormData((prev) => ({ ...prev, attachment: null }))
-                  }
-                  className="hover:text-red-500"
-                  style={{ color: "var(--primary-color)" }}
-                >
-                  <FaTimes size={14} />
-                </button>
-              </div>
-            )}
+              ></div>
+              <span className="ml-3 text-sm font-semibold text-gray-700">
+                Mark as Important
+              </span>
+            </label>
+            <span className="text-xs text-gray-500 italic">pinned on top</span>
           </div>
-          <span className="text-[10px] text-gray-400">
-            Supported formats: JPG, PNG, PDF
-          </span>
+
+          {/* Attachment Upload */}
+          <FileUpload
+            label="Upload Attachment"
+            file={formData.attachment}
+            onChange={handleFileChange}
+            onClear={() =>
+              setFormData((prev) => ({ ...prev, attachment: null }))
+            }
+          />
         </div>
 
         {/* Action Buttons */}

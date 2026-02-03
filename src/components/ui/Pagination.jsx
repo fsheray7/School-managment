@@ -77,11 +77,11 @@ const Pagination = ({
           onClick={() => onPageChange(currentPage - 1)}
           disabled={currentPage === 1}
           variant="ghost"
-          className={`flex items-center justify-center w-9 h-9 rounded-lg transition-all duration-300 
+          className={`flex items-center justify-center !p-0 w-9 h-9 rounded-lg transition-all duration-300 
             ${
               currentPage === 1
-                ? "text-gray-500 cursor-not-allowed"
-                : "text-gray-600 hover:bg-blue-300 hover:text-blue-500 cursor-pointer"
+                ? "text-gray-500  cursor-not-allowed"
+                : "hover:scale-110 duration-300 cursor-pointer"
             }`}
         >
           <IoChevronBack size={18} />
@@ -100,7 +100,7 @@ const Pagination = ({
             <button
               key={page}
               onClick={() => onPageChange(page)}
-              className={`w-7 h-7 rounded-full hover:scale-110 font-medium text-sm transition-all duration-300 cursor-pointer
+              className={`w-7 h-7 rounded-lg hover:scale-110 font-medium text-sm transition-all duration-300 cursor-pointer
                 ${
                   currentPage === page
                     ? "text-white shadow-md scale-105"
@@ -122,11 +122,11 @@ const Pagination = ({
           onClick={() => onPageChange(currentPage + 1)}
           disabled={currentPage === totalPages}
           variant="ghost"
-          className={`flex items-center justify-center w-9 h-9 rounded-lg transition-all duration-300 
+          className={`flex items-center justify-center !p-0 w-9 h-9 rounded-lg transition-all duration-300 
             ${
               currentPage === totalPages
                 ? "text-gray-500 cursor-not-allowed"
-                : "text-gray-600 hover:bg-blue-300 hover:text-blue-500 cursor-pointer"
+                : "hover:scale-110 duration-300 cursor-pointer"
             }`}
         >
           <IoChevronForward size={18} />
