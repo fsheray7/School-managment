@@ -48,7 +48,10 @@ const TodayOverviewStrip = () => {
   ];
 
   return (
-    <div className="w-full bg-white rounded-xl shadow-sm border-t-5 border-[#0C46C4] p-4 lg:p-2">
+    <div
+      className="w-full bg-white rounded-xl shadow-sm border-t-5 p-4 lg:p-2"
+      style={{ borderTopColor: "var(--primary-color)" }}
+    >
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:flex lg:flex-row lg:items-center lg:justify-between gap-4 lg:gap-0 w-full">
         {overviewData.map((item) => (
           <div

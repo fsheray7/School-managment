@@ -38,7 +38,7 @@ const ProfileSelection = () => {
   ];
 
   const boxStyle =
-    "flex flex-col p-2 items-center justify-center md:w-24 md:h-24 lg:w-24 lg:h-24 w-10 h-10 bg-[#0C46C4] rounded-xl text-white cursor-pointer hover:bg-blue-800 transition shadow-md";
+    "flex flex-col p-2 items-center justify-center md:w-16 md:h-16 lg:w-16 lg:h-16 w-10 h-10 rounded-xl text-white cursor-pointer hover:brightness-90 transition shadow-md";
 
   return (
     <section className="relative w-full min-h-screen bg-white flex flex-col items-center px-4 sm:px-6 md:px-8 py-8 md:justify-center overflow-hidden">
@@ -71,7 +71,10 @@ const ProfileSelection = () => {
       <div className="z-50 w-full max-w-lg mt-50 sm:mt-28 md:mt-0 flex flex-col items-center">
         {!selectedRole ? (
           <div className="flex flex-col items-center gap-8 sm:gap-10">
-            <h1 className="text-[#0C46C4] text-xl md:text-3xl font-bold font-opensans text-center">
+            <h1
+              className="text-lg md:text-2xl font-bold font-opensans text-center"
+              style={{ color: "var(--primary-color)" }}
+            >
               Choose your option
             </h1>
 
@@ -82,10 +85,16 @@ const ProfileSelection = () => {
                   className="flex flex-col items-center hover:scale-105 transition duration-300 cursor-pointer group"
                   onClick={() => handleRoleSelect(id)}
                 >
-                  <div className={boxStyle}>
+                  <div
+                    className={boxStyle}
+                    style={{ backgroundColor: "var(--primary-color)" }}
+                  >
                     <Icon size={iconSize} />
                   </div>
-                  <span className="mt-3 text-md font-semibold text-gray-700 group-hover:text-[#0C46C4] transition-colors">
+                  <span
+                    className="mt-3 text-md font-semibold text-gray-700 transition-colors"
+                    style={{ color: "var(--primary-color)" }}
+                  >
                     {label}
                   </span>
                 </div>
@@ -96,13 +105,20 @@ const ProfileSelection = () => {
           <div className="bg-white rounded-2xl w-full max-w-[400px] mt-4 sm:mt-8 md:mt-30 p-4">
             <button
               onClick={handleBackToRoles}
-              className="group relative text-[#0C46C4] text-sm font-semibold flex items-center hover:scale-105 transition duration-300 cursor-pointer gap-2 mb-4"
+              className="group relative text-sm font-semibold flex items-center hover:scale-105 transition duration-300 cursor-pointer gap-2 mb-4"
+              style={{ color: "var(--primary-color)" }}
             >
               <span>← Back to Selection</span>
-              <span className="absolute -bottom-1 left-1/2 w-0 h-0.5 bg-[#0C46C4] transition-all duration-300 -translate-x-1/2 group-hover:w-full"></span>
+              <span
+                className="absolute -bottom-1 left-1/2 w-0 h-0.5 transition-all duration-300 -translate-x-1/2 group-hover:w-full"
+                style={{ backgroundColor: "var(--primary-color)" }}
+              ></span>
             </button>
 
-            <h2 className="text-[#0C46C4] text-lg md:text-lg font-bold font-opensans text-center mb-4 capitalize">
+            <h2
+              className="text-lg md:text-lg font-bold font-opensans text-center mb-4 capitalize"
+              style={{ color: "var(--primary-color)" }}
+            >
               {selectedRole} Login
             </h2>
 

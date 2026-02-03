@@ -23,7 +23,7 @@ const GenderDonutChart = ({ className }) => {
           name: "Male",
           value: malePercentage,
           count: maleCount,
-          color: "#0C46C4",
+          color: "var(--primary-color)",
         },
         {
           name: "Female",
@@ -43,11 +43,12 @@ const GenderDonutChart = ({ className }) => {
 
   return (
     <div
-      className={`w-full max-w-sm bg-white rounded-2xl p-6 shadow hover:scale-102 border-t-5 border-[#0C46C4] hover:shadow-lg transition-all duration-300 ${className}`}
+      className={`w-full max-w-xs bg-white rounded-2xl p-6 shadow hover:scale-102 border-t-5 hover:shadow-lg transition-all duration-300 ${className}`}
+      style={{ borderTopColor: "var(--primary-color)" }}
     >
       {/* Top Labels */}
-      <div className="flex justify-between text-sm mb-2">
-        <div className="text-center mb-3">
+      <div className="flex justify-between text-sm">
+        <div className="text-center ">
           <p className="text-sm font-semibold text-black">{malePercentage}%</p>
           <p className="text-blue-500 text-md">
             <IoMdMale />
@@ -83,7 +84,7 @@ const GenderDonutChart = ({ className }) => {
       {/* Bottom Label */}
 
       {/* Legend */}
-      <div className="flex justify-center gap-4 text-sm">
+      <div className="flex mt-6 justify-center gap-4 text-sm">
         {data.map((item) => (
           <div key={item.name} className="flex items-center gap-1">
             <span

@@ -8,8 +8,11 @@ import {
 import Button from "../../components/ui/Button";
 import { IoArrowBack } from "react-icons/io5";
 import DynamicForm from "../../components/ui/DynamicForm";
+import ProgressBar from "../../components/ui/ProgressBar";
+import { useToast } from "../../context/ToastContext";
 
 const AddStudent = () => {
+  const { showToast } = useToast();
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState(1);
   const [studentData, setStudentData] = useState({
@@ -50,6 +53,14 @@ const AddStudent = () => {
           required: true,
         },
         {
+          name: "userName",
+          type: "input",
+          inputType: "text",
+          label: "User Name",
+          placeholder: "Enter User Name...",
+          required: true,
+        },
+        {
           name: "gender",
           type: "dropdown",
           label: "Gender",
@@ -69,7 +80,23 @@ const AddStudent = () => {
           type: "input",
           inputType: "file",
           label: "Profile Photo",
-          fullWidth: true,
+          fullWidth: false,
+          required: true,
+        },
+        {
+          name: "password",
+          type: "input",
+          inputType: "password",
+          label: "Password",
+          placeholder: "Enter Password...",
+          required: true,
+        },
+        {
+          name: "confirmPassword",
+          type: "input",
+          inputType: "password",
+          label: "Confirm Password",
+          placeholder: "Enter Confirm Password...",
           required: true,
         },
       ],
@@ -172,28 +199,24 @@ const AddStudent = () => {
       handleNext();
     } else {
       console.log("Final submission data:", studentData);
-      alert("Student added successfully!");
+      showToast("Student added successfully!");
       navigate("/students");
     }
   };
 
   const currentConfig = tabConfigs[activeTab];
+  const steps = Object.values(tabConfigs);
 
   return (
-    <div className="flex justify-start items-center">
+    <div className="flex flex-col justify-start items-center w-full">
+      <ProgressBar currentStep={activeTab} steps={steps} />
       <DynamicForm
         title={currentConfig.title}
         fields={currentConfig.fields}
         formData={studentData}
         setFormData={setStudentData}
         onSubmit={handleSubmit}
-        headerActions={
-          <Button
-            onClick={handleBack}
-            variant="ghost"
-            icon={<IoArrowBack size={20} />}
-          />
-        }
+        onClick={handleBack}
       >
         {activeTab < 3 ? "Next" : "Save Student"}
       </DynamicForm>

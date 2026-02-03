@@ -54,8 +54,12 @@ const WelcomePage = () => {
         {/* Loading Bar Container */}
         <div className="w-64 sm:w-80 h-1.5 bg-gray-100 rounded-full overflow-hidden shadow-inner flex items-center">
           <div
-            className="h-full bg-[#0C46C4] transition-all duration-75 ease-linear rounded-full shadow-[0_0_10px_rgba(12,70,196,0.5)]"
-            style={{ width: `${progress}%` }}
+            className="h-full transition-all duration-75 ease-linear rounded-full"
+            style={{
+              width: `${progress}%`,
+              backgroundColor: "var(--primary-color)",
+              boxShadow: `0 0 10px var(--primary-color)`,
+            }}
           ></div>
         </div>
         <p className="mt-4 text-gray-500 font-medium text-sm animate-pulse">
@@ -77,11 +81,12 @@ const WelcomePage = () => {
 
       {/* Decorative Background Circle Bottom - Responsive */}
       <div
-        className="absolute rounded-full bg-[#0C46C4]
+        className="absolute rounded-full
           w-100 h-100  sm:w-180 sm:h-180 md:w-210 md:h-210 lg:w-300 lg:h-310
            -bottom-75 sm:-bottom-130 md:-bottom-180 lg:-bottom-285
           transition-top-[520px]
           transition-all duration-300"
+        style={{ backgroundColor: "var(--primary-color)" }}
       ></div>
     </section>
   );

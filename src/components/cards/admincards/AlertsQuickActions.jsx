@@ -35,7 +35,7 @@ const AlertsQuickActions = () => {
     {
       label: "Send Notice",
       icon: <FaEnvelope />,
-      path: "/notice",
+      path: "/notice-admin",
       color: "bg-amber-50 text-amber-600 hover:bg-amber-600 hover:text-white",
     },
   ];
@@ -56,7 +56,10 @@ const AlertsQuickActions = () => {
   return (
     <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 w-full">
       {/* Quick Actions */}
-      <div className="bg-white p-6 rounded-xl shadow-sm border-t-5 border-[#0C46C4]">
+      <div
+        className="bg-white p-6 rounded-xl shadow-sm border-t-5"
+        style={{ borderTopColor: "var(--primary-color)" }}
+      >
         <h3 className="text-lg font-bold text-gray-800 mb-4 flex items-center gap-2">
           <FaShieldAlt className="text-blue-600" /> Quick Actions
         </h3>

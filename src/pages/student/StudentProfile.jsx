@@ -36,8 +36,13 @@ const StudentProfile = () => {
       </div>
 
       {/* Dynamic Content Area */}
-      <div className="flex w-full items-start max-w-4xl flex-col justify-center text-[#0C46C4] px-2 md:px-10 lg:px-20 mt-40 md:mt-50 lg:mt-30 z-50 gap-6">
-        <h1 className="text-[#0C46C4] font-bold">ID: 165653</h1>
+      <div
+        className="flex w-full items-start max-w-4xl flex-col justify-center px-2 md:px-10 lg:px-20 mt-40 md:mt-50 lg:mt-30 z-50 gap-6"
+        style={{ color: "var(--primary-color)" }}
+      >
+        <h1 className="font-bold" style={{ color: "var(--primary-color)" }}>
+          ID: 165653
+        </h1>
 
         <div className="flex flex-col gap-2 ">
           <p className="flex flex-col font-semibold">
@@ -64,7 +69,10 @@ const StudentProfile = () => {
         </div>
       </div>
 
-      <button className="text-xl mt-10 w-full max-w-md text-white bg-[#0C46C4] px-6 py-2 rounded-lg cursor-pointer ">
+      <button
+        className="text-xl mt-10 w-full max-w-md text-white px-6 py-2 rounded-lg cursor-pointer hover:brightness-90 transition-all active:scale-95"
+        style={{ backgroundColor: "var(--primary-color)" }}
+      >
         Request Edit
       </button>
     </section>

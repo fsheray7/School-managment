@@ -103,9 +103,14 @@ const Pagination = ({
               className={`w-7 h-7 rounded-full hover:scale-110 font-medium text-sm transition-all duration-300 cursor-pointer
                 ${
                   currentPage === page
-                    ? "bg-[#0C46C4] text-white shadow-md scale-105"
-                    : "text-gray-600 hover:bg-blue-100 hover:text-[#0C46C4]"
+                    ? "text-white shadow-md scale-105"
+                    : "text-gray-600 hover:brightness-110"
                 }`}
+              style={
+                currentPage === page
+                  ? { backgroundColor: "var(--primary-color)" }
+                  : {}
+              }
             >
               {page}
             </button>

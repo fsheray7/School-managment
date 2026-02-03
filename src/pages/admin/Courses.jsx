@@ -8,12 +8,14 @@ import DataTable from "../../components/ui/DataTable";
 import ActionButtons from "../../components/ui/ActionButtons";
 import DataCard from "../../components/ui/DataCard";
 import Pagination from "../../components/ui/Pagination";
+import { useToast } from "../../context/ToastContext";
 import {
   CLASS_OPTIONS,
   getSectionsByClass,
 } from "../../constants/DropDownOptions";
 
 const Courses = () => {
+  const { showToast } = useToast();
   const navigate = useNavigate();
   const [courses, setCourses] = useState(coursesData);
   const [selectedCourse, setSelectedCourse] = useState(null);
@@ -66,7 +68,7 @@ const Courses = () => {
     setCourses(
       courses.map((c) => (c.id === selectedCourse.id ? selectedCourse : c)),
     );
-    alert("Course details updated successfully!");
+    showToast("Course details updated successfully!");
     closeModal();
   };
 

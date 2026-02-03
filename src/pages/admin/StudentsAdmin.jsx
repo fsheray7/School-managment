@@ -13,10 +13,18 @@ import DataTable from "../../components/ui/DataTable";
 import ActionButtons from "../../components/ui/ActionButtons";
 import DataCard from "../../components/ui/DataCard";
 import Pagination from "../../components/ui/Pagination";
+import { useToast } from "../../context/ToastContext";
 
 const StudentsAdmin = () => {
+  const { showToast } = useToast();
   const navigate = useNavigate();
-  const [students, setStudents] = useState(studentsData);
+  const [students, setStudents] = useState(
+    studentsData.map((student) => ({
+      ...student,
+      profilePhoto: `https://ui-avatars.com/api/?name=${student.fullName}&background=random`,
+      password: "password123", // Default Password
+    })),
+  );
   const [selectedStudent, setSelectedStudent] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isEditMode, setIsEditMode] = useState(false);
@@ -61,7 +69,7 @@ const StudentsAdmin = () => {
     setStudents(
       students.map((s) => (s.id === selectedStudent.id ? selectedStudent : s)),
     );
-    alert("Student details updated successfully!");
+    showToast("Student details updated successfully!");
     closeModal();
   };
 
@@ -110,6 +118,7 @@ const StudentsAdmin = () => {
   ];
 
   const fields = [
+    { label: "", key: "profilePhoto", type: "image" }, // Profile Photo
     { label: "Full Name", key: "fullName", type: "text" },
     { label: "Guardian Name", key: "guardianName", type: "text" },
     { label: "Email", key: "email", type: "email" },
@@ -121,6 +130,7 @@ const StudentsAdmin = () => {
       ],
     },
     { label: "Guardian Contact", key: "guardianContact", type: "text" },
+    { label: "Password", key: "password", type: "password" }, // Password
   ];
 
   const renderMobileCard = (student) => (

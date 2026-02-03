@@ -15,7 +15,10 @@ const data = trendChartData;
 
 const FinanceTrendChart = () => {
   return (
-    <div className="w-full bg-white p-2 md:p-6 rounded-xl shadow-sm border-t-5 border-[#0C46C4] flex flex-col gap-4">
+    <div
+      className="w-full bg-white p-2 md:p-6 rounded-xl shadow-sm border-t-5 flex flex-col gap-4"
+      style={{ borderTopColor: "var(--primary-color)" }}
+    >
       <div className="flex items-center justify-between">
         <h3 className="text-lg font-bold text-gray-800">
           Monthly Fee Collection
@@ -33,8 +36,16 @@ const FinanceTrendChart = () => {
           >
             <defs>
               <linearGradient id="colorCollection" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="5%" stopColor="#0C46C4" stopOpacity={0.1} />
-                <stop offset="95%" stopColor="#0C46C4" stopOpacity={0} />
+                <stop
+                  offset="5%"
+                  stopColor="var(--primary-color)"
+                  stopOpacity={0.1}
+                />
+                <stop
+                  offset="95%"
+                  stopColor="var(--primary-color)"
+                  stopOpacity={0}
+                />
               </linearGradient>
             </defs>
             <CartesianGrid
@@ -69,7 +80,7 @@ const FinanceTrendChart = () => {
             <Area
               type="monotone"
               dataKey="collection"
-              stroke="#0C46C4"
+              stroke="var(--primary-color)"
               strokeWidth={3}
               fillOpacity={1}
               fill="url(#colorCollection)"

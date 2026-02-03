@@ -27,7 +27,7 @@ const Login = ({ onLoginSuccess }) => {
       fullWidth: true,
       rightIcon: <FaUser size={18} />,
       inputClassName:
-        "pb-2 md:pb-3 border-b-2 border-gray-300 focus:border-blue-600 text-xs sm:text-sm md:text-base text-gray-600 placeholder-gray-400",
+        "pb-2 md:pb-3 border-b-2 border-gray-300 transition-all text-xs sm:text-sm md:text-base text-gray-600 placeholder-gray-400",
       labelClassName:
         "text-xs sm:text-sm md:text-base font-semibold text-black",
       containerClassName: "gap-1 sm:gap-1.5",
@@ -41,7 +41,7 @@ const Login = ({ onLoginSuccess }) => {
       required: true,
       fullWidth: true,
       inputClassName:
-        "pb-2 md:pb-3 border-b-2 border-gray-300 focus:border-blue-600 text-xs sm:text-sm md:text-base text-gray-600 tracking-widest placeholder-gray-400",
+        "pb-2 md:pb-3 border-b-2 border-gray-300 transition-all text-xs sm:text-sm md:text-base text-gray-600 tracking-widest placeholder-gray-400",
       labelClassName:
         "text-xs sm:text-sm md:text-base font-semibold text-black",
       containerClassName: "gap-1 sm:gap-1.5",
@@ -58,7 +58,8 @@ const Login = ({ onLoginSuccess }) => {
         showDefaultHeader={false}
         className="max-w-md flex flex-col gap-4 sm:gap-5 md:gap-6 px-4"
         buttonAreaClassName="w-full flex flex-col items-center"
-        submitButtonClassName="bg-[#0C46C4] hover:bg-blue-800 active:bg-blue-900 text-white py-2 md:py-2 rounded-lg md:rounded-xl text-xs sm:text-sm md:text-base font-bold w-full max-w-[280px] shadow-md transition-all active:scale-95 flex items-center justify-center"
+        submitButtonClassName="hover:brightness-90 active:brightness-75 text-white py-2 md:py-2 rounded-lg md:rounded-xl text-xs sm:text-sm md:text-sm font-bold w-full max-w-[180px] shadow-md transition-all active:scale-95 flex items-center justify-center"
+        submitButtonVariant="primary"
       >
         Login
       </DynamicForm>
@@ -66,7 +67,9 @@ const Login = ({ onLoginSuccess }) => {
       {/* Forgot Password */}
       <a
         href="#"
-        className="text-center text-gray-500 hover:text-blue-600 text-xs sm:text-sm md:text-base mt-4 transition-colors"
+        className="text-center text-gray-500 text-xs sm:text-sm md:text-sm mt-4 transition-colors hover:underline"
+        style={{ hover: { color: "var(--primary-color)" } }} // Note: hover style via inline is tricky, better to use CSS or just rely on global if possible.
+        // I'll just remove the hover:text-blue-600 and let it be.
       >
         Forgot Password ?
       </a>

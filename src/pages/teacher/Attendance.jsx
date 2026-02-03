@@ -15,11 +15,11 @@ const students = [
 const Attendance = () => {
   return (
     <section className="w-full min-h-screen bg-white flex flex-col items-center overflow-x-hidden pb-6">
-
-    
-
       {/* CLASS AND DATE BAR */}
-      <div className="flex w-full items-center justify-between bg-[#0C46C499] mt-16 py-2 px-4">
+      <div
+        className="flex w-full items-center justify-between mt-16 py-2 px-4 shadow-sm"
+        style={{ backgroundColor: "var(--primary-color)", opacity: 0.6 }}
+      >
         <h2 className="text-sm sm:text-base text-white font-semibold">
           Class: <span className="font-none">3 A</span>
         </h2>
@@ -31,7 +31,10 @@ const Attendance = () => {
       {/* TABLE */}
       <div className="w-full  mt-8 px-0 sm:px-4">
         {/* Header */}
-        <div className="grid grid-cols-3 border-b bg-[#0C46C499] py-2 px-2 text-white text-xs sm:text-sm font-bold">
+        <div
+          className="grid grid-cols-3 border-b py-2 px-2 text-white text-xs sm:text-sm font-bold shadow-sm"
+          style={{ backgroundColor: "var(--primary-color)", opacity: 0.6 }}
+        >
           <p>Student Name</p>
           <p className="text-center">Present</p>
           <p className="text-center">Absent</p>
@@ -46,22 +49,15 @@ const Attendance = () => {
             <p>{student.name}</p>
 
             <div className="flex justify-center">
-              <input
-                type="checkbox"
-                className="w-4 h-4"
-              />
+              <input type="checkbox" className="w-4 h-4" />
             </div>
 
             <div className="flex justify-center">
-              <input
-                type="checkbox"
-                className="w-4 h-4"
-              />
+              <input type="checkbox" className="w-4 h-4" />
             </div>
           </div>
         ))}
       </div>
-
     </section>
   );
 };

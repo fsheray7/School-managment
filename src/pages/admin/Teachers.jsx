@@ -9,11 +9,24 @@ import DataTable from "../../components/ui/DataTable";
 import ActionButtons from "../../components/ui/ActionButtons";
 import DataCard from "../../components/ui/DataCard";
 import Pagination from "../../components/ui/Pagination";
-import { CLASS_OPTIONS, getSectionsByClass, TEACHER_TYPE } from "../../constants/DropDownOptions";
+import { useToast } from "../../context/ToastContext";
+import {
+  CLASS_OPTIONS,
+  getSectionsByClass,
+  TEACHER_TYPE,
+} from "../../constants/DropDownOptions";
 
 const Teachers = () => {
+  const { showToast } = useToast();
   const navigate = useNavigate();
-  const [teachers, setTeachers] = useState(teachersData);
+  const [teachers, setTeachers] = useState(
+    teachersData.map((teacher) => ({
+      ...teacher,
+      profilePhoto: `https://ui-avatars.com/api/?name=${teacher.fullName}&background=random`,
+      password: teacher.password || "password123", // Keep default if not in data
+    })),
+  );
+
   const [selectedTeacher, setSelectedTeacher] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isEditMode, setIsEditMode] = useState(false);
@@ -24,7 +37,7 @@ const Teachers = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [subjectFilter, setSubjectFilter] = useState("");
   const [sectionFilter, setSectionFilter] = useState("");
-  const [classFilter,setClassFilter]=useState("");
+  const [classFilter, setClassFilter] = useState("");
 
   // Pagination State
   const [currentPage, setCurrentPage] = useState(1);
@@ -60,7 +73,7 @@ const Teachers = () => {
     setTeachers(
       teachers.map((t) => (t.id === selectedTeacher.id ? selectedTeacher : t)),
     );
-    alert("Teacher details updated successfully!");
+    showToast("Teacher details updated successfully!");
     closeModal();
   };
 
@@ -74,7 +87,7 @@ const Teachers = () => {
     setSearchQuery("");
     setSubjectFilter("");
     setSectionFilter("");
-    
+
     setCurrentPage(1);
   };
 
@@ -90,7 +103,8 @@ const Teachers = () => {
   const filteredTeachers = teachers.filter((teacher) => {
     const matchesSearch =
       teacher.fullName.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      teacher.email.toLowerCase().includes(searchQuery.toLowerCase());
+      teacher.email.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      teacher.teacherId.toLowerCase().includes(searchQuery.toLowerCase());
     const matchesSubject = subjectFilter
       ? teacher.subject === subjectFilter
       : true;
@@ -116,11 +130,25 @@ const Teachers = () => {
   };
 
   const columns = [
+    { header: "ID", key: "teacherId", fontBold: true },
     { header: "Full Name", key: "fullName", fontBold: true },
-    { header: "Email", key: "email", hidden: true },
     { header: "Subject", key: "subject", hiddenOnMobile: true },
-    { header: "Section", key: "section", hiddenOnMobile: true },
-    { header: "Contact", key: "contact", hiddenOnMobile: true },
+    { header: "Department", key: "department", hiddenOnMobile: true },
+    {
+      header: "Status",
+      key: "status",
+      render: (teacher) => (
+        <span
+          className={`px-2 py-1 rounded-full text-xs font-semibold ${
+            teacher.status === "Active"
+              ? "bg-green-100 text-green-700"
+              : "bg-red-100 text-red-700"
+          }`}
+        >
+          {teacher.status}
+        </span>
+      ),
+    },
     {
       header: "Type",
       key: "type",
@@ -136,31 +164,92 @@ const Teachers = () => {
   ];
 
   const fields = [
-    { label: "Full Name", key: "fullName", type: "text" },
-    { label: "Email", key: "email", type: "email" },
+    { label: "", key: "profilePhoto", type: "image", isFullWidth: true },
+    {
+      type: "grid",
+      gridFields: [
+        { label: "Teacher ID", key: "teacherId", type: "text" },
+        { label: "Full Name", key: "fullName", type: "text" },
+      ],
+    },
+    {
+      type: "grid",
+      gridFields: [
+        { label: "Email", key: "email", type: "email" },
+        { label: "Contact", key: "contact", type: "text" },
+      ],
+    },
+    {
+      type: "grid",
+      gridFields: [
+        {
+          label: "Gender",
+          key: "gender",
+          type: "select",
+          options: ["Male", "Female", "Other"],
+        },
+        {
+          label: "Department",
+          key: "department",
+          type: "select",
+          options: [
+            "Science",
+            "Mathematics",
+            "Humanities",
+            "Commerce",
+            "Arts",
+            "Computer Science",
+            "Languages",
+          ],
+        },
+      ],
+    },
+    {
+      type: "grid",
+      gridFields: [
+        { label: "Qualification", key: "qualification", type: "text" },
+        { label: "Experience", key: "experience", type: "text" },
+      ],
+    },
     {
       type: "grid",
       gridFields: [
         { label: "Subject", key: "subject", type: "text" },
-        { label: "Section", key: "section", type: "text" },
+        { label: "Role", key: "role", type: "text" },
       ],
     },
-    { label: "Contact", key: "contact", type: "text" },
     {
-      label: "Type",
-      key: "type",
-      type: "select",
-      options: ["Regular", "Contractual"],
-      render: (teacher) => (
-        <div>
-          <span
-            className={`px-2 py-1 rounded-full text-xs font-semibold ${teacher.type === "Regular" ? "bg-green-100 text-green-700" : "bg-blue-100 text-blue-700"}`}
-          >
-            {teacher.type}
-          </span>
-        </div>
-      ),
+      type: "grid",
+      gridFields: [
+        {
+          label: "Status",
+          key: "status",
+          type: "select",
+          options: ["Active", "Inactive", "On Leave"],
+          render: (t) => (
+            <span
+              className={`px-2 py-1 rounded-full text-xs font-semibold ${t.status === "Active" ? "bg-green-100 text-green-700" : "bg-red-100 text-red-700"}`}
+            >
+              {t.status}
+            </span>
+          ),
+        },
+        {
+          label: "Type",
+          key: "type",
+          type: "select",
+          options: ["Regular", "Contractual"],
+          render: (t) => (
+            <span
+              className={`px-2 py-1 rounded-full text-xs font-semibold ${t.type === "Regular" ? "bg-green-100 text-green-700" : "bg-blue-100 text-blue-700"}`}
+            >
+              {t.type}
+            </span>
+          ),
+        },
+      ],
     },
+    { label: "Password", key: "password", type: "password" },
   ];
 
   const renderMobileCard = (teacher) => (
@@ -212,12 +301,12 @@ const Teachers = () => {
               placeholder: "Subject",
               searchable: true,
             },
-            
+
             {
-              value:classFilter,
-              onChange:setClassFilter,
-              options:CLASS_OPTIONS,
-              placeholder:"Class",
+              value: classFilter,
+              onChange: setClassFilter,
+              options: CLASS_OPTIONS,
+              placeholder: "Class",
             },
             {
               value: sectionFilter,

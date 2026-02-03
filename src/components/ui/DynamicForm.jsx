@@ -8,12 +8,11 @@ const DynamicForm = ({
   formData,
   setFormData,
   onSubmit,
-  title,
   children,
-  headerActions,
-  className = "mt-10 grid grid-cols-2 gap-4 max-w-3xl bg-white md:p-8 rounded-2xl pt-10 relative",
+  onClick,
+  className = "grid grid-cols-2 gap-4 max-w-3xl bg-white md:py-2 rounded-2xl  relative",
   showDefaultHeader = true,
-  buttonAreaClassName = "col-span-2 flex flex-col items-center justify-center mt-6",
+  buttonAreaClassName = "col-span-2 flex gap-6  items-center justify-center mt-6",
   submitButtonClassName = "",
   submitButtonVariant = "primary",
 }) => {
@@ -37,10 +36,7 @@ const DynamicForm = ({
   return (
     <form className={`w-full ${className}`} onSubmit={onSubmit}>
       {showDefaultHeader && (
-        <div className="col-span-2 flex items-center justify-between mb-4">
-          <h3 className="text-2xl font-bold text-[#0C46C4]">{title}</h3>
-          {headerActions && <div className="flex gap-2">{headerActions}</div>}
-        </div>
+        <div className="col-span-2 flex items-center justify-end "></div>
       )}
 
       {fields.map((field, index) => {
@@ -93,22 +89,26 @@ const DynamicForm = ({
                     required={field.required}
                     className={`w-full p-2 text-sm focus:outline-none transition-all ${
                       field.inputClassName ||
-                      "border border-[#0C46C4] rounded-md"
+                      "border border-gray-300 rounded-md"
                     }`}
                   />
 
                   {/* Icons Handling */}
                   {isPasswordField ? (
                     <div
-                      className="absolute right-0 top-1/2 -translate-y-1/2 cursor-pointer text-[#0C46C4]
-                      hover:scale-110 transition duration-300  hover:text-blue-700"
+                      className={`absolute right-2 top-1/2 -translate-y-1/2 cursor-pointer
+                      hover:scale-110 transition duration-300 hover:brightness-90`}
+                      style={{ color: "var(--primary-color)" }}
                       onClick={() => togglePasswordVisibility(field.name)}
                     >
-                      {isVisible ? <IoEye size={20} /> : <IoEyeOff size={20} />}
+                      {isVisible ? <IoEye size={16} /> : <IoEyeOff size={16} />}
                     </div>
                   ) : (
                     field.rightIcon && (
-                      <div className="absolute right-0 top-1/2 -translate-y-1/2 text-[#0C46C4]">
+                      <div
+                        className="absolute right-0 top-1/2 -translate-y-1/2"
+                        style={{ color: "var(--primary-color)" }}
+                      >
                         {field.rightIcon}
                       </div>
                     )
@@ -125,7 +125,7 @@ const DynamicForm = ({
                   placeholder={field.placeholder}
                   required={field.required}
                   className={`w-full p-2 text-sm focus:outline-none min-h-[100px] ${
-                    field.inputClassName || "border border-[#0C46C4] rounded-md"
+                    field.inputClassName || "border border-gray-300 rounded-md"
                   }`}
                 />
               )}
@@ -143,7 +143,7 @@ const DynamicForm = ({
                   placeholder={field.placeholder}
                   containerClassName="w-full"
                   triggerClassName={
-                    field.inputClassName || "border border-[#0C46C4] rounded-lg"
+                    field.inputClassName || "border border-gray-300 rounded-lg"
                   }
                   multiSelect={field.multiSelect}
                   searchable={field.searchable}
@@ -162,6 +162,11 @@ const DynamicForm = ({
         >
           {children}
         </Button>
+        {onClick && (
+          <Button type="button" variant="reset" onClick={onClick}>
+            Back
+          </Button>
+        )}
       </div>
     </form>
   );

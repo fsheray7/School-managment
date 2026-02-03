@@ -43,10 +43,16 @@ const RecentActivity = () => {
   ];
 
   return (
-    <div className="w-full bg-white p-6 rounded-xl shadow-sm border-t-5 border-[#0C46C4]">
+    <div
+      className="w-full bg-white p-6 rounded-xl shadow-sm border-t-5"
+      style={{ borderTopColor: "var(--primary-color)" }}
+    >
       <div className="flex items-center justify-between mb-6">
         <h3 className="text-lg font-bold text-gray-800">Recent Activity</h3>
-        <button className="text-sm font-semibold text-[#0C46C4] hover:underline">
+        <button
+          className="text-sm font-semibold hover:underline"
+          style={{ color: "var(--primary-color)" }}
+        >
           View All
         </button>
       </div>

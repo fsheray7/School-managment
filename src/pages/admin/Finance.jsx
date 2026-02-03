@@ -60,7 +60,9 @@ const Finance = () => {
       header: "Txn ID",
       key: "id",
       fontBold: true,
-      render: (txn) => <span className="text-[#0C46C4]">{txn.id}</span>,
+      render: (txn) => (
+        <span style={{ color: "var(--primary-color)" }}>{txn.id}</span>
+      ),
     },
     { header: "Student", key: "studentName", fontBold: true },
     { header: "Class", key: "class" },
@@ -133,7 +135,10 @@ const Finance = () => {
             Overview of school financial status and fee collections.
           </p>
         </div>
-        <button className="flex items-center gap-2 bg-[#0C46C4] text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors shadow-sm">
+        <button
+          className="flex items-center gap-2 text-white px-4 py-2 rounded-lg hover:brightness-90 transition-colors shadow-sm"
+          style={{ backgroundColor: "var(--primary-color)" }}
+        >
           <FaDownload /> Export Report
         </button>
       </div>
@@ -141,7 +146,7 @@ const Finance = () => {
       {/* Finance Cards */}
       <section>
         <div className="flex items-center gap-2 mb-4">
-          <div className="h-6 w-1 rounded-full bg-[#0C46C4]"></div>
+          <div className="h-6 w-1 rounded-full bg-blue-700"></div>
           <h2 className="text-lg font-bold text-gray-800">Financial Summary</h2>
         </div>
         <FinanceCards />
@@ -151,7 +156,7 @@ const Finance = () => {
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         <section className="lg:col-span-2">
           <div className="flex items-center gap-2 mb-4">
-            <div className="h-6 w-1 rounded-full bg-[#0C46C4]"></div>
+            <div className="h-6 w-1 rounded-full bg-blue-700"></div>
             <h2 className="text-lg w-full font-bold text-gray-800">
               Collection Trends
             </h2>
@@ -159,9 +164,13 @@ const Finance = () => {
           <FinanceTrendChart />
         </section>
 
-        <section className="lg:col-span-1 bg-white p-6 rounded-xl shadow-sm mt-11 border-t-4 border-purple-500">
+        <section
+          className="lg:col-span-1 bg-white p-6 rounded-xl shadow-sm mt-11 border-t-8"
+          style={{ borderTopColor: "var(--primary-color)" }}
+        >
           <h3 className="text-lg font-bold text-gray-800 mb-4 flex items-center gap-2">
-            <FaFileInvoiceDollar className="text-purple-600" /> Recent Activity
+            <FaFileInvoiceDollar style={{ color: "var(--primary-color)" }} />{" "}
+            Recent Activity
           </h3>
           <div className="flex flex-col gap-4">
             {recentActivity.map((activity, idx) => (
@@ -197,10 +206,16 @@ const Finance = () => {
       </div>
 
       {/* Detailed Transaction Table */}
-      <section className="bg-white p-6 rounded-xl shadow-sm border-t-4 border-[#0C46C4]">
-        <div className="flex flex-col sm:flex-row items-center justify-between mb-6 gap-4">
+      <section
+        className="bg-white p-6 rounded-xl shadow-sm border-t-8"
+        style={{ borderTopColor: "var(--primary-color)" }}
+      >
+        <div className="flex flex-col sm:flex-row items-center  justify-between mb-6 gap-4">
           <div className="flex items-center gap-2">
-            <div className="h-6 w-1 rounded-full bg-[#0C46C4]"></div>
+            <div
+              className="h-6 w-1 rounded-full"
+              style={{ backgroundColor: "var(--primary-color)" }}
+            ></div>
             <h2 className="text-lg font-bold text-gray-800">
               Recent Fee Transactions
             </h2>
@@ -215,7 +230,8 @@ const Finance = () => {
                 setSearchTerm(e.target.value);
                 setCurrentPage(1);
               }}
-              className="border border-gray-200 rounded-lg pl-10 pr-4 py-2 text-sm focus:outline-none focus:border-[#0C46C4] w-full"
+              className="border border-gray-200 rounded-lg pl-10 pr-4 py-2 text-sm focus:outline-none focus:border-[var(--primary-color)] w-full"
+              style={{ focusBorderColor: "var(--primary-color)" }}
             />
           </div>
         </div>

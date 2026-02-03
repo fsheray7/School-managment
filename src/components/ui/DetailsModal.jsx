@@ -39,7 +39,7 @@ const DetailsModal = ({
                       onChange={(val) => handleChange(gridField.key, val)}
                       placeholder={`Select ${gridField.label}`}
                       containerClassName="w-full"
-                      triggerClassName="text-red-500"
+                      triggerClassName="border-gray-300"
                       searchable={gridField.searchable || false}
                     />
                   </div>
@@ -64,6 +64,56 @@ const DetailsModal = ({
       );
     }
 
+    if (field.type === "image") {
+      return (
+        <div
+          key={field.key}
+          className="flex flex-col gap-2 items-center justify-center mb-4"
+        >
+          <div className="relative group">
+            <img
+              src={
+                data[field.key] instanceof File
+                  ? URL.createObjectURL(data[field.key])
+                  : data[field.key] ||
+                    `https://ui-avatars.com/api/?name=${data.fullName}&background=random`
+              }
+              alt={data.fullName}
+              className="w-24 h-24 rounded-full object-cover border-4 border-gray-100 shadow-md"
+            />
+            {isEditMode && (
+              <label
+                className="absolute bottom-0 right-0 text-white p-1.5 rounded-full cursor-pointer transition-colors shadow-sm hover:brightness-90"
+                style={{ backgroundColor: "var(--primary-color)" }}
+              >
+                <input
+                  type="file"
+                  className="hidden"
+                  accept="image/*"
+                  onChange={(e) => {
+                    if (e.target.files[0]) {
+                      handleChange(field.key, e.target.files[0]);
+                    }
+                  }}
+                />
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="h-4 w-4"
+                  viewBox="0 0 20 20"
+                  fill="currentColor"
+                >
+                  <path d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z" />
+                </svg>
+              </label>
+            )}
+          </div>
+          {isEditMode && (
+            <span className="text-xs text-gray-400">Click icon to change</span>
+          )}
+        </div>
+      );
+    }
+
     return (
       <div key={field.key}>
         <label className="text-xs text-gray-500 uppercase font-bold">
@@ -81,6 +131,14 @@ const DetailsModal = ({
                 searchable={field.searchable || false}
               />
             </div>
+          ) : field.type === "password" ? (
+            <input
+              type="text" // Using text to make it visible as per request "edit password input" usually implies visibility for admin or simple edit
+              value={data[field.key] || ""}
+              onChange={(e) => handleChange(field.key, e.target.value)}
+              className="w-full border border-gray-300 rounded-md p-2 mt-1 focus:outline-none focus:border-blue-500 text-sm"
+              placeholder="Enter new password"
+            />
           ) : (
             <input
               type={field.type || "text"}
@@ -102,8 +160,13 @@ const DetailsModal = ({
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4 backdrop-blur-sm animate-in fade-in duration-200">
       <div className="bg-white rounded-2xl shadow-2xl w-full max-w-md relative overflow-hidden animate-in zoom-in-95 duration-200">
         {/* Header */}
-        <div className="bg-[#E8F8F6] px-6 py-4 flex justify-between items-center border-b border-teal-100">
-          <h3 className="text-lg font-bold text-[#0C46C4]">{title}</h3>
+        <div className="bg-[var(--primary-color)]/10 px-6 py-4 flex justify-between items-center border-b border-[var(--primary-color)]/20">
+          <h3
+            className="text-lg font-bold"
+            style={{ color: "var(--primary-color)" }}
+          >
+            {title}
+          </h3>
           <button
             onClick={onClose}
             className="text-gray-500 hover:text-gray-700 transition-colors p-2 hover:bg-white/50 rounded-full"
@@ -129,7 +192,8 @@ const DetailsModal = ({
               </button>
               <button
                 onClick={onSave}
-                className="px-5 py-2 rounded-xl bg-[#0C46C4] text-white font-medium hover:bg-[#08308d] transition-shadow hover:shadow-lg shadow-blue-100 text-sm"
+                className="px-5 py-2 rounded-xl text-white font-medium hover:brightness-90 transition-shadow hover:shadow-lg shadow-blue-100 text-sm"
+                style={{ backgroundColor: "var(--primary-color)" }}
               >
                 Save Changes
               </button>

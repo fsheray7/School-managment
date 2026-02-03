@@ -15,35 +15,32 @@ const students = [
 const AttendanceStudent = () => {
   return (
     <section className="w-full bg-white flex flex-col items-center overflow-x-hidden pb-6">
-
-
-    
-
       {/* TABLE */}
       <div className="w-full  mt-30 px-0 sm:px-4">
         {/* Header */}
-        <div className="w-full flex items-center justify-between px-4 py-2 bg-[#0C46C4] rounded-t-lg">
+        <div
+          className="w-full flex items-center justify-between px-4 py-2 rounded-t-lg shadow-sm"
+          style={{ backgroundColor: "var(--primary-color)" }}
+        >
           <h2 className="text-white text-lg sm:text-xl font-semibold">
             Attendance List
           </h2>
         </div>
 
-          <div className="w-full mt-32 flex flex-col md:flex-col lg:flex-row items-center justify-center gap-10 pb-10 px-4">
-
-    <div className="w-full flex flex-col items-center justify-center p-20 border-t-8 border-[#0C46C4] rounded-xl max-w-md shadow-xl gap-8">
-        <h2 className="text-[#0C46C4] w-full   font-bold text-2xl ">Comming Soon !</h2>
-       
-        
-       
-
+        <div className="w-full mt-32 flex flex-col md:flex-col lg:flex-row items-center justify-center gap-10 pb-10 px-4">
+          <div
+            className="w-full flex flex-col items-center justify-center p-20 border-t-8 rounded-xl max-w-md shadow-xl gap-8"
+            style={{ borderTopColor: "var(--primary-color)" }}
+          >
+            <h2
+              className="w-full font-bold text-2xl"
+              style={{ color: "var(--primary-color)" }}
+            >
+              Comming Soon !
+            </h2>
+          </div>
         </div>
-   
-
       </div>
-
-
-      </div>
-
     </section>
   );
 };

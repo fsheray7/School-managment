@@ -36,7 +36,8 @@ const ManagementValueChart = ({ className }) => {
 
   return (
     <div
-      className={`w-full bg-white rounded-2xl p-4 sm:p-6 hover:scale-102 hover:shadow-lg transition-all duration-300 shadow border-t-5 border-[#0C46C4] ${className}`}
+      className={`w-full bg-white rounded-2xl py-3 px-2 hover:scale-102 hover:shadow-lg transition-all duration-300 shadow border-t-5 ${className}`}
+      style={{ borderTopColor: "var(--primary-color)" }}
     >
       {/* Header */}
       <div className="flex flex-col sm:flex-row items-center justify-between mb-4 gap-2">
@@ -48,11 +49,14 @@ const ManagementValueChart = ({ className }) => {
         <div className="flex flex-wrap justify-center sm:justify-end gap-2 text-xs">
           <button
             onClick={() => toggleSeries("present")}
-            className={`px-3 py-1 rounded-full transition-colors cursor-pointer duration-200 border ${
-              visibleSeries.present
-                ? "bg-[#0C46C4] text-white  border-[#0C46C4]"
-                : "border-[#0C46C4] text-[#0C46C4] hover:bg-[#0C46C4]"
-            }`}
+            className={`px-3 py-1 rounded-full transition-colors cursor-pointer duration-200 border`}
+            style={{
+              backgroundColor: visibleSeries.present
+                ? "var(--primary-color)"
+                : "transparent",
+              color: visibleSeries.present ? "white" : "var(--primary-color)",
+              borderColor: "var(--primary-color)",
+            }}
           >
             Present
           </button>

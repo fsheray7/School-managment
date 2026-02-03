@@ -83,20 +83,14 @@ const AddCourse = () => {
   };
 
   return (
-    <div className="flex justify-start  items-center">
+    <div className="flex justify-center mt-15   items-center">
       <DynamicForm
         title="Course Information"
         fields={courseFields}
         formData={courseData}
         setFormData={setCourseData}
         onSubmit={handleSubmit}
-        headerActions={
-          <Button
-            onClick={handleBack}
-            variant="ghost"
-            icon={<IoArrowBack size={22} />}
-          />
-        }
+        onClick={handleBack}
       >
         Add Course
       </DynamicForm>

@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useToast } from "../../context/ToastContext";
 import {
   CLASS_OPTIONS,
   getSectionsByClass,
@@ -9,6 +10,7 @@ import { IoArrowBack } from "react-icons/io5";
 import DynamicForm from "../../components/ui/DynamicForm";
 
 const GenerateFee = () => {
+  const { showToast } = useToast();
   const navigate = useNavigate();
   const [feeData, setFeeData] = useState({
     studentId: "",
@@ -132,25 +134,19 @@ const GenerateFee = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     console.log("Generating Fee Invoice:", feeData);
-    alert(`Fee Invoice generated for ${feeData.fullName}!`);
+    showToast(`Fee Invoice generated for ${feeData.fullName}!`);
     navigate("/admin-dashboard");
   };
 
   return (
-    <div className="flex justify-start items-center">
+    <div className="flex justify-center items-center mt-10">
       <DynamicForm
         title="Generate Fee Invoice"
         fields={feeFields}
         formData={feeData}
         setFormData={setFeeData}
         onSubmit={handleSubmit}
-        headerActions={
-          <Button
-            onClick={() => navigate("/admin-dashboard")}
-            variant="ghost"
-            icon={<IoArrowBack size={20} />}
-          />
-        }
+        onClick={() => navigate("/admin-dashboard")}
       >
         Generate Invoice
       </DynamicForm>

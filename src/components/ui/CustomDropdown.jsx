@@ -72,12 +72,16 @@ const CustomDropdown = ({
           {value.map((val) => (
             <span
               key={val}
-              className="bg-blue-100 text-[#0C46C4] text-xs px-2 py-0.5 rounded-full flex items-center gap-1"
+              className="px-2 py-0.5 rounded-full flex items-center gap-1 text-xs"
+              style={{
+                backgroundColor: "var(--primary-color)",
+                color: "white",
+              }}
             >
-              {val}
+              <span>{val}</span>
               <FaTimes
                 size={8}
-                className="cursor-pointer hover:text-red-500"
+                className="cursor-pointer hover:text-red-200"
                 onClick={(e) => removeOption(e, val)}
               />
             </span>
@@ -124,7 +128,7 @@ const CustomDropdown = ({
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                   placeholder="Type to search..."
-                  className="w-full pl-9 pr-3 py-2 text-sm border border-gray-200 rounded-lg focus:outline-none focus:border-[#0C46C4] transition-colors"
+                  className="w-full pl-9 pr-3 py-2 text-sm border border-gray-200 rounded-lg focus:outline-none focus:border-[var(--primary-color)] transition-colors"
                   onClick={(e) => e.stopPropagation()}
                 />
               </div>
@@ -153,8 +157,8 @@ const CustomDropdown = ({
                     className={`px-4 py-2 text-sm cursor-pointer transition-colors duration-150 border-b border-gray-50 last:border-0
                                         ${
                                           isSelected
-                                            ? "bg-blue-50 text-[#0C46C4] font-medium"
-                                            : "text-gray-700 hover:bg-gray-50 hover:text-[#0C46C4]"
+                                            ? "bg-[var(--primary-color)]/10 font-medium"
+                                            : "text-gray-700 hover:bg-gray-50"
                                         }
                                     `}
                   >
@@ -165,7 +169,7 @@ const CustomDropdown = ({
                           type="checkbox"
                           checked={isSelected}
                           readOnly
-                          className="accent-[#0C46C4]"
+                          className="accent-[var(--primary-color)]"
                         />
                       )}
                     </div>

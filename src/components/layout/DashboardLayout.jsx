@@ -40,7 +40,7 @@ const DashboardLayout = () => {
         "/add-course",
         "/generate-fee",
         "/finance",
-        "/notice",
+        "/notice-admin",
       ].includes(location.pathname)
     ) {
       return "admin";
@@ -84,7 +84,11 @@ const DashboardLayout = () => {
         path: "/finance",
         icon: <FaWallet size={20} />,
       },
-      { label: "Notice", path: "/notice", icon: <IoNotifications size={20} /> },
+      {
+        label: "Notice & Announcements",
+        path: "/notice-admin",
+        icon: <IoNotifications size={20} />,
+      },
       { label: "Settings", path: "/settings", icon: <FaCog size={20} /> },
     ],
     teacher: [
@@ -105,11 +109,15 @@ const DashboardLayout = () => {
       },
       { label: "Results", path: "/results", icon: <FaTrophy size={20} /> },
       { label: "Marks", path: "/marks", icon: <FaCog size={20} /> },
-      { label: "Notice", path: "/notice", icon: <IoNotifications size={20} /> },
       {
         label: "Solutions",
         path: "/solutions",
         icon: <FaLightbulb size={20} />,
+      },
+      {
+        label: "Notice & Announcements",
+        path: "/notice-teacher",
+        icon: <IoNotifications size={20} />,
       },
       {
         label: "Add Account",

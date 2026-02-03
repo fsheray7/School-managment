@@ -10,10 +10,15 @@ const InvoiceModal = ({ isOpen, onClose, transaction }) => {
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center  bg-black/50 p-4 backdrop-blur-sm animate-in fade-in duration-200">
-      <div className="bg-white rounded-lg shadow-2xl w-full max-w-2xl flex flex-col max-h-[90vh] relative animate-in zoom-in-95 duration-200 print:shadow-none print:w-full print:max-w-none print:h-auto print:max-h-none">
+      <div className="bg-white rounded-lg shadow-2xl w-full max-w-2xl flex flex-col max-h-[90vh] relative animate-in zoom-in-20 duration-200 print:shadow-none print:w-full print:max-w-none print:h-auto print:max-h-none">
         {/* Modal Header (No Print) */}
         <div className="flex  justify-between items-center p-4 border-b border-gray-100 bg-gray-50 print:hidden flex-shrink-0">
-          <h2 className="text-lg font-bold text-blue-700">Fee Invoice</h2>
+          <h2
+            className="text-lg font-bold"
+            style={{ color: "var(--primary-color)" }}
+          >
+            Fee Invoice
+          </h2>
           <button
             onClick={onClose}
             className="text-gray-500 hover:text-red-500 transition-colors"
@@ -24,17 +29,26 @@ const InvoiceModal = ({ isOpen, onClose, transaction }) => {
 
         {/* Invoice Content (Printable & Scrollable) */}
         <div
-          className="p-6 overflow-y-auto custom-scrollbar flex-grow print:p-0 print:overflow-visible"
+          className="px-6 py-4 overflow-y-auto custom-scrollbar flex-grow print:p-0 print:overflow-visible"
           id="invoice-content"
         >
           {/* Header */}
-          <div className="flex  justify-between items-start mb-4 border-b-2 border-[#0C46C4] pb-4">
+          <div
+            className="flex justify-between items-start mb-2 pb-2 border-b-2"
+            style={{ borderColor: "var(--primary-color)" }}
+          >
             <div className="flex items-center gap-3">
-              <div className="bg-[#0C46C4] text-white p-3 rounded-lg">
+              <div
+                className="text-white p-3 rounded-lg"
+                style={{ backgroundColor: "var(--primary-color)" }}
+              >
                 <FaSchool size={32} />
               </div>
               <div>
-                <h1 className="text-2xl font-bold text-[#0C46C4] uppercase tracking-wide">
+                <h1
+                  className="text-xl font-bold uppercase tracking-wide"
+                  style={{ color: "var(--primary-color)" }}
+                >
                   School Management
                 </h1>
                 <p className="text-sm text-gray-500">
@@ -89,12 +103,15 @@ const InvoiceModal = ({ isOpen, onClose, transaction }) => {
           {/* Table */}
           <table className="w-full mb-4">
             <thead>
-              <tr className="bg-[#0C46C4] text-white text-sm uppercase">
-                <th className="py-3 px-4 text-left rounded-l-lg">
+              <tr
+                className="text-white text-sm uppercase"
+                style={{ backgroundColor: "var(--primary-color)" }}
+              >
+                <th className="py-2 px-4 text-left rounded-l-lg">
                   Description
                 </th>
-                <th className="py-3 px-4 text-right">Month</th>
-                <th className="py-3 px-4 text-right rounded-r-lg">Amount</th>
+                <th className="py-2 px-4 text-right">Month</th>
+                <th className="py-2 px-4 text-right rounded-r-lg">Amount</th>
               </tr>
             </thead>
             <tbody>
@@ -127,8 +144,16 @@ const InvoiceModal = ({ isOpen, onClose, transaction }) => {
                 <span className="font-semibold text-gray-800">PKR 0</span>
               </div>
               <div className="flex justify-between py-3">
-                <span className="text-lg font-bold text-[#0C46C4]">Total</span>
-                <span className="text-lg font-bold text-[#0C46C4]">
+                <span
+                  className="text-lg font-bold"
+                  style={{ color: "var(--primary-color)" }}
+                >
+                  Total
+                </span>
+                <span
+                  className="text-lg font-bold"
+                  style={{ color: "var(--primary-color)" }}
+                >
                   {transaction.amount}
                 </span>
               </div>
@@ -154,7 +179,8 @@ const InvoiceModal = ({ isOpen, onClose, transaction }) => {
           </button>
           <button
             onClick={handlePrint}
-            className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-white bg-[#0C46C4] rounded-lg hover:bg-blue-700 transition-colors shadow-sm"
+            className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-white rounded-lg hover:brightness-90 transition-colors shadow-sm"
+            style={{ backgroundColor: "var(--primary-color)" }}
           >
             <FaPrint /> Print Invoice
           </button>

@@ -38,6 +38,8 @@ import AddStudent from "./features/admin/AddStudent";
 import AddCourse from "./features/admin/AddCourse";
 import GenerateFee from "./features/admin/GenerateFee";
 import Finance from "./pages/admin/Finance";
+import NoticeAdmin from "./pages/admin/Notice";
+import NoticeTeacher from "./pages/teacher/Notice";
 
 function App() {
   return (
@@ -60,6 +62,7 @@ function App() {
           <Route path="/add-course" element={<AddCourse />} />
           <Route path="/generate-fee" element={<GenerateFee />} />
           <Route path="/finance" element={<Finance />} />
+          <Route path="/notice-admin" element={<NoticeAdmin />} />
 
           {/* Teacher Routes */}
           <Route path="/teacher-dashboard" element={<TeacherDashboard />} />
@@ -67,11 +70,11 @@ function App() {
           <Route path="/homework" element={<HomeWork />} />
           <Route path="/results" element={<Results />} />
           <Route path="/marks" element={<AddMarks />} />
-          <Route path="/notice" element={<Notice />} />
           <Route path="/solutions" element={<Solutions />} />
           <Route path="/add-account" element={<AddAccount />} />
           <Route path="/add-classes" element={<AddClasses />} />
           <Route path="/exam-routine" element={<ExamRoutine />} />
+          <Route path="/notice-teacher" element={<NoticeTeacher />} />
 
           {/* Student Routes */}
           <Route path="/student-dashboard" element={<StudentDashboard />} />

@@ -2,10 +2,12 @@ import React from "react";
 import { FaTimes } from "react-icons/fa";
 import { IoLogOutSharp } from "react-icons/io5";
 import { useLocation, useNavigate } from "react-router-dom";
+import { useSettings } from "../../context/SettingsContext";
 
 const Sidebar = ({ isOpen, setIsOpen, menuItems = [] }) => {
   const location = useLocation();
   const navigate = useNavigate();
+  const { schoolLogo, schoolName } = useSettings();
 
   const handleNavigation = (path) => {
     navigate(path);
@@ -25,11 +27,12 @@ const Sidebar = ({ isOpen, setIsOpen, menuItems = [] }) => {
       {/* SIDEBAR */}
       <aside
         className={`
-          fixed top-0 left-0 h-full w-64 bg-[#0C46C4]
+          fixed top-0 left-0 h-full w-64
           transform transition-transform duration-300 z-50
           lg:translate-x-0
           ${isOpen ? "translate-x-0" : "-translate-x-full"}
         `}
+        style={{ backgroundColor: "var(--primary-color)" }}
       >
         {/* CLOSE BUTTON (mobile only) */}
         <button
@@ -42,29 +45,34 @@ const Sidebar = ({ isOpen, setIsOpen, menuItems = [] }) => {
         </button>
 
         {/* LOGO AREA */}
-        <div className="relative h-32 flex items-center justify-center">
-          <img
-            src="/profileselection/Vector.png"
-            alt="Vector Logo"
-            className="w-20 h-20 object-contain"
-          />
-          <img
-            src="/welcomepage/logo.png"
-            alt="School Logo"
-            className="absolute w-15 h-15 object-contain"
-          />
+        <div className="relative h-24 flex flex-col items-center justify-center p-4">
+          <div className="relative flex items-center justify-center mb-2">
+            <img
+              src="/profileselection/Vector.png"
+              alt="Vector Logo"
+              className="w-15 h-15  object-contain opacity-120"
+            />
+            <img
+              src={schoolLogo}
+              alt="School Logo"
+              className="absolute w-12 h-12 object-contain"
+            />
+          </div>
+          <span className="text-white text-sm font-bold text-center px-4 leading-tight drop-shadow-sm">
+            {schoolName}
+          </span>
         </div>
 
         <hr className="mb-2 border-gray-100/40" />
 
         {/* MENU */}
-        <ul className="flex flex-col gap-1 p-4 text-white text-sm">
+        <ul className="flex flex-col gap-0.5 p-3 text-white">
           {menuItems.map((item, index) => (
             <li
               key={index}
               onClick={() => handleNavigation(item.path)}
               className={`
-                flex items-center gap-3 p-3 rounded-lg cursor-pointer transition-colors
+                flex items-center gap-3 p-2.5 rounded-lg cursor-pointer transition-colors text-[13px] font-medium
                 ${
                   location.pathname === item.path
                     ? "bg-white/30"
@@ -72,17 +80,19 @@ const Sidebar = ({ isOpen, setIsOpen, menuItems = [] }) => {
                 }
               `}
             >
-              {item.icon}
-              <span>{item.label}</span>
+              <div className="flex-shrink-0">{item.icon}</div>
+              <span className="truncate">{item.label}</span>
             </li>
           ))}
 
           {/* LOGOUT */}
           <li
             onClick={() => setIsOpen(false)}
-            className="flex items-center gap-3 p-3 rounded-lg hover:bg-white/20 cursor-pointer mt-4 border-t border-white/20 pt-4"
+            className="flex items-center gap-3 p-2.5 rounded-lg hover:bg-white/20 cursor-pointer mt-2 pt-2 text-[13px] font-medium"
           >
-            <IoLogOutSharp size={20} />
+            <div className="flex-shrink-0 text-white">
+              <IoLogOutSharp size={18} />
+            </div>
             <span>Logout</span>
           </li>
         </ul>

@@ -6,8 +6,10 @@ import {
   IoAlertCircleSharp,
   IoInformationCircleSharp,
 } from "react-icons/io5";
+import { useSettings } from "../../context/SettingsContext";
 
 const Navbar = ({ onToggleSidebar, isSidebarOpen, role = "admin" }) => {
+  const { schoolLogo } = useSettings();
   const location = useLocation();
   const navigate = useNavigate();
   const [isNotificationOpen, setIsNotificationOpen] = useState(false);
@@ -58,10 +60,12 @@ const Navbar = ({ onToggleSidebar, isSidebarOpen, role = "admin" }) => {
     "/courses": "Courses",
     "/meetings": "Meetings",
     "/settings": "Settings",
+    "/add-course": "Add Course",
     "/add-teacher": "Add Teacher",
     "/add-student": "Add Student",
     "/generate-fee": "Generate Fee",
     "/finance": "Finance",
+    "/notice-admin": "Notice & Announcements",
     // Teacher Routes
     "/teacher-dashboard": "Teacher Dashboard",
     "/attendance": "Attendance",
@@ -121,28 +125,34 @@ const Navbar = ({ onToggleSidebar, isSidebarOpen, role = "admin" }) => {
           <div className="w-5 h-4 relative flex flex-col justify-between">
             {/* Top bar */}
             <span
-              className={`block h-0.5 w-full bg-[#0C46C4] rounded-full transition-all duration-300 ease-in-out ${
+              className={`block h-0.5 w-full rounded-full transition-all duration-300 ease-in-out ${
                 isSidebarOpen ? "rotate-45 translate-y-1.5" : ""
               }`}
+              style={{ backgroundColor: "var(--primary-color)" }}
             ></span>
             {/* Middle bar */}
             <span
-              className={`block h-0.5 w-full bg-[#0C46C4] rounded-full transition-all duration-300 ease-in-out ${
+              className={`block h-0.5 w-full rounded-full transition-all duration-300 ease-in-out ${
                 isSidebarOpen ? "opacity-0" : "opacity-100"
               }`}
+              style={{ backgroundColor: "var(--primary-color)" }}
             ></span>
             {/* Bottom bar */}
             <span
-              className={`block h-0.5 w-full bg-[#0C46C4] rounded-full transition-all duration-300 ease-in-out ${
+              className={`block h-0.5 w-full rounded-full transition-all duration-300 ease-in-out ${
                 isSidebarOpen ? "-rotate-45 -translate-y-1.5" : ""
               }`}
+              style={{ backgroundColor: "var(--primary-color)" }}
             ></span>
           </div>
         </button>
 
         {/* Logo & Title */}
         <div className="flex items-center gap-2">
-          <h1 className="text-xs md:text-2xl lg:text-2xl font-bold text-[#0C46C4] whitespace-nowrap">
+          <h1
+            className="text-xs md:text-2xl lg:text-2xl font-bold whitespace-nowrap"
+            style={{ color: "var(--primary-color)" }}
+          >
             {currentTitle}
           </h1>
         </div>
@@ -161,7 +171,7 @@ const Navbar = ({ onToggleSidebar, isSidebarOpen, role = "admin" }) => {
             }`}
             aria-label="Notifications"
           >
-            <FaBell size={20} />
+            <FaBell style={{ color: "var(--primary-color)" }} size={20} />
             {/* Notification Badge */}
             <span className="absolute top-1.5 right-1.5 w-2 h-2 bg-red-500 rounded-full border border-white"></span>
           </button>
@@ -200,7 +210,10 @@ const Navbar = ({ onToggleSidebar, isSidebarOpen, role = "admin" }) => {
               </div>
 
               {/* Footer */}
-              <button className="w-full py-2.5 text-xs font-bold text-[#0C46C4] hover:bg-blue-50 transition-colors border-t border-gray-50">
+              <button
+                className="w-full py-2.5 text-xs font-bold transition-colors border-t border-gray-50 hover:bg-[var(--primary-color)]/10"
+                style={{ color: "var(--primary-color)" }}
+              >
                 View All Notifications
               </button>
             </div>
@@ -215,12 +228,15 @@ const Navbar = ({ onToggleSidebar, isSidebarOpen, role = "admin" }) => {
         >
           <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-full flex items-center justify-center overflow-hidden border border-gray-300 bg-gray-50 flex-shrink-0">
             <img
-              src="/welcomepage/logo.png"
+              src={schoolLogo}
               alt="Profile"
               className="p-1 w-full h-full object-contain"
             />
           </div>
-          <span className="text-xs md:text-sm lg:text-base font-medium text-blue-700">
+          <span
+            className="text-xs md:text-sm lg:text-base font-bold"
+            style={{ color: "var(--primary-color)" }}
+          >
             {currentUserName}
           </span>
         </button>

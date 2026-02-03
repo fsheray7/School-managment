@@ -12,7 +12,10 @@ const DataTable = ({
       {/* ================= TABLE (Tablet + Desktop) ================= */}
       <div className="hidden md:block w-full bg-white rounded-xl shadow-sm border border-gray-200 mt-4 overflow-hidden  ">
         <table className="w-full table-fixed   text-left border-collapse">
-          <thead className="bg-[#E8F8F6] text-[#0C46C4] uppercase text-xs font-bold">
+          <thead
+            className="bg-[var(--primary-color)]/10 uppercase text-xs font-bold"
+            style={{ color: "var(--primary-color)" }}
+          >
             <tr>
               {columns.map((col, index) => {
                 if (col.hidden) return null;

@@ -6,7 +6,10 @@ const StudentDashboard = () => {
   return (
     <section className="flex flex-col items-center justify-start w-full bg-white pt-20 gap-6">
       {/* Welcome Card */}
-      <div className="w-full bg-[#0C46C4] text-white rounded-xl  p-2 sm:p-6 ">
+      <div
+        className="w-full text-white rounded-xl  p-2 sm:p-6 "
+        style={{ backgroundColor: "var(--primary-color)" }}
+      >
         <div className="flex justify-start gap-4 items-center">
           <h2 className="text-sm px-2 sm:text-lg font-semibold">
             Welcome Message
@@ -28,13 +31,19 @@ const StudentDashboard = () => {
         <div className="flex flex-col items-center w-full sm:max-w-none">
           <Link
             to="/attendance-student"
-            className="w-full bg-[#E8F8F6] rounded-xl p-3 sm:p-4 flex justify-center items-center shadow-sm cursor-pointer"
+            className="w-full rounded-xl p-3 sm:p-4 flex justify-center items-center shadow-sm cursor-pointer"
+            style={{ backgroundColor: "var(--primary-color)", opacity: 0.1 }}
           >
-            <img
-              src="/teachersection/attendance.png"
-              alt="Logo Img"
-              className="w-8 sm:w-12"
-            />
+            <div
+              className="flex justify-center items-center"
+              style={{ opacity: 1 }}
+            >
+              <img
+                src="/teachersection/attendance.png"
+                alt="Logo Img"
+                className="w-8 sm:w-12"
+              />
+            </div>
           </Link>
           <span className="mt-2 text-[10px] sm:text-sm font-medium">
             Attendance
