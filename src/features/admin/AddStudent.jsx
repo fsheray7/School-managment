@@ -4,7 +4,7 @@ import {
   GENDER_OPTIONS,
   CLASS_OPTIONS,
   getSectionsByClass,
-} from "../../constants/DropDownOptions";
+} from "../../constants/Store";
 import Button from "../../components/ui/Button";
 import { IoArrowBack } from "react-icons/io5";
 import DynamicForm from "../../components/ui/DynamicForm";

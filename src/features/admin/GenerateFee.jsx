@@ -1,10 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useToast } from "../../context/ToastContext";
-import {
-  CLASS_OPTIONS,
-  getSectionsByClass,
-} from "../../constants/DropDownOptions";
+import { CLASS_OPTIONS, getSectionsByClass } from "../../constants/Store";
 import Button from "../../components/ui/Button";
 import { IoArrowBack } from "react-icons/io5";
 import DynamicForm from "../../components/ui/DynamicForm";

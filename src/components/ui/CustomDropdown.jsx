@@ -11,6 +11,7 @@ const CustomDropdown = ({
   triggerClassName = "",
   searchable = false,
   multiSelect = false,
+  creatable = false,
 }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
@@ -60,6 +61,21 @@ const CustomDropdown = ({
         option.toLowerCase().includes(searchQuery.toLowerCase()),
       )
     : options;
+
+  const showCreatableOption =
+    creatable &&
+    searchable &&
+    searchQuery.trim() !== "" &&
+    !filteredOptions.some(
+      (opt) => opt.toLowerCase() === searchQuery.toLowerCase(),
+    );
+
+  const handleKeyDown = (e) => {
+    if (e.key === "Enter" && showCreatableOption) {
+      e.preventDefault();
+      handleSelect(searchQuery.trim());
+    }
+  };
 
   const renderTrigger = () => {
     const isEmpty = multiSelect
@@ -127,7 +143,10 @@ const CustomDropdown = ({
                   type="text"
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  placeholder="Type to search..."
+                  onKeyDown={handleKeyDown}
+                  placeholder={
+                    creatable ? "Type or select..." : "Type to search..."
+                  }
                   className="w-full pl-9 pr-3 py-2 text-sm border border-gray-200 rounded-lg focus:outline-none focus:border-[var(--primary-color)] transition-colors"
                   onClick={(e) => e.stopPropagation()}
                 />
@@ -142,6 +161,17 @@ const CustomDropdown = ({
                 className="px-4 py-2 text-sm text-gray-400 hover:bg-gray-50 cursor-pointer"
               >
                 {placeholder}
+              </li>
+            )}
+
+            {showCreatableOption && (
+              <li
+                onClick={() => handleSelect(searchQuery.trim())}
+                className="px-4 py-2 text-sm cursor-pointer transition-colors duration-150 bg-blue-50 text-blue-600 hover:bg-blue-100 border-b border-gray-100"
+              >
+                <div className="flex items-center gap-2">
+                  <span className="font-medium">Create:</span> "{searchQuery}"
+                </div>
               </li>
             )}
 

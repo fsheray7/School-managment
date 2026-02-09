@@ -20,6 +20,7 @@ import {
   FaWallet,
 } from "react-icons/fa";
 import { IoLogOutSharp, IoPeople, IoNotifications } from "react-icons/io5";
+import { SiGoogleclassroom } from "react-icons/si";
 
 const DashboardLayout = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
@@ -41,6 +42,8 @@ const DashboardLayout = () => {
         "/generate-fee",
         "/finance",
         "/notice-admin",
+        "/classes",
+        "/add-class",
       ].includes(location.pathname)
     ) {
       return "admin";
@@ -73,6 +76,11 @@ const DashboardLayout = () => {
         icon: <FaUserGraduate size={20} />,
       },
       { label: "Courses", path: "/courses", icon: <FaBook size={20} /> },
+      {
+        label: "Classes",
+        path: "/classes",
+        icon: <SiGoogleclassroom size={20} />,
+      },
       { label: "Meetings", path: "/meetings", icon: <IoPeople size={20} /> },
       {
         label: "Fees",
@@ -188,7 +196,7 @@ const DashboardLayout = () => {
         onToggleSidebar={() => setIsSidebarOpen(!isSidebarOpen)}
         isSidebarOpen={isSidebarOpen}
       />
-      <main className="w-full flex    lg:pl-64  transition-all duration-300 ">
+      <main className="w-full flex lg:pl-64 transition-all duration-300">
         <div className="py-4 w-full px-3 md:px-6">
           <Outlet />
         </div>

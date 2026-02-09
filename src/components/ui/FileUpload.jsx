@@ -6,6 +6,7 @@ const FileUpload = ({
   file,
   onChange,
   onClear,
+  onPreview,
   accept = ".jpg,.png,.pdf",
   helperText = "Supported formats: JPG, PNG, PDF",
   className = "",
@@ -36,7 +37,8 @@ const FileUpload = ({
 
         {(fileName || isUrl) && (
           <div
-            className="flex items-center gap-2 px-3 py-1.5 rounded-md text-sm font-medium border animate-fade-in"
+            onClick={onPreview}
+            className={`flex items-center gap-2 px-3 py-1.5 rounded-md text-sm font-medium border animate-fade-in ${onPreview ? "cursor-pointer hover:brightness-110 active:scale-95" : ""}`}
             style={{
               backgroundColor: "var(--primary-color)",
               color: "white",
@@ -51,7 +53,10 @@ const FileUpload = ({
             {onClear && (
               <button
                 type="button"
-                onClick={onClear}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  onClear();
+                }}
                 className="hover:text-red-500 transition-colors cursor-pointer"
                 title="Remove file"
               >

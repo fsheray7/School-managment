@@ -7,7 +7,7 @@ import {
   getSectionsByClass,
   COURSE_STATUS,
   TEACHERS,
-} from "../../constants/DropDownOptions";
+} from "../../constants/Store";
 import { IoArrowBack } from "react-icons/io5";
 
 const AddCourse = () => {

@@ -9,10 +9,7 @@ import ActionButtons from "../../components/ui/ActionButtons";
 import DataCard from "../../components/ui/DataCard";
 import Pagination from "../../components/ui/Pagination";
 import { useToast } from "../../context/ToastContext";
-import {
-  CLASS_OPTIONS,
-  getSectionsByClass,
-} from "../../constants/DropDownOptions";
+import { CLASS_OPTIONS, getSectionsByClass } from "../../constants/Store";
 
 const Courses = () => {
   const { showToast } = useToast();

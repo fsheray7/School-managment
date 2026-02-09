@@ -79,7 +79,7 @@ const DetailsModal = ({
                     `https://ui-avatars.com/api/?name=${data.fullName}&background=random`
               }
               alt={data.fullName}
-              className="w-24 h-24 rounded-full object-cover border-4 border-gray-100 shadow-md"
+              className="w-24 h-24 rounded-full object-contain border-4 border-gray-100 shadow-md"
             />
             {isEditMode && (
               <label

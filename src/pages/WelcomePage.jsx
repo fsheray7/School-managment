@@ -73,7 +73,7 @@ const WelcomePage = () => {
           left-1/2 -translate-x-1/2
           z-50 text-white font-light 
           text-xs sm:text-sm md:text-base lg:text-base
-          text-center transition-all font-opensans font-bold duration-300
+          text-center transition-all font-bold duration-300
           w-full px-4"
       >
         Powered by: XYZ COM

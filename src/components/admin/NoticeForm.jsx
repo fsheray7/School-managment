@@ -1,7 +1,7 @@
 import React, { useState } from "react";
-import CustomDropdown from "../../components/ui/CustomDropdown";
-import Button from "../../components/ui/Button";
-import FileUpload from "../../components/ui/FileUpload";
+import CustomDropdown from "../ui/CustomDropdown";
+import Button from "../ui/Button";
+import FileUpload from "../ui/FileUpload";
 
 import { useSettings } from "../../context/SettingsContext";
 

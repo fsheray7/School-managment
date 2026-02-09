@@ -14,8 +14,7 @@ const InvoiceModal = ({ isOpen, onClose, transaction }) => {
         {/* Modal Header (No Print) */}
         <div className="flex  justify-between items-center p-4 border-b border-gray-100 bg-gray-50 print:hidden flex-shrink-0">
           <h2
-            className="text-lg font-bold"
-            style={{ color: "var(--primary-color)" }}
+            className="text-lg text-[var(--text-primary-color)] font-bold"
           >
             Fee Invoice
           </h2>
@@ -46,8 +45,7 @@ const InvoiceModal = ({ isOpen, onClose, transaction }) => {
               </div>
               <div>
                 <h1
-                  className="text-xl font-bold uppercase tracking-wide"
-                  style={{ color: "var(--primary-color)" }}
+                  className="text-xl text-[var(--text-primary-color)] font-bold uppercase tracking-wide"
                 >
                   School Management
                 </h1>
@@ -107,11 +105,11 @@ const InvoiceModal = ({ isOpen, onClose, transaction }) => {
                 className="text-white text-sm uppercase"
                 style={{ backgroundColor: "var(--primary-color)" }}
               >
-                <th className="py-2 px-4 text-left rounded-l-lg">
+                <th className="py-2 px-4 text-left text-[var(--text-primary-color)] rounded-l-lg">
                   Description
                 </th>
-                <th className="py-2 px-4 text-right">Month</th>
-                <th className="py-2 px-4 text-right rounded-r-lg">Amount</th>
+                <th className="py-2 text-[var(--text-primary-color)] px-4 text-right">Month</th>
+                <th className="py-2 px-4 text-[var(--text-primary-color)] text-right rounded-r-lg">Amount</th>
               </tr>
             </thead>
             <tbody>
@@ -145,14 +143,12 @@ const InvoiceModal = ({ isOpen, onClose, transaction }) => {
               </div>
               <div className="flex justify-between py-3">
                 <span
-                  className="text-lg font-bold"
-                  style={{ color: "var(--primary-color)" }}
+                  className="text-lg font-bold text-[var(--text-primary-color)]"
                 >
                   Total
                 </span>
                 <span
-                  className="text-lg font-bold"
-                  style={{ color: "var(--primary-color)" }}
+                  className="text-lg font-bold text-[var(--text-primary-color)]"
                 >
                   {transaction.amount}
                 </span>

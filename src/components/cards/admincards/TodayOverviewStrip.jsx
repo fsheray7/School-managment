@@ -52,11 +52,11 @@ const TodayOverviewStrip = () => {
       className="w-full bg-white rounded-xl shadow-sm border-t-5 p-4 lg:p-2"
       style={{ borderTopColor: "var(--primary-color)" }}
     >
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:flex lg:flex-row lg:items-center lg:justify-between gap-4 lg:gap-0 w-full">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:flex lg:flex-row lg:items-center lg:justify-between gap-2 lg:gap-0 w-full">
         {overviewData.map((item) => (
           <div
             key={item.id}
-            className="flex items-center gap-3 p-3 rounded-lg lg:p-2 lg:rounded-none lg:border-none lg:shadow-none border border-gray-100 shadow-sm bg-gray-50 lg:bg-transparent lg:border-r lg:last:border-r-0 lg:border-gray-200 lg:flex-1 lg:justify-center whitespace-nowrap transition-all duration-200 hover:shadow-md lg:hover:shadow-none"
+            className="flex items-center gap-2 p-3 rounded-lg lg:p-2 lg:rounded-none lg:border-none lg:shadow-none border border-gray-100 shadow-sm bg-gray-50 lg:bg-transparent lg:border-r lg:last:border-r-0 lg:border-gray-200 lg:flex-1 lg:justify-center whitespace-nowrap transition-all duration-200 hover:shadow-md lg:hover:shadow-none"
           >
             <div
               className={`text-xl ${item.color} bg-white lg:bg-gray-50 p-2 rounded-lg shadow-sm lg:shadow-none`}

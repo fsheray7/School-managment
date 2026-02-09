@@ -43,9 +43,12 @@ const GenderDonutChart = ({ className }) => {
 
   return (
     <div
-      className={`w-full max-w-xs bg-white rounded-2xl p-6 shadow hover:scale-102 border-t-5 hover:shadow-lg transition-all duration-300 ${className}`}
+      className={`w-full md:max-w-xs bg-white rounded-2xl py-1 px-6 shadow hover:scale-102 border-t-5 hover:shadow-lg transition-all duration-300 ${className}`}
       style={{ borderTopColor: "var(--primary-color)" }}
     >
+      <h3 className="text-base sm:text-lg  font-bold text-[var(--text-primary-color)]">
+          Gender Chart
+        </h3>
       {/* Top Labels */}
       <div className="flex justify-between text-sm">
         <div className="text-center ">
@@ -63,8 +66,13 @@ const GenderDonutChart = ({ className }) => {
       </div>
 
       {/* Donut Chart */}
-      <div className="w-full h-56 min-h-[220px] min-w-0">
-        <ResponsiveContainer width="100%" height="100%">
+      <div className="relative w-full h-56 min-h-[220px] min-w-0">
+        <ResponsiveContainer
+          width="100%"
+          height="100%"
+          minWidth={0}
+          minHeight={0}
+        >
           <PieChart>
             <Pie
               data={data}

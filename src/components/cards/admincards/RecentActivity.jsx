@@ -48,7 +48,9 @@ const RecentActivity = () => {
       style={{ borderTopColor: "var(--primary-color)" }}
     >
       <div className="flex items-center justify-between mb-6">
-        <h3 className="text-lg font-bold text-gray-800">Recent Activity</h3>
+        <h3 className="text-lg font-bold text-[var(--text-primary-color)]">
+          Recent Activity
+        </h3>
         <button
           className="text-sm font-semibold hover:underline"
           style={{ color: "var(--primary-color)" }}

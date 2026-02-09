@@ -5,7 +5,7 @@ import {
   CLASS_OPTIONS,
   GENDER_OPTIONS,
   getSectionsByClass,
-} from "../../constants/DropDownOptions";
+} from "../../constants/Store";
 import StudentFilters from "../../components/ui/Filters";
 import DeleteModal from "../../components/ui/DeleteModal";
 import DetailsModal from "../../components/ui/DetailsModal";

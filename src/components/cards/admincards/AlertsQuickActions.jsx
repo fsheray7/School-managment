@@ -60,8 +60,8 @@ const AlertsQuickActions = () => {
         className="bg-white p-6 rounded-xl shadow-sm border-t-5"
         style={{ borderTopColor: "var(--primary-color)" }}
       >
-        <h3 className="text-lg font-bold text-gray-800 mb-4 flex items-center gap-2">
-          <FaShieldAlt className="text-blue-600" /> Quick Actions
+        <h3 className="text-lg font-bold text-[var(--text-primary-color)] mb-4 flex items-center gap-2">
+          <FaShieldAlt className="text-[var(--primary-color)]" /> Quick Actions
         </h3>
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
           {quickActions.map((action, idx) => (
@@ -79,8 +79,8 @@ const AlertsQuickActions = () => {
 
       {/* Alerts */}
       <div className="bg-white p-6 rounded-xl shadow-sm border-t-5  border-red-500">
-        <h3 className="text-lg font-bold text-gray-800 mb-4 flex items-center gap-2">
-          <FaBell className="text-red-500" /> Critical Alerts
+        <h3 className="text-lg font-bold text-[var(--text-primary-color)] mb-4 flex items-center gap-2">
+          <FaBell className="text-[var(--primary-color)]" /> Critical Alerts
         </h3>
         <div className="flex flex-col gap-3">
           {alerts.map((alert) => (

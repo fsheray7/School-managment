@@ -72,7 +72,7 @@ const ProfileSelection = () => {
         {!selectedRole ? (
           <div className="flex flex-col items-center gap-8 sm:gap-10">
             <h1
-              className="text-lg md:text-2xl font-bold font-opensans text-center"
+              className="text-lg md:text-2xl font-bold text-center"
               style={{ color: "var(--primary-color)" }}
             >
               Choose your option
@@ -116,7 +116,7 @@ const ProfileSelection = () => {
             </button>
 
             <h2
-              className="text-lg md:text-lg font-bold font-opensans text-center mb-4 capitalize"
+              className="text-lg md:text-lg font-bold text-center mb-4 capitalize"
               style={{ color: "var(--primary-color)" }}
             >
               {selectedRole} Login

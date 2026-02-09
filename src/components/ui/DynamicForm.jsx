@@ -163,6 +163,7 @@ const DynamicForm = ({
                   }
                   multiSelect={field.multiSelect}
                   searchable={field.searchable}
+                  creatable={field.creatable}
                 />
               )}
             </div>

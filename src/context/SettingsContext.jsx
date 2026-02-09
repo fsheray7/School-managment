@@ -13,37 +13,55 @@ export const useSettings = () => {
 export const SettingsProvider = ({ children }) => {
   // Load settings from localStorage or use defaults
   const [settings, setSettings] = useState(() => {
+    const defaultSettings = {
+      schoolName: "Antigravity School",
+      schoolLogo: "/welcomepage/logo.png",
+      theme: "light",
+      primaryColor: "#0C46C4",
+      secondaryColor: "#22D3EE",
+
+      // New School Info
+      schoolAddress: "123 Education Lane, Learning City",
+      schoolPhone: "+92 300 1234567",
+      schoolEmail: "info@antigravityschool.edu",
+      // Academic
+      academicYear: "2025-2026",
+      classes: "Playgroup, Nursery, KG, Class 1-12",
+      sections: "A, B, C, D",
+      // System
+      timezone: "Asia/Karachi",
+      language: "English",
+      currency: "PKR",
+      textPrimaryColor: "#0C46C4",
+
+      // Account
+      adminUsername: "admin",
+      adminPassword: "password123",
+    };
+
     const saved = localStorage.getItem("school_settings");
-    return saved
-      ? JSON.parse(saved)
-      : {
-          schoolName: "Antigravity School",
-          schoolLogo: "/welcomepage/logo.png",
-          theme: "light",
-          primaryColor: "#0C46C4",
-          // New School Info
-          schoolAddress: "123 Education Lane, Learning City",
-          schoolPhone: "+92 300 1234567",
-          schoolEmail: "info@antigravityschool.edu",
-          // Academic
-          academicYear: "2025-2026",
-          classes: "Playgroup, Nursery, KG, Class 1-12",
-          sections: "A, B, C, D",
-          // System
-          timezone: "Asia/Karachi",
-          language: "English",
-          currency: "PKR",
-        };
+    if (!saved) return defaultSettings;
+
+    const parsed = JSON.parse(saved);
+    // Merge saved with defaults to handle new keys
+    return { ...defaultSettings, ...parsed };
   });
 
   // Save settings to localStorage and apply CSS variables
   useEffect(() => {
     localStorage.setItem("school_settings", JSON.stringify(settings));
 
-    // Apply primary color variable
     document.documentElement.style.setProperty(
       "--primary-color",
       settings.primaryColor,
+    );
+    document.documentElement.style.setProperty(
+      "--secondary-color",
+      settings.secondaryColor,
+    );
+    document.documentElement.style.setProperty(
+      "--text-primary-color",
+      settings.textPrimaryColor,
     );
 
     // Apply theme (simple implementation for now)

@@ -1,6 +1,6 @@
 import React from "react";
 import {
-  LineChart,
+  ComposedChart,
   Line,
   XAxis,
   YAxis,
@@ -41,12 +41,12 @@ const ManagementValueChart = ({ className }) => {
     >
       {/* Header */}
       <div className="flex flex-col sm:flex-row items-center justify-between mb-4 gap-2">
-        <h3 className="text-base sm:text-lg font-semibold text-gray-800">
+        <h3 className="text-base sm:text-lg px-4 font-bold text-[var(--text-primary-color)]">
           Management Value
         </h3>
 
         {/* Legend Buttons */}
-        <div className="flex flex-wrap justify-center sm:justify-end gap-2 text-xs">
+        <div className="flex flex-wrap justify-center sm:justify-end px-3 gap-2 text-xs">
           <button
             onClick={() => toggleSeries("present")}
             className={`px-3 py-1 rounded-full transition-colors cursor-pointer duration-200 border`}
@@ -62,11 +62,14 @@ const ManagementValueChart = ({ className }) => {
           </button>
           <button
             onClick={() => toggleSeries("absent")}
-            className={`px-3 py-1 rounded-full transition-colors cursor-pointer duration-200 border ${
-              visibleSeries.absent
-                ? "bg-cyan-400 text-white border-cyan-400"
-                : "border-cyan-400 text-cyan-500 hover:bg-cyan-50"
-            }`}
+            className={`px-3 py-1 rounded-full transition-colors cursor-pointer duration-200 border`}
+            style={{
+              backgroundColor: visibleSeries.absent
+                ? "var(--secondary-color)"
+                : "transparent",
+              color: visibleSeries.absent ? "white" : "var(--secondary-color)",
+              borderColor: "var(--secondary-color)",
+            }}
           >
             Absent
           </button>
@@ -74,21 +77,32 @@ const ManagementValueChart = ({ className }) => {
       </div>
 
       {/* Chart */}
-      <div className="w-full h-56 sm:h-64 min-h-[220px] min-w-0">
-        <ResponsiveContainer width="100%" height="100%">
-          <LineChart data={data}>
-            <CartesianGrid strokeDasharray="3 3" vertical={false} />
-            <XAxis dataKey="week" tickLine={false} />
-            <YAxis tickLine={false} axisLine={false} />
+      <div className="relative w-full h-56 sm:h-64 min-h-[220px] min-w-0">
+        <ResponsiveContainer
+          width="100%"
+          height="100%"
+          minWidth={0}
+          minHeight={0}
+        >
+          <ComposedChart data={data}>
+            <CartesianGrid
+              strokeDasharray="3 3"
+              vertical={false}
+              horizontal={false}
+            />
+            <XAxis dataKey="week" tickLine={true} />
+            <YAxis tickLine={true} axisLine={true} />
             <Tooltip />
 
-            {/* Background soft area (present) - Only show if present is visible */}
             {visibleSeries.present && (
               <Area
                 type="monotone"
                 dataKey="present"
-                fill="rgba(251,146,60,0.15)"
-                stroke="none"
+                stroke="var(--primary-color)"
+                strokeWidth={3}
+                fill="rgba(18, 50, 233, 0.15)"
+                dot={{ r: 3, strokeWidth: 2, fill: "#eeebebff" }}
+                activeDot={{ r: 5 }}
               />
             )}
 
@@ -96,22 +110,13 @@ const ManagementValueChart = ({ className }) => {
               <Line
                 type="monotone"
                 dataKey="absent"
-                stroke="#22D3EE"
+                stroke="var(--secondary-color)"
+                activeDot={{ r: 5 }}
                 strokeWidth={2}
-                dot={false}
+                dot={true}
               />
             )}
-
-            {visibleSeries.present && (
-              <Line
-                type="monotone"
-                dataKey="present"
-                stroke="#FB923C"
-                strokeWidth={3}
-                dot={{ r: 5, strokeWidth: 2, fill: "#FB923C" }}
-              />
-            )}
-          </LineChart>
+          </ComposedChart>
         </ResponsiveContainer>
       </div>
     </div>

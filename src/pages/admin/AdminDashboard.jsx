@@ -12,12 +12,12 @@ import RecentActivity from "../../components/cards/admincards/RecentActivity";
 const AdminDashboard = () => {
   const navigate = useNavigate();
   return (
-    <section className="flex flex-col items-center justify-start w-full bg-white gap-8 pb-10 pt-15 transition-all duration-300 ">
+    <section className="flex flex-col items-center justify-center w-full bg-white gap-8 pb-10 pt-15 transition-all duration-300 ">
       {/* 1. KPI CARDS */}
       <div className="w-full flex  flex-col gap-6">
         <div className="flex items-center gap-2">
           <div className="h-6 w-1.5 rounded-full bg-[blue]"></div>
-          <h2 className="text-xl font-bold text-gray-800 font-opensans">
+          <h2 className="text-xl font-bold text-[var(--text-primary-color)] font-opensans">
             KPI Cards
           </h2>
         </div>
@@ -28,9 +28,7 @@ const AdminDashboard = () => {
       <div className="w-full flex flex-col gap-6">
         <div className="flex items-center gap-2">
           <div className="h-6 w-1.5 rounded-full bg-[blue]"></div>
-          <h2 className="text-xl font-bold text-gray-800 font-opensans">
-            Today Overview
-          </h2>
+          <h2 className="text-xl font-bold text-[var(--text-primary-color)]">Today Overview</h2>
         </div>
         <TodayOverviewStrip />
       </div>
@@ -43,11 +41,12 @@ const AdminDashboard = () => {
         <div className="flex items-center gap-2">
           <div className="h-6 w-1.5 rounded-full bg-[blue]"></div>
           <div className="flex w-full flex-row justify-between items-center gap-2">
-            <h2 className="text-xl font-bold text-gray-800 font-opensans">
+            <h2 className="text-xl font-bold text-[var(--text-primary-color)]">
               Finance & Data Insights
             </h2>
             <a
-              className="text-blue-600  text-sm font-semibold hover:text-blue-800 cursor-pointer hover:underline"
+              className="text-sm font-semibold cursor-pointer hover:underline"
+              style={{ color: "var(--text-primary-color)" }}
               onClick={() => navigate("/finance")}
             >
               View All

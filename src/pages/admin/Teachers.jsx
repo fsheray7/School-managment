@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { FaEdit, FaTrash, FaEye, FaTimes } from "react-icons/fa";
 import teachersData from "../../data/teachers/teacher";
 import Filters from "../../components/ui/Filters";
 import DeleteModal from "../../components/ui/DeleteModal";
@@ -13,8 +12,12 @@ import { useToast } from "../../context/ToastContext";
 import {
   CLASS_OPTIONS,
   getSectionsByClass,
+  ROLE_OPTIONS,
+  GENDER_OPTIONS,
+  STATUS_OPTIONS,
+  DEPARTMENT_OPTIONS,
   TEACHER_TYPE,
-} from "../../constants/DropDownOptions";
+} from "../../constants/Store";
 
 const Teachers = () => {
   const { showToast } = useToast();
@@ -186,21 +189,13 @@ const Teachers = () => {
           label: "Gender",
           key: "gender",
           type: "select",
-          options: ["Male", "Female", "Other"],
+          options: GENDER_OPTIONS,
         },
         {
           label: "Department",
           key: "department",
           type: "select",
-          options: [
-            "Science",
-            "Mathematics",
-            "Humanities",
-            "Commerce",
-            "Arts",
-            "Computer Science",
-            "Languages",
-          ],
+          options: DEPARTMENT_OPTIONS,
         },
       ],
     },
@@ -215,7 +210,7 @@ const Teachers = () => {
       type: "grid",
       gridFields: [
         { label: "Subject", key: "subject", type: "text" },
-        { label: "Role", key: "role", type: "text" },
+        { label: "Role", key: "role", type: "select", options: ROLE_OPTIONS },
       ],
     },
     {
@@ -225,7 +220,7 @@ const Teachers = () => {
           label: "Status",
           key: "status",
           type: "select",
-          options: ["Active", "Inactive", "On Leave"],
+          options: STATUS_OPTIONS,
           render: (t) => (
             <span
               className={`px-2 py-1 rounded-full text-xs font-semibold ${t.status === "Active" ? "bg-green-100 text-green-700" : "bg-red-100 text-red-700"}`}
@@ -238,7 +233,7 @@ const Teachers = () => {
           label: "Type",
           key: "type",
           type: "select",
-          options: ["Regular", "Contractual"],
+          options: TEACHER_TYPE,
           render: (t) => (
             <span
               className={`px-2 py-1 rounded-full text-xs font-semibold ${t.type === "Regular" ? "bg-green-100 text-green-700" : "bg-blue-100 text-blue-700"}`}

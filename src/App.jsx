@@ -40,6 +40,8 @@ import GenerateFee from "./features/admin/GenerateFee";
 import Finance from "./pages/admin/Finance";
 import NoticeAdmin from "./pages/admin/Notice";
 import NoticeTeacher from "./pages/teacher/Notice";
+import Classes from "./pages/admin/Classes";
+import AddClass from "./features/admin/AddClass";
 
 function App() {
   return (
@@ -63,6 +65,8 @@ function App() {
           <Route path="/generate-fee" element={<GenerateFee />} />
           <Route path="/finance" element={<Finance />} />
           <Route path="/notice-admin" element={<NoticeAdmin />} />
+          <Route path="/classes" element={<Classes />} />
+          <Route path="/add-class" element={<AddClass />} />
 
           {/* Teacher Routes */}
           <Route path="/teacher-dashboard" element={<TeacherDashboard />} />

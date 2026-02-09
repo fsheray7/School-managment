@@ -20,7 +20,9 @@ const FinanceTrendChart = () => {
       style={{ borderTopColor: "var(--primary-color)" }}
     >
       <div className="flex items-center justify-between">
-        <h3 className="text-lg font-bold text-gray-800">
+        <h3
+          className="text-lg text-[var(--text-primary-color)] font-bold"
+        >
           Monthly Fee Collection
         </h3>
         <span className="text-xs font-semibold text-green-600 bg-green-50 px-2 py-1 rounded-full">
@@ -52,17 +54,18 @@ const FinanceTrendChart = () => {
               strokeDasharray="3 3"
               vertical={false}
               stroke="#f0f0f0"
+              horizontal={false}
             />
             <XAxis
               dataKey="month"
-              axisLine={false}
-              tickLine={false}
-              tick={{ fontSize: 12, fill: "#9ca3af" }}
+              axisLine={true}
+              tickLine={true}
+              tick={{ fontSize: 12, fill: "#557ab9ff" }}
               dy={10}
             />
             <YAxis
-              axisLine={false}
-              tickLine={false}
+              axisLine={true}
+              tickLine={true}
               tick={{ fontSize: 12, fill: "#9ca3af" }}
               tickFormatter={(value) => `${value / 1000000}M`}
             />

@@ -10,7 +10,7 @@ const Cards = () => {
           return (
             <div
               key={item.id}
-              className="flex flex-row items-center justify-between p-2 md:py-2 w-full border-t-[6px] rounded-xl shadow-sm bg-white hover:scale-105 hover:shadow-md transition-all duration-300 cursor-default"
+              className="flex flex-row items-center justify-between p-2 md:py-2 md:px-6 w-full border-t-[6px] rounded-xl shadow-sm bg-white hover:scale-105 hover:shadow-md transition-all duration-300 cursor-default"
               style={{ borderTopColor: "var(--primary-color)" }}
             >
               {/* Left side - Title and Total */}

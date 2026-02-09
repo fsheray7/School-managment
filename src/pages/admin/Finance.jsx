@@ -8,6 +8,7 @@ import Pagination from "../../components/ui/Pagination";
 import DataTable from "../../components/ui/DataTable";
 import ActionButtons from "../../components/ui/ActionButtons";
 import DataCard from "../../components/ui/DataCard";
+import Button from "../../components/ui/Button";
 
 const Finance = () => {
   const [searchTerm, setSearchTerm] = useState("");
@@ -124,30 +125,31 @@ const Finance = () => {
   );
 
   return (
-    <div className="flex flex-col gap-6 w-full">
+    <div className="flex flex-col mt-15 gap-6 w-full">
       {/* Header */}
       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-bold text-gray-800">
+          <h1 className="text-2xl font-bold text-[var(--text-primary-color)]">
             Finance & Accounts
           </h1>
           <p className="text-sm text-gray-500">
             Overview of school financial status and fee collections.
           </p>
         </div>
-        <button
-          className="flex items-center gap-2 text-white px-4 py-2 rounded-lg hover:brightness-90 transition-colors shadow-sm"
-          style={{ backgroundColor: "var(--primary-color)" }}
+        <Button
+        variant="primary"
         >
           <FaDownload /> Export Report
-        </button>
+        </Button>
       </div>
 
       {/* Finance Cards */}
       <section>
         <div className="flex items-center gap-2 mb-4">
           <div className="h-6 w-1 rounded-full bg-blue-700"></div>
-          <h2 className="text-lg font-bold text-gray-800">Financial Summary</h2>
+          <h2 className="text-lg font-bold text-[var(--text-primary-color)]">
+            Financial Summary
+          </h2>
         </div>
         <FinanceCards />
       </section>
@@ -157,7 +159,7 @@ const Finance = () => {
         <section className="lg:col-span-2">
           <div className="flex items-center gap-2 mb-4">
             <div className="h-6 w-1 rounded-full bg-blue-700"></div>
-            <h2 className="text-lg w-full font-bold text-gray-800">
+            <h2 className="text-lg w-full font-bold text-[var(--text-primary-color)]">
               Collection Trends
             </h2>
           </div>
@@ -216,7 +218,7 @@ const Finance = () => {
               className="h-6 w-1 rounded-full"
               style={{ backgroundColor: "var(--primary-color)" }}
             ></div>
-            <h2 className="text-lg font-bold text-gray-800">
+            <h2 className="text-lg font-bold text-[var(--text-primary-color)]">
               Recent Fee Transactions
             </h2>
           </div>

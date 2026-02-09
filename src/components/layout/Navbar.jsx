@@ -5,6 +5,8 @@ import {
   IoCheckmarkDoneSharp,
   IoAlertCircleSharp,
   IoInformationCircleSharp,
+  IoPersonSharp,
+  IoLogOutOutline,
 } from "react-icons/io5";
 import { useSettings } from "../../context/SettingsContext";
 
@@ -13,7 +15,9 @@ const Navbar = ({ onToggleSidebar, isSidebarOpen, role = "admin" }) => {
   const location = useLocation();
   const navigate = useNavigate();
   const [isNotificationOpen, setIsNotificationOpen] = useState(false);
+  const [isProfileOpen, setIsProfileOpen] = useState(false);
   const notificationRef = useRef(null);
+  const profileRef = useRef(null);
 
   const notifications = [
     {
@@ -48,8 +52,12 @@ const Navbar = ({ onToggleSidebar, isSidebarOpen, role = "admin" }) => {
       ) {
         setIsNotificationOpen(false);
       }
+      if (profileRef.current && !profileRef.current.contains(event.target)) {
+        setIsProfileOpen(false);
+      }
     };
     document.addEventListener("mousedown", handleClickOutside);
+
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
@@ -66,6 +74,8 @@ const Navbar = ({ onToggleSidebar, isSidebarOpen, role = "admin" }) => {
     "/generate-fee": "Generate Fee",
     "/finance": "Finance",
     "/notice-admin": "Notice & Announcements",
+    "/classes": "Classes",
+    "/add-class": "Add Class",
     // Teacher Routes
     "/teacher-dashboard": "Teacher Dashboard",
     "/attendance": "Attendance",
@@ -92,7 +102,6 @@ const Navbar = ({ onToggleSidebar, isSidebarOpen, role = "admin" }) => {
     "/quiz-multiple-options": "Multiple Choice Quiz",
     "/quiz-score": "Quiz Result",
     "/student-profile": "My Profile",
-    "/generate-fee": "Generate Fee",
   };
 
   const currentTitle =
@@ -110,6 +119,19 @@ const Navbar = ({ onToggleSidebar, isSidebarOpen, role = "admin" }) => {
   };
 
   const currentUserName = roleNames[role] || "User";
+
+  const handleLogout = () => {
+    navigate("/select-profile");
+    setIsProfileOpen(false);
+  };
+
+  const handleProfileClick = () => {
+    if (role === "admin") navigate("/settings");
+    else if (role === "teacher") navigate("/teacher-dashboard");
+    else if (role === "student") navigate("/student-dashboard");
+    else navigate("/settings");
+    setIsProfileOpen(false);
+  };
 
   return (
     <nav className="fixed top-0 left-0 right-0 h-16 bg-white shadow-md z-40 transition-all duration-300 lg:left-64 flex items-center px-4 lg:px-6 justify-between">
@@ -151,7 +173,7 @@ const Navbar = ({ onToggleSidebar, isSidebarOpen, role = "admin" }) => {
         <div className="flex items-center gap-2">
           <h1
             className="text-xs md:text-2xl lg:text-2xl font-bold whitespace-nowrap"
-            style={{ color: "var(--primary-color)" }}
+            style={{ color: "var(--text-primary-color)" }}
           >
             {currentTitle}
           </h1>
@@ -166,9 +188,12 @@ const Navbar = ({ onToggleSidebar, isSidebarOpen, role = "admin" }) => {
             onClick={() => setIsNotificationOpen(!isNotificationOpen)}
             className={`relative p-2 rounded-lg cursor-pointer transition-all duration-200 ${
               isNotificationOpen
-                ? "bg-blue-50 text-blue-600"
+                ? "bg-blue-50"
                 : "text-gray-600 hover:bg-gray-100"
             }`}
+            style={
+              isNotificationOpen ? { color: "var(--text-primary-color)" } : {}
+            }
             aria-label="Notifications"
           >
             <FaBell style={{ color: "var(--primary-color)" }} size={20} />
@@ -184,7 +209,10 @@ const Navbar = ({ onToggleSidebar, isSidebarOpen, role = "admin" }) => {
                 <h3 className="font-bold text-gray-800 text-sm">
                   Notifications
                 </h3>
-                <span className="text-[10px] font-bold text-blue-600 bg-blue-50 px-2 py-0.5 rounded-full uppercase tracking-wider">
+                <span
+                  className="text-[10px] font-bold bg-blue-50 px-2 py-0.5 rounded-full uppercase tracking-wider"
+                  style={{ color: "var(--text-primary-color)" }}
+                >
                   {notifications.length} New
                 </span>
               </div>
@@ -212,7 +240,7 @@ const Navbar = ({ onToggleSidebar, isSidebarOpen, role = "admin" }) => {
               {/* Footer */}
               <button
                 className="w-full py-2.5 text-xs font-bold transition-colors border-t border-gray-50 hover:bg-[var(--primary-color)]/10"
-                style={{ color: "var(--primary-color)" }}
+                style={{ color: "var(--text-primary-color)" }}
               >
                 View All Notifications
               </button>
@@ -221,25 +249,51 @@ const Navbar = ({ onToggleSidebar, isSidebarOpen, role = "admin" }) => {
         </div>
 
         {/* Profile Button */}
-        <button
-          onClick={() => navigate("/admin-dashboard")}
-          className="flex items-center gap-2 p-1 sm:p-2 hover:bg-gray-100 rounded-lg cursor-pointer transition-colors   "
-          aria-label="Profile"
-        >
-          <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-full flex items-center justify-center overflow-hidden border border-gray-300 bg-gray-50 flex-shrink-0">
-            <img
-              src={schoolLogo}
-              alt="Profile"
-              className="p-1 w-full h-full object-contain"
-            />
-          </div>
-          <span
-            className="text-xs md:text-sm lg:text-base font-bold"
-            style={{ color: "var(--primary-color)" }}
+        <div className="relative" ref={profileRef}>
+          <button
+            onClick={() => setIsProfileOpen(!isProfileOpen)}
+            className={`flex items-center gap-2 p-1 sm:p-2 rounded-lg cursor-pointer transition-colors ${
+              isProfileOpen ? "bg-blue-50" : "hover:bg-gray-100"
+            }`}
+            aria-label="Profile"
           >
-            {currentUserName}
-          </span>
-        </button>
+            <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-full flex items-center justify-center overflow-hidden border border-gray-300 bg-gray-50 flex-shrink-0">
+              <img
+                src={schoolLogo}
+                alt="Profile"
+                className="p-1 w-full h-full object-contain"
+              />
+            </div>
+            <span
+              className="text-xs md:text-sm lg:text-base font-bold"
+              style={{ color: "var(--text-primary-color)" }}
+            >
+              {currentUserName}
+            </span>
+          </button>
+
+          {/* Profile Dropdown */}
+          {isProfileOpen && (
+            <div className="absolute right-0 mt-3 w-48 bg-white rounded-xl shadow-2xl border border-gray-100 z-50 overflow-hidden transform transition-all duration-200 origin-top-right">
+              <div className="py-1">
+                <button
+                  onClick={handleProfileClick}
+                  className="w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 flex items-center gap-2 transition-colors"
+                >
+                  <IoPersonSharp className="text-gray-500" />
+                  Profile
+                </button>
+                <button
+                  onClick={handleLogout}
+                  className="w-full px-4 py-2 text-sm text-red-600 hover:bg-red-50 flex items-center gap-2 transition-colors"
+                >
+                  <IoLogOutOutline className="text-red-500" />
+                  Logout
+                </button>
+              </div>
+            </div>
+          )}
+        </div>
       </div>
     </nav>
   );
