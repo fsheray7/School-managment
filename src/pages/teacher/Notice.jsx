@@ -1,5 +1,6 @@
 import { FaArrowLeft } from "react-icons/fa";
 import { Link } from "react-router-dom";
+import Button from "../../components/ui/Button";
 
 const NoticeTeacher = () => {
   return (
@@ -17,20 +18,14 @@ const NoticeTeacher = () => {
           placeholder="Write your notice or event details here..."
         ></textarea>
 
-        <button
-          className="px-4 py-2 rounded-lg text-white text-sm sm:text-base hover:brightness-90 transition-all active:scale-95"
-          style={{ backgroundColor: "var(--primary-color)" }}
-        >
+        <Button variant="primary" className="px-4 py-2">
           Upload image
-        </button>
+        </Button>
       </form>
 
-      <button
-        className="text-xl w-full max-w-md text-white px-6 py-2 rounded-lg mt-10 hover:brightness-90 transition-all active:scale-95 shadow-md"
-        style={{ backgroundColor: "var(--primary-color)" }}
-      >
+      <Button variant="primary" className="w-full max-w-md mt-10">
         Send
-      </button>
+      </Button>
     </section>
   );
 };

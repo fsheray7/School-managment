@@ -81,7 +81,7 @@ const NoticeForm = () => {
 
   return (
     <div className="w-full max-w-3xl bg-white overflow-hidden">
-      <form onSubmit={handleSubmit} className="p-1 md:p-4 space-y-3 ">
+      <form onSubmit={handleSubmit} className="p-1 md:p-4 space-y-2 ">
         {/* Notice Title */}
         <div className="flex flex-col gap-2">
           <label className="text-sm font-semibold text-gray-700">

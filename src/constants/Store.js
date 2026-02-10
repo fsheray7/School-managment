@@ -55,3 +55,31 @@ export const TEACHER_TYPE = ["Regular", "Contractual"];
 export const COURSE_STATUS = ["Active", "Inactive"];
 
 export const SESSION_OPTIONS = ["2023-24", "2024-25", "2025-26"];
+
+// Class progression order for student promotion
+const CLASS_PROGRESSION = [
+  "Play Group",
+  "Nursery",
+  "KG",
+  "Class 1",
+  "Class 2",
+  "Class 3",
+  "Class 4",
+  "Class 5",
+  "Class 6",
+  "Class 7",
+  "Class 8",
+  "Class 9",
+  "Class 10",
+  "Class 11",
+  "Class 12",
+];
+
+// Get next class in progression
+export const getNextClass = (currentClass) => {
+  const currentIndex = CLASS_PROGRESSION.indexOf(currentClass);
+  if (currentIndex === -1 || currentIndex === CLASS_PROGRESSION.length - 1) {
+    return null; // No next class (invalid or last class)
+  }
+  return CLASS_PROGRESSION[currentIndex + 1];
+};

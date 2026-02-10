@@ -14,15 +14,13 @@ import ActionButtons from "../../components/ui/ActionButtons";
 import DataCard from "../../components/ui/DataCard";
 import Pagination from "../../components/ui/Pagination";
 import { useToast } from "../../context/ToastContext";
-
 const StudentsAdmin = () => {
   const { showToast } = useToast();
   const navigate = useNavigate();
   const [students, setStudents] = useState(
     studentsData.map((student) => ({
       ...student,
-      profilePhoto: `https://ui-avatars.com/api/?name=${student.fullName}&background=random`,
-      password: "password123", // Default Password
+      profilePhoto: student.profileImage,
     })),
   );
   const [selectedStudent, setSelectedStudent] = useState(null);
@@ -130,6 +128,7 @@ const StudentsAdmin = () => {
       ],
     },
     { label: "Guardian Contact", key: "guardianContact", type: "text" },
+    { label: "Username", key: "userName", type: "text" }, // Username
     { label: "Password", key: "password", type: "password" }, // Password
   ];
 

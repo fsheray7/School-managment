@@ -44,6 +44,7 @@ const DashboardLayout = () => {
         "/notice-admin",
         "/classes",
         "/add-class",
+        "/student-promotion",
       ].includes(location.pathname)
     ) {
       return "admin";
@@ -96,6 +97,11 @@ const DashboardLayout = () => {
         label: "Notice & Announcements",
         path: "/notice-admin",
         icon: <IoNotifications size={20} />,
+      },
+      {
+        label: "Promote Students",
+        path: "/student-promotion",
+        icon: <FaUserGraduate size={20} />,
       },
       { label: "Settings", path: "/settings", icon: <FaCog size={20} /> },
     ],

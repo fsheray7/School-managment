@@ -16,10 +16,16 @@ const ProfileSelection = () => {
     setSelectedRole(null);
   };
 
-  const handleLoginSuccess = () => {
+  const handleLoginSuccess = (userData) => {
     if (selectedRole === "teacher") {
+      if (userData) {
+        localStorage.setItem("currentTeacher", JSON.stringify(userData));
+      }
       navigate("/teacher-dashboard");
     } else if (selectedRole === "student") {
+      if (userData) {
+        localStorage.setItem("currentStudent", JSON.stringify(userData));
+      }
       navigate("/student-dashboard");
     } else if (selectedRole === "admin") {
       navigate("/admin-dashboard");
@@ -63,7 +69,7 @@ const ProfileSelection = () => {
           <img
             src="./welcomepage/logo.png"
             alt="School Logo"
-            className="absolute w-1/2 object-cover"
+            className="absolute w-2/3 object-cover"
           />
         </div>
       </div>
@@ -122,7 +128,7 @@ const ProfileSelection = () => {
               {selectedRole} Login
             </h2>
 
-            <Login onLoginSuccess={handleLoginSuccess} />
+            <Login onLoginSuccess={handleLoginSuccess} role={selectedRole} />
           </div>
         )}
       </div>

@@ -4,6 +4,8 @@ const teachersData = [
     id: 1,
     teacherId: "TCH-001",
     fullName: "Sadia Noor",
+    userName: "sadianoor",
+    password: "sadia123",
     email: "sadia.noor@school.edu",
     gender: "Female",
     subject: "Early Childhood Education",
@@ -18,11 +20,14 @@ const teachersData = [
     classes: ["Play Group"],
     sections: ["A"],
     status: "Active",
+    profileImage: "/assets/profiles/teachers/t_1.jpg",
   },
   {
     id: 2,
     teacherId: "TCH-002",
     fullName: "Rubina Khatoon",
+    userName: "rubinakhatoon",
+    password: "rubina123",
     email: "rubina.khatoon@school.edu",
     gender: "Female",
     subject: "Early Childhood Education",
@@ -37,15 +42,18 @@ const teachersData = [
     classes: ["Play Group"],
     sections: ["B"],
     status: "Active",
+    profileImage: "/assets/profiles/teachers/t_2.jpg",
   },
   // Nursery Teachers
   {
     id: 3,
     teacherId: "TCH-003",
     fullName: "Amna Bibi",
+    userName: "amnabibi",
+    password: "amna123",
     email: "amna.bibi@school.edu",
     gender: "Female",
-    subject: "Basic Learning",
+    subject: "Basic Montessori",
     class: "Nursery",
     section: "A",
     contact: "0300-2222201",
@@ -57,14 +65,17 @@ const teachersData = [
     classes: ["Nursery"],
     sections: ["A"],
     status: "Active",
+    profileImage: "/assets/profiles/teachers/t_3.jpg",
   },
   {
     id: 4,
     teacherId: "TCH-004",
     fullName: "Tahira Begum",
+    userName: "tahirabegum",
+    password: "tahira123",
     email: "tahira.begum@school.edu",
     gender: "Female",
-    subject: "Basic Learning",
+    subject: "Basic Montessori",
     class: "Nursery",
     section: "B",
     contact: "0300-2222202",
@@ -76,9 +87,10 @@ const teachersData = [
     classes: ["Nursery"],
     sections: ["B"],
     status: "Inactive",
+    profileImage: "/assets/profiles/teachers/t_4.jpg",
   },
 ].concat(
-  // Generating defaults for the rest to avoid massive file size in one edit
+  // Generating defaults for the rest
   [
     {
       id: 5,
@@ -88,7 +100,7 @@ const teachersData = [
       section: "A",
       contact: "0300-3333301",
       type: "Regular",
-      subject: "Pre-Primary Education",
+      subject: "Pre-Primary Literacy",
     },
     {
       id: 6,
@@ -98,7 +110,7 @@ const teachersData = [
       section: "B",
       contact: "0300-3333302",
       type: "Contractual",
-      subject: "Pre-Primary Education",
+      subject: "Pre-Primary Numeracy",
     },
     {
       id: 7,
@@ -108,7 +120,7 @@ const teachersData = [
       section: "A",
       contact: "0301-1111101",
       type: "Regular",
-      subject: "English",
+      subject: "English Foundation",
     },
     {
       id: 8,
@@ -118,7 +130,7 @@ const teachersData = [
       section: "B",
       contact: "0301-1111102",
       type: "Regular",
-      subject: "Mathematics",
+      subject: "Mathematics Foundation",
     },
     {
       id: 9,
@@ -128,7 +140,7 @@ const teachersData = [
       section: "C",
       contact: "0301-1111103",
       type: "Contractual",
-      subject: "Urdu",
+      subject: "Urdu Foundation",
     },
     {
       id: 10,
@@ -138,7 +150,7 @@ const teachersData = [
       section: "A",
       contact: "0302-1111101",
       type: "Regular",
-      subject: "English",
+      subject: "English Level II",
     },
     {
       id: 11,
@@ -148,7 +160,7 @@ const teachersData = [
       section: "B",
       contact: "0302-1111102",
       type: "Regular",
-      subject: "Mathematics",
+      subject: "Mathematics Level II",
     },
     {
       id: 12,
@@ -158,7 +170,7 @@ const teachersData = [
       section: "C",
       contact: "0302-1111103",
       type: "Contractual",
-      subject: "General Knowledge",
+      subject: "General Science",
     },
     {
       id: 13,
@@ -168,7 +180,7 @@ const teachersData = [
       section: "A",
       contact: "0303-1111101",
       type: "Regular",
-      subject: "English",
+      subject: "English Level III",
     },
     {
       id: 14,
@@ -178,7 +190,7 @@ const teachersData = [
       section: "B",
       contact: "0303-1111102",
       type: "Regular",
-      subject: "Mathematics",
+      subject: "Mathematics Level III",
     },
     {
       id: 15,
@@ -188,7 +200,7 @@ const teachersData = [
       section: "C",
       contact: "0303-1111103",
       type: "Regular",
-      subject: "Science",
+      subject: "Environmental Science",
     },
     {
       id: 16,
@@ -198,7 +210,7 @@ const teachersData = [
       section: "A",
       contact: "0304-1111101",
       type: "Regular",
-      subject: "English",
+      subject: "English Grammar",
     },
     {
       id: 17,
@@ -208,7 +220,7 @@ const teachersData = [
       section: "B",
       contact: "0304-1111102",
       type: "Contractual",
-      subject: "Mathematics",
+      subject: "Mathematics Level IV",
     },
     {
       id: 18,
@@ -218,7 +230,7 @@ const teachersData = [
       section: "C",
       contact: "0304-1111103",
       type: "Regular",
-      subject: "Science",
+      subject: "Science Level IV",
     },
     {
       id: 19,
@@ -228,7 +240,7 @@ const teachersData = [
       section: "A",
       contact: "0305-1111101",
       type: "Regular",
-      subject: "English",
+      subject: "English Literature",
     },
     {
       id: 20,
@@ -238,7 +250,7 @@ const teachersData = [
       section: "B",
       contact: "0305-1111102",
       type: "Regular",
-      subject: "Mathematics",
+      subject: "Mathematics Level V",
     },
     {
       id: 21,
@@ -248,7 +260,7 @@ const teachersData = [
       section: "C",
       contact: "0305-1111103",
       type: "Contractual",
-      subject: "Science",
+      subject: "Science Level V",
     },
     {
       id: 22,
@@ -258,7 +270,7 @@ const teachersData = [
       section: "A",
       contact: "0306-1111101",
       type: "Regular",
-      subject: "Mathematics",
+      subject: "Mathematics Level VI",
     },
     {
       id: 23,
@@ -268,7 +280,7 @@ const teachersData = [
       section: "B",
       contact: "0306-1111102",
       type: "Regular",
-      subject: "English",
+      subject: "English Level VI",
     },
     {
       id: 24,
@@ -278,7 +290,7 @@ const teachersData = [
       section: "C",
       contact: "0306-1111103",
       type: "Regular",
-      subject: "Science",
+      subject: "General Science",
     },
     {
       id: 25,
@@ -288,7 +300,7 @@ const teachersData = [
       section: "D",
       contact: "0306-1111104",
       type: "Contractual",
-      subject: "Urdu",
+      subject: "Urdu Literature",
     },
     {
       id: 26,
@@ -298,7 +310,7 @@ const teachersData = [
       section: "A",
       contact: "0307-1111101",
       type: "Regular",
-      subject: "Mathematics",
+      subject: "Mathematics Level VII",
     },
     {
       id: 27,
@@ -308,7 +320,7 @@ const teachersData = [
       section: "B",
       contact: "0307-1111102",
       type: "Regular",
-      subject: "English",
+      subject: "English Level VII",
     },
     {
       id: 28,
@@ -318,7 +330,7 @@ const teachersData = [
       section: "C",
       contact: "0307-1111103",
       type: "Contractual",
-      subject: "Science",
+      subject: "General Science",
     },
     {
       id: 29,
@@ -328,7 +340,7 @@ const teachersData = [
       section: "D",
       contact: "0307-1111104",
       type: "Regular",
-      subject: "Urdu",
+      subject: "Urdu Literature",
     },
     {
       id: 30,
@@ -338,7 +350,7 @@ const teachersData = [
       section: "A",
       contact: "0343-3344556",
       type: "Contractual",
-      subject: "Mathematics",
+      subject: "Mathematics Level VIII",
     },
     {
       id: 31,
@@ -348,7 +360,7 @@ const teachersData = [
       section: "B",
       contact: "0333-5555555",
       type: "Regular",
-      subject: "English",
+      subject: "English Level VIII",
     },
     {
       id: 32,
@@ -358,7 +370,7 @@ const teachersData = [
       section: "C",
       contact: "0344-4455667",
       type: "Regular",
-      subject: "History",
+      subject: "Pakistan Studies",
     },
     {
       id: 33,
@@ -368,7 +380,7 @@ const teachersData = [
       section: "D",
       contact: "0308-1111104",
       type: "Regular",
-      subject: "Science",
+      subject: "General Science",
     },
     {
       id: 34,
@@ -408,7 +420,7 @@ const teachersData = [
       section: "A",
       contact: "0300-1234567",
       type: "Regular",
-      subject: "Mathematics",
+      subject: "Advanced Mathematics",
     },
     {
       id: 38,
@@ -510,25 +522,59 @@ const teachersData = [
       type: "Contractual",
       subject: "Business Studies",
     },
-  ].map((t) => ({
-    ...t,
-    teacherId: `TCH-${String(t.id).padStart(3, "0")}`,
-    gender:
+  ].map((t) => {
+    let dept = "Primary";
+    if (["Class 6", "Class 7", "Class 8"].includes(t.class)) dept = "Middle";
+    else if (["Class 9", "Class 10"].includes(t.class)) dept = "Secondary";
+    else if (["Class 11", "Class 12"].includes(t.class))
+      dept = "Higher Secondary";
+
+    const gender =
       t.fullName.endsWith("a") ||
       t.fullName.includes("Sadia") ||
       t.fullName.includes("Rubina") ||
       t.fullName.includes("Amna") ||
-      t.fullName.includes("Tahira")
+      t.fullName.includes("Tahira") ||
+      t.fullName.includes("Ayesha") ||
+      t.fullName.includes("Saima") ||
+      t.fullName.includes("Farzana") ||
+      t.fullName.includes("Javeria") ||
+      t.fullName.includes("Sara") ||
+      t.fullName.includes("Hina") ||
+      t.fullName.includes("Maryam") ||
+      t.fullName.includes("Zainab") ||
+      t.fullName.includes("Rabia") ||
+      t.fullName.includes("Nida") ||
+      t.fullName.includes("Fatima") ||
+      t.fullName.includes("Naila") ||
+      t.fullName.includes("Shazia") ||
+      t.fullName.includes("Bushra") ||
+      t.fullName.includes("Nazia") ||
+      t.fullName.includes("Zahida") ||
+      t.fullName.includes("Khalida") ||
+      t.fullName.includes("Rashida") ||
+      t.fullName.includes("Farida") ||
+      t.fullName.includes("Samina") ||
+      t.fullName.includes("Amna")
         ? "Female"
-        : "Male",
-    qualification: "Masters Degree",
-    experience: "3 Years",
-    department: "General",
-    role: "Subject Teacher",
-    classes: [t.class],
-    sections: [t.section],
-    status: "Active",
-  })),
+        : "Male";
+
+    return {
+      ...t,
+      teacherId: `TCH-${String(t.id).padStart(3, "0")}`,
+      userName: t.fullName.toLowerCase().replace(/\s/g, ""),
+      password: t.fullName.split(" ")[0].toLowerCase() + "123",
+      gender,
+      profileImage: `/assets/profiles/teachers/t_${((t.id - 1) % 35) + 1}.jpg`,
+      qualification: "Masters Degree",
+      experience: "5 Years",
+      department: dept,
+      role: "Subject Teacher",
+      classes: [t.class],
+      sections: [t.section],
+      status: "Active",
+    };
+  }),
 );
 
 export default teachersData;

@@ -42,6 +42,7 @@ import NoticeAdmin from "./pages/admin/Notice";
 import NoticeTeacher from "./pages/teacher/Notice";
 import Classes from "./pages/admin/Classes";
 import AddClass from "./features/admin/AddClass";
+import StudentPromotion from "./pages/admin/StudentPromotion";
 
 function App() {
   return (
@@ -67,6 +68,7 @@ function App() {
           <Route path="/notice-admin" element={<NoticeAdmin />} />
           <Route path="/classes" element={<Classes />} />
           <Route path="/add-class" element={<AddClass />} />
+          <Route path="/student-promotion" element={<StudentPromotion />} />
 
           {/* Teacher Routes */}
           <Route path="/teacher-dashboard" element={<TeacherDashboard />} />

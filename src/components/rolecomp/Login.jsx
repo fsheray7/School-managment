@@ -1,8 +1,12 @@
 import { useState } from "react";
 import { FaUser } from "react-icons/fa";
 import DynamicForm from "../ui/DynamicForm";
+import studentsData from "../../data/admindata/students/students";
+import teachersData from "../../data/teachers/teacher";
+import { useToast } from "../../context/ToastContext";
 
-const Login = ({ onLoginSuccess }) => {
+const Login = ({ onLoginSuccess, role }) => {
+  const { showToast } = useToast();
   const [loginData, setLoginData] = useState({
     username: "",
     password: "",
@@ -10,9 +14,43 @@ const Login = ({ onLoginSuccess }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // Here you would validate credentials
-    if (onLoginSuccess) {
-      onLoginSuccess();
+
+    if (role === "student") {
+      const student = studentsData.find(
+        (s) =>
+          s.userName === loginData.username &&
+          s.password === loginData.password,
+      );
+
+      if (student) {
+        showToast(`Welcome back, ${student.fullName}!`, "success");
+        if (onLoginSuccess) {
+          onLoginSuccess(student);
+        }
+      } else {
+        showToast("Invalid username or password!", "error");
+      }
+    } else if (role === "teacher") {
+      const teacher = teachersData.find(
+        (t) =>
+          t.userName === loginData.username &&
+          t.password === loginData.password,
+      );
+
+      if (teacher) {
+        showToast(`Welcome back, ${teacher.fullName}!`, "success");
+        if (onLoginSuccess) {
+          onLoginSuccess(teacher);
+        }
+      } else {
+        showToast("Invalid username or password!", "error");
+      }
+    } else {
+      // Default success for other roles for now
+      showToast("Logged in successfully!", "success");
+      if (onLoginSuccess) {
+        onLoginSuccess();
+      }
     }
   };
 

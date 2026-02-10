@@ -9,6 +9,8 @@ import {
   IoLogOutOutline,
 } from "react-icons/io5";
 import { useSettings } from "../../context/SettingsContext";
+import teachersData from "../../data/teachers/teacher";
+import finalStudentsData from "../../data/admindata/students/students";
 
 const Navbar = ({ onToggleSidebar, isSidebarOpen, role = "admin" }) => {
   const { schoolLogo } = useSettings();
@@ -76,8 +78,9 @@ const Navbar = ({ onToggleSidebar, isSidebarOpen, role = "admin" }) => {
     "/notice-admin": "Notice & Announcements",
     "/classes": "Classes",
     "/add-class": "Add Class",
+    "/student-promotion": "Student Promotion",
     // Teacher Routes
-    "/teacher-dashboard": "Teacher Dashboard",
+    "/teacher-dashboard": "Dashboard",
     "/attendance": "Attendance",
     "/homework": "Homework",
     "/results": "Results",
@@ -88,7 +91,7 @@ const Navbar = ({ onToggleSidebar, isSidebarOpen, role = "admin" }) => {
     "/add-classes": "Add Classes",
     "/exam-routine": "Exam Routine",
     // Student Routes
-    "/student-dashboard": "Student Dashboard",
+    "/student-dashboard": "Dashboard",
     "/attendance-student": "My Attendance",
     "/homework-student": "My Homework",
     "/results-student": "My Results",
@@ -118,7 +121,36 @@ const Navbar = ({ onToggleSidebar, isSidebarOpen, role = "admin" }) => {
     student: "Student",
   };
 
-  const currentUserName = roleNames[role] || "User";
+  const [currentUserName, setCurrentUserName] = useState(
+    roleNames[role] || "User",
+  );
+
+  const [profileImage, setProfileImage] = useState("");
+
+  useEffect(() => {
+    if (role === "student") {
+      const storedStudent = localStorage.getItem("currentStudent");
+      if (storedStudent) {
+        const sessionData = JSON.parse(storedStudent);
+        const updatedStudent =
+          finalStudentsData.find((s) => s.id === sessionData.id) || sessionData;
+        setCurrentUserName(updatedStudent.fullName || "Student");
+        setProfileImage(updatedStudent.profileImage || "");
+      }
+    } else if (role === "teacher") {
+      const storedTeacher = localStorage.getItem("currentTeacher");
+      if (storedTeacher) {
+        const sessionData = JSON.parse(storedTeacher);
+        const updatedTeacher =
+          teachersData.find((t) => t.id === sessionData.id) || sessionData;
+        setCurrentUserName(updatedTeacher.fullName || "Teacher");
+        setProfileImage(updatedTeacher.profileImage || "");
+      }
+    } else {
+      setCurrentUserName(roleNames[role] || "Admin");
+      setProfileImage("");
+    }
+  }, [role]);
 
   const handleLogout = () => {
     navigate("/select-profile");
@@ -128,7 +160,7 @@ const Navbar = ({ onToggleSidebar, isSidebarOpen, role = "admin" }) => {
   const handleProfileClick = () => {
     if (role === "admin") navigate("/settings");
     else if (role === "teacher") navigate("/teacher-dashboard");
-    else if (role === "student") navigate("/student-dashboard");
+    else if (role === "student") navigate("/student-profile");
     else navigate("/settings");
     setIsProfileOpen(false);
   };
@@ -259,9 +291,9 @@ const Navbar = ({ onToggleSidebar, isSidebarOpen, role = "admin" }) => {
           >
             <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-full flex items-center justify-center overflow-hidden border border-gray-300 bg-gray-50 flex-shrink-0">
               <img
-                src={schoolLogo}
+                src={profileImage || schoolLogo}
                 alt="Profile"
-                className="p-1 w-full h-full object-contain"
+                className={`${!profileImage ? "p-1" : ""} w-full h-full object-cover`}
               />
             </div>
             <span

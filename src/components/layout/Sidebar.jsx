@@ -7,7 +7,6 @@ const Sidebar = ({ isOpen, setIsOpen, menuItems = [] }) => {
   const location = useLocation();
   const navigate = useNavigate();
   const { schoolLogo, schoolName } = useSettings();
-  const [isHovered, setIsHovered] = useState(false);
 
   const handleNavigation = (path) => {
     navigate(path);
@@ -27,14 +26,12 @@ const Sidebar = ({ isOpen, setIsOpen, menuItems = [] }) => {
         />
       )}
 
-      {/* SIDEBAR - always w-64 */}
+      {/* SIDEBAR */}
       <aside
-        onMouseEnter={() => setIsHovered(true)}
-        onMouseLeave={() => setIsHovered(false)}
         className={`
-          fixed top-0 left-0 h-full w-64 overflow-hidden
+          fixed top-0 left-0 h-full 
           z-50 transition-all duration-300
-          ${isOpen ? "translate-x-0" : "-translate-x-full lg:translate-x-0"}
+          ${isOpen ? "translate-x-0 w-64" : "-translate-x-full w-64 lg:translate-x-0"}
         `}
         style={{ backgroundColor: "var(--primary-color)" }}
       >
@@ -70,66 +67,26 @@ const Sidebar = ({ isOpen, setIsOpen, menuItems = [] }) => {
         <hr className=" border-gray-100/40 mx-3" />
 
         {/* MENU */}
-        <ul
-          className={`
-            flex flex-col gap-1 py-1 text-white
-            transition-all duration-500 ease-[cubic-bezier(0.4,0,0.2,1)]
-            ${isHovered ? "px-3 items-start" : "lg:px-0 lg:items-center px-3 items-start"}
-          `}
-        >
+        <ul className="flex flex-col p-1 px-3 text-white">
           {menuItems.map((item, index) => (
             <li
               key={index}
               onClick={() => handleNavigation(item.path)}
               className={`
-                relative flex items-center text-[var(--text-primary-color)] cursor-pointer text-[13px] font-medium group
-                transition-all duration-500 ease-[cubic-bezier(0.4,0,0.2,1)]
-                ${
-                  isHovered
-                    ? "w-full justify-start"
-                    : "lg:w-auto lg:justify-center w-full justify-start"
-                }
+                relative flex items-center p-1 rounded-xl cursor-pointer text-[var(--text-primary-color)] text-[13px] font-medium transition-all duration-300
+                ${isActive(item.path) ? "bg-white/25" : "hover:bg-white/10"}
               `}
-              title={!isHovered ? item.label : ""}
+              title={item.label}
             >
-              {/* Icon with active background */}
-              <div
-                className={`
-                  flex-shrink-0 flex items-center justify-center
-                  w-10 h-10 rounded-xl
-                  transition-all duration-500 ease-[cubic-bezier(0.4,0,0.2,1)]
-                  ${
-                    isActive(item.path)
-                      ? "bg-white/25"
-                      : "group-hover:bg-white/15"
-                  }
-                `}
-              >
+              {/* Icon Container */}
+              <div className="flex-shrink-0 flex items-center justify-center w-8 h-8">
                 {item.icon}
               </div>
 
-              {/* Label with smooth fade - only this part hides/shows */}
-              <span
-                className={`
-                  whitespace-nowrap overflow-hidden
-                  transition-all duration-500 ease-[cubic-bezier(0.4,0,0.2,1)]
-                  ${
-                    isHovered
-                      ? "opacity-100 max-w-[180px] ml-3"
-                      : "lg:opacity-0 lg:max-w-0 lg:ml-0 opacity-100 max-w-[180px] ml-3"
-                  }
-                `}
-              >
+              {/* Label - always visible */}
+              <span className="whitespace-nowrap overflow-hidden ml-3">
                 {item.label}
               </span>
-
-              {/* Extended active background when hovered - covers icon + text */}
-              {isActive(item.path) && isHovered && (
-                <div
-                  className="absolute inset-0 bg-white/25 rounded-xl -z-10 
-                    transition-all duration-600 ease-[cubic-bezier(0.4,0,0.2,1)]"
-                />
-              )}
             </li>
           ))}
 

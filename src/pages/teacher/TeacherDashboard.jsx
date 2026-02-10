@@ -1,168 +1,326 @@
-import React from "react";
-
-import { FaArrowRight } from "react-icons/fa";
-import { Link } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import {
+  FaTrophy,
+  FaChevronRight,
+  FaClipboardCheck,
+  FaUserTimes,
+  FaUserCheck,
+  FaBookOpen,
+} from "react-icons/fa";
+import { IoNotifications, IoSchool } from "react-icons/io5";
+import { HiOutlineSpeakerphone } from "react-icons/hi";
+import teachersData from "../../data/teachers/teacher";
+import studentsData from "../../data/admindata/students/students";
+import classesData from "../../data/admindata/classes";
+import coursesData from "../../data/admindata/courses";
+import { UPCOMING_EVENTS, CIRCULARS } from "../../data/admindata/dashboardData";
 
 const TeacherDashboard = () => {
-  return (
-    <section className="flex flex-col items-center  justify-start w-full bg-white overflow-hidden gap-2 px-4 pb-10 pt-20 ">
-      {/* Welcome Card */}
-      <div
-        className="w-full text-white rounded-xl  p-2 sm:p-6 shadow-md"
-        style={{ backgroundColor: "var(--primary-color)" }}
-      >
-        <div className="flex justify-start gap-4 items-center">
-          <h2 className="text-sm px-2 sm:text-lg font-semibold">
-            Welcome Message
-          </h2>
-          <span className="text-xl ">
-            <FaArrowRight />
-          </span>
-        </div>
-        <p className="text-[10px] px-2 sm:text-sm mt-2 opacity-90">
-          The standard Lorem Ipsum passage "Lorem ipsum dolor sit amet,
-          consectetur adipiscing elit, sed do eiusmod tempor incididunt ut
-          labore et dolore magna aliqua.”
-        </p>
-      </div>
+  const navigate = useNavigate();
+  const [teacher, setTeacher] = useState(null);
+  const [myClass, setMyClass] = useState(null);
+  const [stats, setStats] = useState({
+    present: 0,
+    absent: 0,
+    pendingHomework: 1,
+    papersToCheck: 15,
+  });
 
-      {/* Feature Grid */}
-      <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-4 gap-3 sm:gap-5 w-full justify-items-center py-2 mt-5">
-        {/* Item */}
-        <div className="flex flex-col items-center w-full  ">
-          <Link
-            to="/attendance"
-            className="w-full max-w-[120px] rounded-xl p-3 sm:p-4 flex justify-center items-center shadow-sm cursor-pointer"
-            style={{ backgroundColor: "var(--primary-color)", opacity: 0.1 }}
-          >
-            <div
-              className="flex justify-center items-center"
-              style={{ opacity: 1 }}
-            >
+  useEffect(() => {
+    const storedTeacher = localStorage.getItem("currentTeacher");
+    if (storedTeacher) {
+      const sessionData = JSON.parse(storedTeacher);
+      // Refresh teacher data from the source to get latest profileImage
+      const updatedTeacher =
+        teachersData.find((t) => t.id === sessionData.id) || sessionData;
+      setTeacher(updatedTeacher);
+
+      // Find the class where this teacher is the Class Teacher
+      const assignedClass = classesData.find(
+        (c) => c.classTeacher === updatedTeacher.fullName,
+      );
+
+      if (assignedClass) {
+        setMyClass(assignedClass);
+        const total = assignedClass.totalStudents;
+        // Simulate some stats
+        setStats({
+          present: Math.floor(total * 0.9),
+          absent: total - Math.floor(total * 0.9),
+          pendingHomework: 1,
+          papersToCheck: 15,
+        });
+      }
+    } else {
+      navigate("/");
+    }
+  }, [navigate]);
+
+  if (!teacher) return null;
+
+  return (
+    <section className="flex flex-col w-full bg-[#f8fafc] overflow-y-auto px-4 sm:px-8 pb-10 pt-24 gap-8">
+      {/* Welcome Banner */}
+      <div className="relative w-full bg-gradient-to-r from-[#e0f2fe] to-[#f0f9ff] rounded-3xl p-8 sm:p-12 shadow-sm border border-blue-50 flex items-center justify-between overflow-hidden">
+        {/* Abstract Background Shapes */}
+        <div className="absolute top-[-20%] left-[-5%] w-64 h-64 bg-blue-100 rounded-full opacity-20 blur-3xl"></div>
+        <div className="absolute bottom-[-10%] right-[10%] w-48 h-48 bg-blue-200 rounded-full opacity-30 blur-2xl"></div>
+
+        <div className="z-10 max-w-2xl">
+          <h1 className="text-3xl sm:text-4xl font-bold text-[#1e293b] mb-4">
+            Welcome, {teacher.fullName}!
+          </h1>
+          <p className="text-[#64748b] text-base sm:text-lg leading-relaxed max-w-lg">
+            "Education is the most powerful weapon which you can use to change
+            the world." Manage your classes and stay updated with school
+            activities.
+          </p>
+        </div>
+
+        <div className="hidden lg:block z-10">
+          <div className="relative">
+            <div className="w-48 h-48 rounded-full border-8 border-white shadow-xl overflow-hidden bg-white">
               <img
-                src="/teachersection/attendance.png"
-                alt="Logo Img"
-                className="w-8 sm:w-12"
+                src={teacher.profileImage}
+                alt="Profile"
+                className="w-full h-full object-cover"
               />
             </div>
-          </Link>
-          <span className="mt-2 text-[10px] sm:text-sm font-medium">
-            Attendance
-          </span>
+            {/* Decorative element around image */}
+            <div className="absolute inset-[-10px] rounded-full border-2 border-blue-100 opacity-50"></div>
+          </div>
+        </div>
+      </div>
+
+      <div className="grid grid-cols-1 xl:grid-cols-3 gap-8 w-full">
+        {/* Middle Section: Overview & Circulars */}
+        <div className="xl:col-span-2 flex flex-col gap-8">
+          {/* Today's Overview */}
+          <div className="bg-white rounded-3xl shadow-sm p-6 sm:p-8 border border-gray-100">
+            <div className="flex items-center justify-between mb-8">
+              <h2 className="text-xl font-bold text-[#1e293b]">
+                Today's Overview
+              </h2>
+              <button className="text-[var(--primary-color)] text-sm font-semibold flex items-center gap-1 hover:underline">
+                View Details <FaChevronRight size={10} />
+              </button>
+            </div>
+
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6">
+              <StatCard
+                icon={<FaUserCheck className="text-[#10b981]" />}
+                count={stats.present}
+                label="Students Present"
+                bgColor="bg-[#ecfdf5]"
+              />
+              <StatCard
+                icon={<FaUserTimes className="text-[#ef4444]" />}
+                count={stats.absent}
+                label="Students Absent"
+                bgColor="bg-[#fef2f2]"
+              />
+              <StatCard
+                icon={<FaClipboardCheck className="text-[#f59e0b]" />}
+                count={stats.pendingHomework}
+                label="Homework Pending"
+                bgColor="bg-[#fffbeb]"
+              />
+              <StatCard
+                icon={<IoSchool className="text-[#3b82f6]" />}
+                count={stats.papersToCheck}
+                label="Papers To Check"
+                bgColor="bg-[#eff6ff]"
+              />
+            </div>
+          </div>
+
+          {/* Circulars */}
+          <div className="bg-white rounded-3xl shadow-sm p-6 sm:p-8 border border-gray-100">
+            <div className="flex items-center justify-between mb-8">
+              <h2 className="text-xl font-bold text-[#1e293b]">Circulars</h2>
+              <button className="text-[var(--primary-color)] text-sm font-semibold flex items-center gap-1 hover:underline">
+                View All <FaChevronRight size={10} />
+              </button>
+            </div>
+
+            <div className="flex flex-col gap-6">
+              {CIRCULARS.map((circular) => (
+                <div
+                  key={circular.id}
+                  className="flex items-start justify-between group cursor-pointer border-b border-gray-50 pb-4 last:border-0 last:pb-0"
+                >
+                  <div className="flex gap-4">
+                    <div
+                      className={`p-3 rounded-2xl ${circular.type === "trophy" ? "bg-[#fff7ed]" : "bg-[#f0fdf4]"} text-[#f97316]`}
+                    >
+                      {circular.type === "trophy" ? (
+                        <FaTrophy size={20} className="text-[#f59e0b]" />
+                      ) : (
+                        <HiOutlineSpeakerphone
+                          size={20}
+                          className="text-[#10b981]"
+                        />
+                      )}
+                    </div>
+                    <div>
+                      <h3 className="font-bold text-[#334155] group-hover:text-[var(--primary-color)] transition-colors">
+                        {circular.title}
+                      </h3>
+                      <p className="text-sm text-[#94a3b8] flex items-center gap-2 mt-1">
+                        {circular.date}{" "}
+                        <span className="w-1.5 h-1.5 rounded-full bg-[#10b981]"></span>{" "}
+                        {circular.tag}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
         </div>
 
-        <div className="flex flex-col items-center w-full ">
-          <Link
-            to="/homework"
-            className="w-full max-w-[120px] bg-[#E8F8F6] rounded-xl p-3 sm:p-4 flex justify-center items-center shadow-sm cursor-pointer"
-          >
-            <img
-              src="/teachersection/homework.png"
-              alt="Logo Img"
-              className="w-8 sm:w-12"
-            />
-          </Link>
-          <span className="mt-2 text-[10px] sm:text-sm font-medium">
-            Homework
-          </span>
-        </div>
+        {/* Right Section: Upcoming Events & My Class */}
+        <div className="flex flex-col gap-8">
+          {/* Upcoming Events */}
+          <div className="bg-white rounded-3xl shadow-sm p-6 sm:p-8 border border-gray-100">
+            <div className="flex items-center justify-between mb-8">
+              <h2 className="text-xl font-bold text-[#1e293b]">
+                Upcoming Events
+              </h2>
+              <button className="text-[var(--primary-color)] text-sm font-semibold flex items-center gap-1 hover:underline">
+                View All <FaChevronRight size={10} />
+              </button>
+            </div>
 
-        <div className="flex flex-col items-center w-full ">
-          <Link
-            to="/results"
-            className="w-full max-w-[120px] bg-[#E8F8F6] rounded-xl p-3 sm:p-4 flex justify-center items-center shadow-sm cursor-pointer"
-          >
-            <img
-              src="/teachersection/results.png"
-              alt="Logo Img"
-              className="w-8 sm:w-12"
-            />
-          </Link>
-          <span className="mt-2 text-[10px] sm:text-sm font-medium">
-            Result
-          </span>
-        </div>
+            <div className="flex flex-col gap-6">
+              {UPCOMING_EVENTS.map((event, idx) => (
+                <div
+                  key={idx}
+                  className="flex items-center gap-4 group cursor-pointer px-2 py-1 hover:bg-gray-50 rounded-2xl transition-all"
+                >
+                  <div className="min-w-[60px] h-[60px] bg-blue-50 rounded-2xl flex flex-col items-center justify-center border border-blue-100 group-hover:bg-[var(--primary-color)] transition-all">
+                    <span className="text-xs font-bold text-[var(--primary-color)] group-hover:text-white uppercase">
+                      Dec
+                    </span>
+                    <span className="text-xl font-black text-[#1e293b] group-hover:text-white">
+                      {event.day}
+                    </span>
+                  </div>
+                  <div>
+                    <h4 className="font-bold text-[#334155] text-sm group-hover:text-[#1e293b]">
+                      {event.title}
+                    </h4>
+                    <p className="text-xs text-[#94a3b8] mt-1">
+                      {event.time}, {event.location}
+                    </p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
 
-        <div className="flex flex-col items-center w-full ">
-          <Link
-            to="/exam-routine"
-            className="w-full max-w-[120px] bg-[#E8F8F6] rounded-xl p-3 sm:p-4 flex justify-center items-center shadow-sm cursor-pointer"
-          >
-            <img
-              src="/teachersection/exam.png"
-              alt="Logo Img"
-              className="w-8 sm:w-12"
-            />
-          </Link>
-          <span className="mt-2 text-[10px] sm:text-sm font-medium">
-            Exam Routine
-          </span>
-        </div>
+          {/* My Class */}
+          <div className="bg-white rounded-3xl shadow-sm p-6 sm:p-8 border border-gray-100 flex-1">
+            <div className="flex items-center justify-between mb-8">
+              <div className="flex items-center gap-2">
+                <div className="bg-[#f0fdfa] p-2 rounded-lg">
+                  <IoSchool className="text-[#0d9488]" size={20} />
+                </div>
+                <h2 className="text-xl font-bold text-[#1e293b]">My Class</h2>
+              </div>
+              <button className="text-[var(--primary-color)] text-sm font-semibold hover:underline">
+                View All
+              </button>
+            </div>
 
-        <div className="flex flex-col items-center w-full ">
-          <Link
-            to="/solutions"
-            className="w-full max-w-[120px] bg-[#E8F8F6] rounded-xl p-3 sm:p-4 flex justify-center items-center shadow-sm cursor-pointer"
-          >
-            <img
-              src="/teachersection/solution.png"
-              alt="Logo Img"
-              className="w-8 sm:w-12"
-            />
-          </Link>
-          <span className="mt-2 text-[10px] sm:text-sm font-medium">
-            Solution
-          </span>
-        </div>
+            {myClass ? (
+              <div className="space-y-6">
+                <div>
+                  <p className="text-[#64748b] text-sm">
+                    Class Teacher:{" "}
+                    <span className="text-[#1e293b] font-bold">
+                      {teacher.fullName}
+                    </span>
+                  </p>
+                  <h3 className="text-2xl font-black text-[#1e293b] mt-1">
+                    {myClass.className} <span className="text-gray-300">|</span>{" "}
+                    '{myClass.section}'
+                  </h3>
+                  <p className="text-xs text-[#94a3b8] mt-1 font-medium italic">
+                    Total Students: {myClass.totalStudents}
+                  </p>
+                </div>
 
-        <div className="flex flex-col items-center w-full ">
-          <Link
-            to="/notice"
-            className="w-full max-w-[120px] bg-[#E8F8F6] rounded-xl p-3 sm:p-4 flex justify-center items-center shadow-sm cursor-pointer"
-          >
-            <img
-              src="/teachersection/events.png"
-              alt="Logo Img"
-              className="w-8 sm:w-12"
-            />
-          </Link>
-          <span className="mt-2 text-[10px] sm:text-sm font-medium">
-            Notice & Events
-          </span>
-        </div>
+                <div className="flex flex-col gap-3">
+                  <div className="bg-blue-50/50 p-4 rounded-2xl border border-blue-100/50 flex items-center justify-between hover:bg-blue-50 transition-colors cursor-pointer">
+                    <div className="flex items-center gap-3">
+                      <div className="w-10 h-10 bg-white rounded-xl flex items-center justify-center shadow-sm">
+                        <FaBookOpen className="text-blue-500" />
+                      </div>
+                      <div>
+                        <p className="font-bold text-[#334155] text-sm">
+                          Math Assignment
+                        </p>
+                        <p className="text-[10px] text-[#64748b]">
+                          Pending | Due: 28 Feb
+                        </p>
+                      </div>
+                    </div>
+                  </div>
 
-        <div className="flex flex-col items-center w-full ">
-          <Link
-            to="/add-account"
-            className="w-full max-w-[120px] bg-[#E8F8F6] rounded-xl p-3 sm:p-4 flex justify-center items-center shadow-sm cursor-pointer"
-          >
-            <img
-              src="/teachersection/user.png"
-              alt="Logo Img"
-              className="w-8 sm:w-12"
-            />
-          </Link>
-          <p className="mt-2 text-[10px] sm:text-sm font-medium">Add Account</p>
-        </div>
+                  <div className="bg-emerald-50/50 p-4 rounded-2xl border border-emerald-100/50 flex items-center justify-between hover:bg-emerald-50 transition-colors cursor-pointer">
+                    <div className="flex items-center gap-3">
+                      <div className="w-10 h-10 bg-white rounded-xl flex items-center justify-center shadow-sm">
+                        <FaClipboardCheck className="text-emerald-500" />
+                      </div>
+                      <div>
+                        <p className="font-bold text-[#334155] text-sm">
+                          English Test
+                        </p>
+                        <p className="text-[10px] text-[#64748b]">
+                          Upcoming | 1 March
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
 
-        <div className="flex flex-col items-center w-full  sm:max-w-none">
-          <Link
-            to="/add-classes"
-            className="w-full max-w-[120px] bg-[#E8F8F6] rounded-xl p-3 sm:p-4 flex justify-center items-center shadow-sm cursor-pointer"
-          >
-            <img
-              src="/teachersection/homework.png"
-              alt="Logo Img"
-              className="w-8 sm:w-12"
-            />
-          </Link>
-          <span className="mt-2 text-[10px] sm:text-sm font-medium">
-            Add Classes
-          </span>
+                <div className="pt-2">
+                  <button className="w-full py-3 bg-gray-50 hover:bg-gray-100 rounded-2xl text-xs font-bold text-[#64748b] transition-all">
+                    View Complete Schedule
+                  </button>
+                </div>
+              </div>
+            ) : (
+              <div className="h-full flex flex-col items-center justify-center text-center opacity-50 space-y-2">
+                <IoSchool size={40} />
+                <p className="text-sm font-medium">
+                  No class assigned as Class Teacher
+                </p>
+              </div>
+            )}
+          </div>
         </div>
       </div>
     </section>
   );
 };
+
+const StatCard = ({ icon, count, label, bgColor }) => (
+  <div
+    className={`p-5 rounded-[2rem] ${bgColor} flex flex-col items-center justify-center text-center group hover:scale-[1.02] transition-all duration-300 shadow-sm border border-black/5`}
+  >
+    <div className="mb-3 text-2xl group-hover:scale-110 transition-transform">
+      {icon}
+    </div>
+    <div className="text-2xl font-black text-[#1e293b] mb-0.5">{count}</div>
+    <div className="text-[10px] sm:text-xs font-bold text-[#64748b] uppercase tracking-wider leading-tight">
+      {label.split(" ").map((word, i) => (
+        <div key={i}>{word}</div>
+      ))}
+    </div>
+  </div>
+);
 
 export default TeacherDashboard;

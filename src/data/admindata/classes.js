@@ -185,7 +185,7 @@ const classesData = [
     id: 16,
     className: "Class 4",
     section: "A",
-    department: "Middle",
+    department: "Primary",
     get totalStudents() {
       return getStudentCount(this.className, this.section);
     },
@@ -196,7 +196,7 @@ const classesData = [
     id: 17,
     className: "Class 4",
     section: "B",
-    department: "Middle",
+    department: "Primary",
     get totalStudents() {
       return getStudentCount(this.className, this.section);
     },
@@ -207,7 +207,7 @@ const classesData = [
     id: 18,
     className: "Class 4",
     section: "C",
-    department: "Middle",
+    department: "Primary",
     get totalStudents() {
       return getStudentCount(this.className, this.section);
     },
@@ -219,7 +219,7 @@ const classesData = [
     id: 19,
     className: "Class 5",
     section: "A",
-    department: "Middle",
+    department: "Primary",
     get totalStudents() {
       return getStudentCount(this.className, this.section);
     },
@@ -230,7 +230,7 @@ const classesData = [
     id: 20,
     className: "Class 5",
     section: "B",
-    department: "Middle",
+    department: "Primary",
     get totalStudents() {
       return getStudentCount(this.className, this.section);
     },
@@ -241,7 +241,7 @@ const classesData = [
     id: 21,
     className: "Class 5",
     section: "C",
-    department: "Middle",
+    department: "Primary",
     get totalStudents() {
       return getStudentCount(this.className, this.section);
     },
@@ -343,7 +343,7 @@ const classesData = [
     id: 30,
     className: "Class 8",
     section: "A",
-    department: "Secondary",
+    department: "Middle",
     get totalStudents() {
       return getStudentCount(this.className, this.section);
     },
@@ -354,7 +354,7 @@ const classesData = [
     id: 31,
     className: "Class 8",
     section: "B",
-    department: "Secondary",
+    department: "Middle",
     get totalStudents() {
       return getStudentCount(this.className, this.section);
     },
@@ -365,7 +365,7 @@ const classesData = [
     id: 32,
     className: "Class 8",
     section: "C",
-    department: "Secondary",
+    department: "Middle",
     get totalStudents() {
       return getStudentCount(this.className, this.section);
     },
@@ -376,7 +376,7 @@ const classesData = [
     id: 33,
     className: "Class 8",
     section: "D",
-    department: "Secondary",
+    department: "Middle",
     get totalStudents() {
       return getStudentCount(this.className, this.section);
     },

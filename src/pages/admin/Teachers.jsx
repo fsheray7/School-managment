@@ -25,7 +25,7 @@ const Teachers = () => {
   const [teachers, setTeachers] = useState(
     teachersData.map((teacher) => ({
       ...teacher,
-      profilePhoto: `https://ui-avatars.com/api/?name=${teacher.fullName}&background=random`,
+      profilePhoto: teacher.profileImage,
       password: teacher.password || "password123", // Keep default if not in data
     })),
   );
