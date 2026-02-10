@@ -176,16 +176,7 @@ const StudentPromotion = () => {
 
   return (
     <div className="flex flex-col gap-6 mt-14 w-full min-h-screen pb-24">
-      {/* Header */}
-      <div className="flex flex-col gap-2">
-        <h1 className="text-2xl font-bold text-[var(--text-primary-color)]">
-          Student Promotion
-        </h1>
-        <p className="text-sm text-gray-500">
-          Manage student promotions between academic sessions.
-        </p>
-      </div>
-
+     
       {/* FILTER CARD */}
       <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100 grid grid-cols-1 lg:grid-cols-12 gap-4 items-end">
         {/* From */}
