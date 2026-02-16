@@ -599,7 +599,7 @@ const Settings = () => {
                   className="w-full flex flex-col items-center gap-4 py-8 px-4 rounded-2xl text-white text-center shadow-lg transition-all duration-500 relative"
                   style={{ backgroundColor: localSettings.primaryColor }}
                 >
-                  <div className="w-16 h-16 bg-white/10 backdrop-blur-md rounded-xl p-2.5 shadow-inner">
+                  <div className="w-16 h-16 bg-white backdrop-blur-md rounded-xl p-2.5 shadow-inner">
                     <img
                       src={localSettings.schoolLogo}
                       alt="preview"
