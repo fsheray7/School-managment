@@ -1,123 +1,132 @@
-import { useState, useRef, useEffect } from "react";
-import { FaArrowLeft, FaPlus } from "react-icons/fa";
-
+import React, { useState, useEffect } from "react";
+import {
+  FaPlus,
+  FaArrowRight,
+  FaCheckCircle,
+  FaQuestionCircle,
+} from "react-icons/fa";
+import Button from "../../components/ui/Button";
+import DataCard from "../../components/ui/DataCard";
 import { useNavigate } from "react-router-dom";
+import { getStudentDoubts } from "../../utils/doubtsManager";
 
 const Questions = () => {
-  const [showOptions, setShowOptions] = useState(false);
-  const menuRef = useRef(null);
+  const navigate = useNavigate();
+  const [myQuestions, setMyQuestions] = useState([]);
+  const [student, setStudent] = useState(null);
 
   useEffect(() => {
-    const handleClickOutside = (e) => {
-      if (menuRef.current && !menuRef.current.contains(e.target)) {
-        setShowOptions(false);
-      }
-    };
-
-    if (showOptions) {
-      document.addEventListener("mousedown", handleClickOutside);
+    const storedStudent = localStorage.getItem("currentStudent");
+    if (storedStudent) {
+      const studentData = JSON.parse(storedStudent);
+      setStudent(studentData);
+      const data = getStudentDoubts(studentData.id);
+      setMyQuestions(data);
     } else {
-      document.removeEventListener("mousedown", handleClickOutside);
+      navigate("/");
     }
+  }, [navigate]);
 
-    return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, [showOptions]);
-
-  const navigate = useNavigate();
+  if (!student) return null;
 
   return (
-    <section className="w-full bg-white flex flex-col items-center">
-      <div className="w-full mt-32 flex flex-col md:flex-col lg:flex-row items-center justify-center gap-10 px-4">
-        <div
-          className="w-full flex flex-col items-center justify-center p-4 border-t-8 rounded-xl max-w-md shadow-xl gap-8"
-          style={{ borderTopColor: "var(--primary-color)" }}
+    <section className="w-full min-h-screen bg-[#f3f4f6] py-10 px-4 flex flex-col items-center">
+      <div className="w-full max-w-5xl flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-10">
+     
+        <Button
+          onClick={() => navigate("/ask-question")}
+          icon={<FaPlus />}
+          variant="primary"
+          className="rounded-xl px-6 py-3 shadow-lg shadow-blue-100"
         >
-          <h2
-            className="w-full flex items-center justify-start  font-bold text-xl "
-            style={{ color: "var(--primary-color)" }}
-          >
-            Question
-          </h2>
-          <p className="w-full px-4   ">
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-            eiusmod tempor incididunt ut labore et dolore magna aliqua?
-          </p>
-
-          <span
-            className="w-full text-xl font-semibold uppercase flex items-center justify-end gap-2 hover:brightness-90 transition-all"
-            style={{ color: "var(--primary-color)" }}
-          >
-            <button
-              className="cursor-pointer"
-              onClick={() => navigate("/answer")}
-            >
-              View
-            </button>
-          </span>
-        </div>
-
-        <div
-          className="w-full flex flex-col items-center justify-center p-4 border-t-8 rounded-xl max-w-md shadow-lg gap-8"
-          style={{ borderTopColor: "var(--primary-color)" }}
-        >
-          <h2
-            className="w-full flex items-center justify-start  font-bold text-xl "
-            style={{ color: "var(--primary-color)" }}
-          >
-            Question
-          </h2>
-          <p className="w-full px-4   ">
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-            eiusmod tempor incididunt ut labore et dolore magna aliqua?
-          </p>
-
-          <span className="w-full text-xl font-semibold  uppercase  text-[#0C46C4]   flex items-center justify-end gap-2 hover:text-[#0a369e]">
-            <button
-              className="cursor-pointer"
-              onClick={() => navigate("/answer")}
-            >
-              View
-            </button>
-          </span>
-        </div>
+          Ask New Question
+        </Button>
       </div>
 
-      {/* Floating Button */}
-
-      <div
-        ref={menuRef}
-        className="flex bottom-4 fixed right-4 flex-col items-center gap-4 mt-6"
-      >
-        {/* Options */}
-        {showOptions && (
-          <>
-            <button
-              className="px-4 fixed right-10 sm:px-5 py-1 sm:py-1 bg-white border cursor-pointer rounded-full text-xs sm:text-sm font-medium transition-all hover:brightness-90 shadow-sm"
-              style={{
-                borderColor: "var(--primary-color)",
-                color: "var(--primary-color)",
-              }}
-            >
-              Remove Question
-            </button>
-
-            <button
+      <div className="w-full max-w-5xl grid grid-cols-1 md:grid-cols-2 gap-6">
+        {myQuestions.length === 0 ? (
+          <div className="col-span-1 md:col-span-2 flex flex-col items-center justify-center py-20 bg-white rounded-3xl shadow-sm border-2 border-dashed border-gray-200">
+            <FaQuestionCircle size={48} className="text-gray-300 mb-4" />
+            <p className="text-gray-400 font-bold text-xl">
+              No questions asked yet.
+            </p>
+            <Button
+              variant="ghost"
               onClick={() => navigate("/ask-question")}
-              className="px-4 fixed bottom-20 right-10 sm:px-5 py-1 sm:py-1 border border-[#28C2A0] text-[#00000080] rounded-full text-xs sm:text-sm font-medium hover:bg-[#28C2A015] cursor-pointer transition"
+              className="mt-4"
             >
-              Add Question
-            </button>
-          </>
+              Ask your first question now
+            </Button>
+          </div>
+        ) : (
+          myQuestions.map((q) => (
+            <DataCard
+              key={q.id}
+              title={q.subject}
+              borderAccent={
+                q.status === "Answered"
+                  ? "border-green-500"
+                  : "border-yellow-500"
+              }
+              fields={[
+                {
+                  label: "Date",
+                  value: q.date,
+                },
+                {
+                  label: "Question",
+                  value: q.question,
+                  render: (val) => (
+                    <p className="text-gray-700 italic font-medium line-clamp-2 mt-1">
+                      "{val}"
+                    </p>
+                  ),
+                },
+                {
+                  label: "Status",
+                  value: q.status,
+                  render: (val) => (
+                    <span
+                      className={`flex items-center gap-1 text-xs font-black uppercase tracking-widest ${
+                        val === "Answered"
+                          ? "text-green-500"
+                          : "text-yellow-600"
+                      }`}
+                    >
+                      {val === "Answered" ? (
+                        <FaCheckCircle size={10} />
+                      ) : (
+                        <FaQuestionCircle size={10} />
+                      )}
+                      {val}
+                    </span>
+                  ),
+                },
+              ]}
+              actions={
+                <div className="flex flex-col w-full gap-3">
+                  {q.status === "Answered" && (
+                    <div className="bg-green-50 px-4 py-2 rounded-lg border border-green-100 text-center">
+                      <p className="text-[10px] text-green-700 font-black uppercase tracking-wider">
+                        Teacher has replied!
+                      </p>
+                    </div>
+                  )}
+                  <Button
+                    variant="ghost"
+                    className="w-full py-2 group"
+                    onClick={() =>
+                      navigate("/answer", { state: { doubtId: q.id } })
+                    }
+                  >
+                    Details
+                    <FaArrowRight className="group-hover:translate-x-1 transition-transform" />
+                  </Button>
+                </div>
+              }
+            />
+          ))
         )}
-
-        {/* Floating Fab */}
-        <button
-          onClick={() => setShowOptions(!showOptions)}
-          className="w-12 h-12 sm:w-14 sm:h-14 rounded-full flex items-center justify-center shadow-md hover:brightness-90 cursor-pointer hover:scale-110 transition-all"
-          style={{ backgroundColor: "var(--primary-color)" }}
-        >
-          <FaPlus className="text-white text-lg sm:text-xl" />
-        </button>
       </div>
     </section>
   );

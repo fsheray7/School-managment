@@ -2,12 +2,19 @@ import React, { useState } from "react";
 import { useSettings } from "../../context/SettingsContext";
 import Button from "../../components/ui/Button";
 import FileUpload from "../../components/ui/FileUpload";
-import { FaMoon, FaSun, FaCheck, FaTimes } from "react-icons/fa";
+import {
+  FaMoon,
+  FaSun,
+  FaCheck,
+  FaTimes,
+  FaEye,
+  FaEyeSlash,
+} from "react-icons/fa";
 
 import { useToast } from "../../context/ToastContext";
 
 const SettingCard = ({ title, children }) => (
-  <div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 flex flex-col gap-5">
+  <div className="bg-white p-6 rounded-2xl shadow-sm border  border-gray-100 flex flex-col gap-5">
     <h2 className="text-lg font-bold text-[var(--text-primary-color)] border-b border-gray-50 pb-3">
       {title}
     </h2>
@@ -15,18 +22,33 @@ const SettingCard = ({ title, children }) => (
   </div>
 );
 
-const InputField = ({ label, value, onChange, placeholder, type = "text" }) => (
+const InputField = ({
+  label,
+  value,
+  onChange,
+  placeholder,
+  type = "text",
+  error = false,
+  suffix = null,
+}) => (
   <div className="flex flex-col gap-2">
     <label className="text-xs font-bold text-gray-500 uppercase tracking-wider">
       {label}
     </label>
-    <input
-      type={type}
-      value={value}
-      onChange={(e) => onChange(e.target.value)}
-      placeholder={placeholder}
-      className="w-full p-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:border-[#0C46C4] focus:ring-2 focus:ring-blue-50 transition-all text-sm text-gray-700"
-    />
+    <div className="relative">
+      <input
+        type={type}
+        value={value}
+        onChange={(e) => onChange(e.target.value)}
+        placeholder={placeholder}
+        className={`w-full p-3 bg-gray-50 border ${error ? "border-red-500 bg-red-50" : "border-gray-200"} rounded-xl focus:outline-none focus:border-[#0C46C4] focus:ring-2 focus:ring-blue-50 transition-all text-sm text-gray-700 pr-10`}
+      />
+      {suffix && (
+        <div className="absolute right-3 top-1/2 -translate-y-1/2">
+          {suffix}
+        </div>
+      )}
+    </div>
   </div>
 );
 
@@ -100,13 +122,22 @@ const Settings = () => {
     confirmPassword: "",
   });
 
+  const [showOldPass, setShowOldPass] = useState(false);
+  const [showNewPass, setShowNewPass] = useState(false);
+  const [showConfirmPass, setShowConfirmPass] = useState(false);
+
+  // Real-time matching check
+  const isMismatch =
+    passwordFields.confirmPassword &&
+    passwordFields.newPassword !== passwordFields.confirmPassword;
+
   const COLORS = [
     "#0C46C4",
     "#10B981",
     "#F59E0B",
     "#f82525ff",
     "#8B5CF6",
-    "#EC4899",
+    "#48ece9",
     "#000000",
     "#FFFFFF",
   ];
@@ -123,22 +154,37 @@ const Settings = () => {
   };
 
   const handleSave = () => {
-    // Basic password validation if new password is being set
-    if (passwordFields.newPassword) {
-      if (passwordFields.oldPassword !== localSettings.adminPassword) {
+    // 1. Check if Username or Password has changed
+    const usernameChanged = localSettings.adminUsername !== adminUsername;
+    const passwordChanged = !!passwordFields.newPassword;
+
+    if (usernameChanged || passwordChanged) {
+      // Must provide old password for any account change
+      if (!passwordFields.oldPassword) {
+        showToast(
+          "Please provide old password to change credentials.",
+          "warning",
+        );
+        return;
+      }
+      if (passwordFields.oldPassword !== adminPassword) {
         showToast("Incorrect old password!", "error");
         return;
       }
-      if (passwordFields.newPassword !== passwordFields.confirmPassword) {
-        showToast("New passwords do not match!", "error");
-        return;
+
+      // If password is being changed, check confirmation
+      if (passwordChanged) {
+        if (passwordFields.newPassword !== passwordFields.confirmPassword) {
+          showToast("New passwords do not match!", "error");
+          return;
+        }
+        // Update the password in localSettings before saving
+        localSettings.adminPassword = passwordFields.newPassword;
       }
-      // Update the password in localSettings before saving
-      localSettings.adminPassword = passwordFields.newPassword;
     }
 
     updateSettings(localSettings);
-    showToast("Settings saved successfully!");
+    showToast("Settings saved successfully!", "success");
 
     // Clear password fields after save
     setPasswordFields({
@@ -149,12 +195,12 @@ const Settings = () => {
   };
 
   return (
-    <section className="flex flex-col items-center w-full bg-gray-50/50 min-h-screen gap-8 px-4 pb-20 pt-20">
+    <section className="flex flex-col items-center mt-3 w-full bg-gray-50/50 min-h-screen px-4 ">
       <div className="w-full max-w-5xl flex flex-col gap-8">
         {/* Header */}
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 bg-white p-4 rounded-2xl shadow-sm border border-gray-100">
           <div className="flex flex-col gap-2">
-            <h1 className="text-xl font-extrabold  tracking-tight text-[var(--text-primary-color)]">
+            <h1 className="text-xl font-bold  tracking-tight text-[var(--text-primary-color)]">
               System Settings
             </h1>
             <p className="text-gray-500 ">
@@ -252,30 +298,65 @@ const Settings = () => {
                 <InputField
                   label="Old Password"
                   placeholder="Enter old password"
-                  type="password"
+                  type={showOldPass ? "text" : "password"}
                   value={passwordFields.oldPassword}
                   onChange={(val) =>
                     setPasswordFields((p) => ({ ...p, oldPassword: val }))
+                  }
+                  suffix={
+                    <button
+                      type="button"
+                      onClick={() => setShowOldPass(!showOldPass)}
+                      className="text-[var(--primary-color)] hover:text-[var(--primary-color)] transition-colors cursor-pointer"
+                    >
+                      {showOldPass ? <FaEyeSlash /> : <FaEye />}
+                    </button>
                   }
                 />
                 <InputField
                   label="New Password"
                   placeholder="Enter new password"
-                  type="password"
+                  type={showNewPass ? "text" : "password"}
                   value={passwordFields.newPassword}
                   onChange={(val) =>
                     setPasswordFields((p) => ({ ...p, newPassword: val }))
                   }
-                />
-                <InputField
-                  label="Confirm Password"
-                  placeholder="Confirm new password"
-                  type="password"
-                  value={passwordFields.confirmPassword}
-                  onChange={(val) =>
-                    setPasswordFields((p) => ({ ...p, confirmPassword: val }))
+                  suffix={
+                    <button
+                      type="button"
+                      onClick={() => setShowNewPass(!showNewPass)}
+                      className="text-[var(--primary-color)] hover:text-[var(--primary-color)] transition-colors cursor-pointer"
+                    >
+                      {showNewPass ? <FaEyeSlash /> : <FaEye />}
+                    </button>
                   }
                 />
+                <div className="flex flex-col">
+                  <InputField
+                    label="Confirm Password"
+                    placeholder="Confirm new password"
+                    type={showConfirmPass ? "text" : "password"}
+                    error={isMismatch}
+                    value={passwordFields.confirmPassword}
+                    onChange={(val) =>
+                      setPasswordFields((p) => ({ ...p, confirmPassword: val }))
+                    }
+                    suffix={
+                      <button
+                        type="button"
+                        onClick={() => setShowConfirmPass(!showConfirmPass)}
+                        className="text-[var(--primary-color)] hover:text-[var(--primary-color)] transition-colors cursor-pointer"
+                      >
+                        {showConfirmPass ? <FaEyeSlash /> : <FaEye />}
+                      </button>
+                    }
+                  />
+                  {isMismatch && (
+                    <p className="text-[10px] text-red-500 font-bold mt-1 ml-1 animate-pulse">
+                      Passwords do not match!
+                    </p>
+                  )}
+                </div>
               </div>
             </SettingCard>
 

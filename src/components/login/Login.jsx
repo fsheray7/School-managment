@@ -3,10 +3,13 @@ import { FaUser } from "react-icons/fa";
 import DynamicForm from "../ui/DynamicForm";
 import studentsData from "../../data/admindata/students/students";
 import teachersData from "../../data/teachers/teacher";
+import { useNavigate } from "react-router-dom";
 import { useToast } from "../../context/ToastContext";
+import { useSettings } from "../../context/SettingsContext";
 
 const Login = ({ onLoginSuccess, role }) => {
   const { showToast } = useToast();
+  const { adminUsername, adminPassword } = useSettings();
   const [loginData, setLoginData] = useState({
     username: "",
     password: "",
@@ -44,6 +47,18 @@ const Login = ({ onLoginSuccess, role }) => {
         }
       } else {
         showToast("Invalid username or password!", "error");
+      }
+    } else if (role === "admin") {
+      if (
+        loginData.username.trim() === adminUsername &&
+        loginData.password.trim() === adminPassword
+      ) {
+        showToast("Logged in as Administrator!", "success");
+        if (onLoginSuccess) {
+          onLoginSuccess({ role: "admin", fullName: "Admin User" });
+        }
+      } else {
+        showToast("Invalid admin credentials!", "error");
       }
     } else {
       // Default success for other roles for now

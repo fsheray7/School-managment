@@ -14,3 +14,18 @@ The React Compiler is not enabled on this template because of its impact on dev 
 ## Expanding the ESLint configuration
 
 If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+
+
+
+## For testing purpose 
+Login Credentials
+username: admin
+password: admin12
+
+## For testing purpose Teachers
+Login Credentials
+## full name of theacher and student is username 
+like Sadia Noor is a teacher
+username: sadianoor
+## for password first name of the teacher or student and 123 at the end
+password: sadia123

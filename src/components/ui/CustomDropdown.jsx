@@ -3,6 +3,7 @@ import { FaChevronDown, FaTimes } from "react-icons/fa";
 import { CiSearch } from "react-icons/ci";
 
 const CustomDropdown = ({
+  title,
   options,
   value,
   onChange,
@@ -116,6 +117,11 @@ const CustomDropdown = ({
 
   return (
     <div className={`relative ${containerClassName}`} ref={dropdownRef}>
+      {title && (
+        <label className="block text-sm font-medium text-gray-700 mb-1">
+          {title}
+        </label>
+      )}
       <div
         onClick={() => setIsOpen(!isOpen)}
         className={`flex items-center justify-between w-full border rounded-md px-3 py-2 text-sm cursor-pointer bg-white transition-all duration-200 shadow-sm
@@ -185,10 +191,9 @@ const CustomDropdown = ({
                     key={index}
                     onClick={() => handleSelect(option)}
                     className={`px-4 py-2 text-sm cursor-pointer transition-colors duration-150 border-b border-gray-50 last:border-0
-                                        ${
                                           isSelected
                                             ? "bg-[var(--primary-color)]/10 font-medium"
-                                            : "text-gray-700 hover:bg-gray-50"
+                                            : "text-gray-700 hover:bg-gray-100"
                                         }
                                     `}
                   >

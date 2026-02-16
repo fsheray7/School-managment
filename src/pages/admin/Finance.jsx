@@ -125,7 +125,7 @@ const Finance = () => {
   );
 
   return (
-    <div className="flex flex-col mt-15 gap-6 w-full">
+    <div className="flex flex-col gap-6 w-full">
       {/* Header */}
       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
         <div>

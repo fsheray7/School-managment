@@ -29,7 +29,7 @@ const Sidebar = ({ isOpen, setIsOpen, menuItems = [] }) => {
       {/* SIDEBAR */}
       <aside
         className={`
-          fixed top-0 left-0 h-full 
+          fixed top-0 left-0  overflow-hidden h-full
           z-50 transition-all duration-300
           ${isOpen ? "translate-x-0 w-64" : "-translate-x-full w-64 lg:translate-x-0"}
         `}
@@ -89,45 +89,6 @@ const Sidebar = ({ isOpen, setIsOpen, menuItems = [] }) => {
               </span>
             </li>
           ))}
-
-          {/* LOGOUT */}
-          {/* <li
-            onClick={() => setIsOpen(false)}
-            className={`
-              relative flex items-center cursor-pointer  text-[13px] font-medium group
-              transition-all duration-500 ease-[cubic-bezier(0.4,0,0.2,1)]
-              ${
-                isHovered
-                  ? "w-full justify-start"
-                  : "lg:w-auto lg:justify-center w-full justify-start"
-              }
-            `}
-            title={!isHovered ? "Logout" : ""}
-          >
-            <div
-              className={`
-                flex-shrink-0 flex items-center justify-center text-white
-                w-10 h-10 rounded-xl
-                transition-all duration-500 ease-[cubic-bezier(0.4,0,0.2,1)]
-                group-hover:bg-white/15
-              `}
-            >
-              <IoLogOutSharp size={18} />
-            </div>
-            <span
-              className={`
-                whitespace-nowrap overflow-hidden
-                transition-all duration-500 ease-[cubic-bezier(0.4,0,0.2,1)]
-                ${
-                  isHovered
-                    ? "opacity-100 max-w-[180px] ml-3"
-                    : "lg:opacity-0 lg:max-w-0 lg:ml-0 opacity-100 max-w-[180px] ml-3"
-                }
-              `}
-            >
-              Logout
-            </span>
-          </li> */}
         </ul>
       </aside>
     </>

@@ -1,16 +1,15 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { FaBell } from "react-icons/fa";
-import {
-  IoCheckmarkDoneSharp,
-  IoAlertCircleSharp,
-  IoInformationCircleSharp,
-  IoPersonSharp,
-  IoLogOutOutline,
-} from "react-icons/io5";
+import { IoPersonSharp, IoLogOutOutline } from "react-icons/io5";
 import { useSettings } from "../../context/SettingsContext";
 import teachersData from "../../data/teachers/teacher";
 import finalStudentsData from "../../data/admindata/students/students";
+import {
+  getStudentNotifications,
+  getTeacherNotifications,
+  getAdminNotifications,
+} from "../../utils/notificationsManager.jsx";
 
 const Navbar = ({ onToggleSidebar, isSidebarOpen, role = "admin" }) => {
   const { schoolLogo } = useSettings();
@@ -20,30 +19,20 @@ const Navbar = ({ onToggleSidebar, isSidebarOpen, role = "admin" }) => {
   const [isProfileOpen, setIsProfileOpen] = useState(false);
   const notificationRef = useRef(null);
   const profileRef = useRef(null);
+  const [notifications, setNotifications] = useState([]);
+  const [readIds, setReadIds] = useState([]);
 
-  const notifications = [
-    {
-      id: 1,
-      title: "New Student Enrolled",
-      time: "2 mins ago",
-      type: "success",
-      icon: <IoCheckmarkDoneSharp className="text-green-500" />,
-    },
-    {
-      id: 2,
-      title: "Teacher Meeting @ 3PM",
-      time: "1 hour ago",
-      type: "info",
-      icon: <IoInformationCircleSharp className="text-blue-500" />,
-    },
-    {
-      id: 3,
-      title: "Exam Results Pending",
-      time: "3 hours ago",
-      type: "warning",
-      icon: <IoAlertCircleSharp className="text-amber-500" />,
-    },
-  ];
+  // Load readIds from localStorage on mount
+  useEffect(() => {
+    const stored = localStorage.getItem("readNotificationIds");
+    if (stored) {
+      try {
+        setReadIds(JSON.parse(stored));
+      } catch (e) {
+        setReadIds([]);
+      }
+    }
+  }, []);
 
   // Close dropdown when clicking outside
   useEffect(() => {
@@ -52,6 +41,11 @@ const Navbar = ({ onToggleSidebar, isSidebarOpen, role = "admin" }) => {
         notificationRef.current &&
         !notificationRef.current.contains(event.target)
       ) {
+        if (isNotificationOpen) {
+          // Sync read status when closing by clicking outside
+          const stored = localStorage.getItem("readNotificationIds");
+          if (stored) setReadIds(JSON.parse(stored));
+        }
         setIsNotificationOpen(false);
       }
       if (profileRef.current && !profileRef.current.contains(event.target)) {
@@ -81,15 +75,15 @@ const Navbar = ({ onToggleSidebar, isSidebarOpen, role = "admin" }) => {
     "/student-promotion": "Student Promotion",
     // Teacher Routes
     "/teacher-dashboard": "Dashboard",
-    "/attendance": "Attendance",
+    "/add-attendance": "Add Attendance",
     "/homework": "Homework",
     "/results": "Results",
     "/marks": "Add Marks",
     "/notice": "Notice",
     "/solutions": "Solutions",
-    "/add-account": "Add Account",
-    "/add-classes": "Add Classes",
+
     "/exam-routine": "Exam Routine",
+    "/attendance": "Attendance",
     // Student Routes
     "/student-dashboard": "Dashboard",
     "/attendance-student": "My Attendance",
@@ -136,6 +130,8 @@ const Navbar = ({ onToggleSidebar, isSidebarOpen, role = "admin" }) => {
           finalStudentsData.find((s) => s.id === sessionData.id) || sessionData;
         setCurrentUserName(updatedStudent.fullName || "Student");
         setProfileImage(updatedStudent.profileImage || "");
+        // Load student notifications
+        setNotifications(getStudentNotifications(updatedStudent));
       }
     } else if (role === "teacher") {
       const storedTeacher = localStorage.getItem("currentTeacher");
@@ -145,12 +141,16 @@ const Navbar = ({ onToggleSidebar, isSidebarOpen, role = "admin" }) => {
           teachersData.find((t) => t.id === sessionData.id) || sessionData;
         setCurrentUserName(updatedTeacher.fullName || "Teacher");
         setProfileImage(updatedTeacher.profileImage || "");
+        // Load teacher notifications
+        setNotifications(getTeacherNotifications(updatedTeacher));
       }
     } else {
       setCurrentUserName(roleNames[role] || "Admin");
       setProfileImage("");
+      // Load admin notifications
+      setNotifications(getAdminNotifications());
     }
-  }, [role]);
+  }, [role, location.pathname]); // Update on route change too
 
   const handleLogout = () => {
     navigate("/select-profile");
@@ -165,8 +165,41 @@ const Navbar = ({ onToggleSidebar, isSidebarOpen, role = "admin" }) => {
     setIsProfileOpen(false);
   };
 
+  const handleNotificationClick = (notif) => {
+    // Mark this specific one as read immediately
+    const updatedReadIds = [...new Set([...readIds, notif.id])];
+    setReadIds(updatedReadIds);
+    localStorage.setItem("readNotificationIds", JSON.stringify(updatedReadIds));
+
+    if (notif.link) {
+      navigate(notif.link);
+    }
+    setIsNotificationOpen(false);
+  };
+
+  const toggleNotifications = () => {
+    const nextState = !isNotificationOpen;
+    setIsNotificationOpen(nextState);
+
+    if (nextState) {
+      // When opening, we mark all current notifications as "read" in localStorage
+      // so the badge disappears next time, but we DON'T update readIds state yet
+      // so they stay gray while the user is looking at them.
+      const allIds = notifications.map((n) => n.id);
+      const updatedReadIds = [...new Set([...readIds, ...allIds])];
+      localStorage.setItem(
+        "readNotificationIds",
+        JSON.stringify(updatedReadIds),
+      );
+    } else {
+      // When closing, sync readIds state so they turn white next time
+      const stored = localStorage.getItem("readNotificationIds");
+      if (stored) setReadIds(JSON.parse(stored));
+    }
+  };
+
   return (
-    <nav className="fixed top-0 left-0 right-0 h-16 bg-white shadow-md z-40 transition-all duration-300 lg:left-64 flex items-center px-4 lg:px-6 justify-between">
+    <nav className="fixed top-0 left-0 right-0 h-14 bg-white shadow-md z-40 transition-all duration-300 lg:left-64 flex items-center px-4 justify-between">
       {/* Left Side: Hamburger (mobile), Logo, Title */}
       <div className="flex items-center gap-3">
         {/* Animated Hamburger Toggle Button - Only visible on small screens */}
@@ -204,7 +237,7 @@ const Navbar = ({ onToggleSidebar, isSidebarOpen, role = "admin" }) => {
         {/* Logo & Title */}
         <div className="flex items-center gap-2">
           <h1
-            className="text-xs md:text-2xl lg:text-2xl font-bold whitespace-nowrap"
+            className="text-xs md:text-xl lg:text-xl font-bold whitespace-nowrap"
             style={{ color: "var(--text-primary-color)" }}
           >
             {currentTitle}
@@ -217,7 +250,7 @@ const Navbar = ({ onToggleSidebar, isSidebarOpen, role = "admin" }) => {
         {/* Notification Button */}
         <div className="relative" ref={notificationRef}>
           <button
-            onClick={() => setIsNotificationOpen(!isNotificationOpen)}
+            onClick={toggleNotifications}
             className={`relative p-2 rounded-lg cursor-pointer transition-all duration-200 ${
               isNotificationOpen
                 ? "bg-blue-50"
@@ -229,8 +262,10 @@ const Navbar = ({ onToggleSidebar, isSidebarOpen, role = "admin" }) => {
             aria-label="Notifications"
           >
             <FaBell style={{ color: "var(--primary-color)" }} size={20} />
-            {/* Notification Badge */}
-            <span className="absolute top-1.5 right-1.5 w-2 h-2 bg-red-500 rounded-full border border-white"></span>
+            {/* Notification Badge - Only show if there are unread notifications */}
+            {notifications.some((n) => !readIds.includes(n.id)) && (
+              <span className="absolute top-1.5 right-1.5 w-2 h-2 bg-red-500 rounded-full border border-white"></span>
+            )}
           </button>
 
           {/* Notification Dropdown */}
@@ -245,28 +280,38 @@ const Navbar = ({ onToggleSidebar, isSidebarOpen, role = "admin" }) => {
                   className="text-[10px] font-bold bg-blue-50 px-2 py-0.5 rounded-full uppercase tracking-wider"
                   style={{ color: "var(--text-primary-color)" }}
                 >
-                  {notifications.length} New
+                  {notifications.filter((n) => !readIds.includes(n.id)).length}{" "}
+                  New
                 </span>
               </div>
 
               {/* List */}
               <div className="max-h-[350px] overflow-y-auto">
-                {notifications.map((notif) => (
-                  <div
-                    key={notif.id}
-                    className="px-4 py-3 hover:bg-gray-50 cursor-pointer transition-colors border-b border-gray-50 last:border-0 flex gap-3 items-start"
-                  >
-                    <div className="mt-1">{notif.icon}</div>
-                    <div className="flex-1">
-                      <p className="text-sm font-medium text-gray-700 leading-tight">
-                        {notif.title}
-                      </p>
-                      <p className="text-[11px] text-gray-400 mt-1 flex items-center gap-1">
-                        {notif.time}
-                      </p>
+                {notifications.length > 0 ? (
+                  notifications.map((notif) => (
+                    <div
+                      key={notif.id}
+                      onClick={() => handleNotificationClick(notif)}
+                      className={`px-4 py-3 hover:bg-blue-50/50 cursor-pointer transition-colors border-b border-gray-50 last:border-0 flex gap-3 items-start ${
+                        readIds.includes(notif.id) ? "bg-white" : "bg-gray-100"
+                      }`}
+                    >
+                      <div className="mt-1">{notif.icon}</div>
+                      <div className="flex-1">
+                        <p className="text-sm font-medium text-gray-700 leading-tight">
+                          {notif.title}
+                        </p>
+                        <p className="text-[11px] text-gray-400 mt-1 flex items-center gap-1">
+                          {notif.time}
+                        </p>
+                      </div>
                     </div>
+                  ))
+                ) : (
+                  <div className="px-4 py-8 text-center text-gray-400 text-sm italic">
+                    No new notifications
                   </div>
-                ))}
+                )}
               </div>
 
               {/* Footer */}
@@ -293,7 +338,7 @@ const Navbar = ({ onToggleSidebar, isSidebarOpen, role = "admin" }) => {
               <img
                 src={profileImage || schoolLogo}
                 alt="Profile"
-                className={`${!profileImage ? "p-1" : ""} w-full h-full object-cover`}
+                className={`${!profileImage ? "p-1" : ""} w-full h-full object-contain`}
               />
             </div>
             <span

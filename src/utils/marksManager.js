@@ -2,6 +2,7 @@
 // Handles saving, loading, and updating student marks
 
 const MARKS_STORAGE_KEY = "studentMarks";
+const SUBMITTED_RESULTS_KEY = "submittedResults";
 
 /**
  * Get all marks from localStorage
@@ -38,6 +39,19 @@ const saveMarksToStorage = (marks) => {
  */
 const calculatePercentage = (obtained, total) => {
   return parseFloat(((obtained / total) * 100).toFixed(2));
+};
+
+/**
+ * Determine grade based on percentage
+ * @param {number} percentage - Percentage score
+ * @returns {string} Grade (A, B, C, D, F)
+ */
+const getGrade = (percentage) => {
+  if (percentage >= 90) return "A";
+  if (percentage >= 80) return "B";
+  if (percentage >= 70) return "C";
+  if (percentage >= 60) return "D";
+  return "F";
 };
 
 /**
@@ -88,6 +102,7 @@ export const saveStudentMarks = ({
 
       const percentage = calculatePercentage(obtainedMarks, totalMarks);
       const status = getStatus(percentage);
+      const grade = getGrade(percentage);
 
       // Create marks record
       const marksRecord = {
@@ -101,6 +116,7 @@ export const saveStudentMarks = ({
         totalMarks,
         obtainedMarks: parseInt(obtainedMarks),
         percentage,
+        grade,
         status,
         academicYear,
         savedAt: timestamp,
@@ -246,7 +262,117 @@ export const clearAllMarks = () => {
     return { success: false, message: "Failed to clear marks" };
   }
 };
+/**
+ * Saves the results for a specific class, section, and subject for promotion.
+ * These are stored separately from the raw marks data.
+ */
+export const submitResultsForPromotion = ({
+  results,
+  class: className,
+  section,
+  subject,
+}) => {
+  try {
+    const submissions =
+      JSON.parse(localStorage.getItem(SUBMITTED_RESULTS_KEY)) || {};
+    const key = `${className}-${section}-${subject}`;
+    submissions[key] = {
+      results,
+      submittedAt: new Date().toISOString(),
+      class: className,
+      section,
+      subject,
+    };
+    localStorage.setItem(SUBMITTED_RESULTS_KEY, JSON.stringify(submissions));
+    return { success: true, message: "Results submitted for promotion." };
+  } catch (error) {
+    console.error("Error submitting results:", error);
+    return { success: false, message: "Failed to submit results." };
+  }
+};
 
+/**
+ * Retrieves the submitted promotion data for a specific class and section.
+ */
+export const getSubmittedPromotionData = (className, section) => {
+  try {
+    const submissions =
+      JSON.parse(localStorage.getItem(SUBMITTED_RESULTS_KEY)) || {};
+    const matchingKeys = Object.keys(submissions).filter((key) =>
+      key.startsWith(`${className}-${section}`),
+    );
+
+    // Aggregate results from all subjects for the class and section
+    const aggregatedResults = {};
+    matchingKeys.forEach((key) => {
+      const submission = submissions[key];
+      submission.results.forEach((studentResult) => {
+        if (!aggregatedResults[studentResult.id]) {
+          aggregatedResults[studentResult.id] = {
+            ...studentResult,
+            subjects: [],
+            totalObtained: 0,
+            totalPossible: 0,
+          };
+        }
+
+        const subjectData = {
+          subject: submission.subject,
+          firstTerm: studentResult.firstTerminalMarks,
+          secondTerm: studentResult.secondTerminalMarks,
+          final: studentResult.final,
+          grade: studentResult.overallGrade,
+          status: studentResult.overallStatus,
+        };
+
+        aggregatedResults[studentResult.id].subjects.push(subjectData);
+        aggregatedResults[studentResult.id].totalObtained +=
+          studentResult.overallObtained;
+        aggregatedResults[studentResult.id].totalPossible +=
+          studentResult.overallTotal;
+      });
+    });
+
+    return Object.values(aggregatedResults).map((student) => {
+      const percentage =
+        student.totalPossible > 0
+          ? (student.totalObtained / student.totalPossible) * 100
+          : 0;
+
+      // A student passes only if they pass in ALL subjects submitted.
+      const hasFailedASubject = student.subjects.some(
+        (s) => s.status === "Fail",
+      );
+
+      return {
+        ...student,
+        overallPercentage: parseFloat(percentage.toFixed(2)),
+        overallStatus: hasFailedASubject ? "Fail" : "Pass",
+      };
+    });
+  } catch (error) {
+    console.error("Error getting submitted data:", error);
+    return [];
+  }
+};
+
+/**
+ * Returns a list of all class/section/subject combos that have submitted results.
+ */
+export const getAvailablePromotionSubmissions = () => {
+  try {
+    const submissions =
+      JSON.parse(localStorage.getItem(SUBMITTED_RESULTS_KEY)) || {};
+    return Object.values(submissions).map((s) => ({
+      class: s.class,
+      section: s.section,
+      subject: s.subject,
+    }));
+  } catch (error) {
+    console.error("Error getting available submissions:", error);
+    return [];
+  }
+};
 export default {
   getStoredMarks,
   saveStudentMarks,
@@ -254,4 +380,7 @@ export default {
   getClassMarks,
   getStudentAggregatedMarks,
   clearAllMarks,
+  submitResultsForPromotion,
+  getSubmittedPromotionData,
+  getAvailablePromotionSubmissions,
 };

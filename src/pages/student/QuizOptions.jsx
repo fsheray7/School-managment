@@ -1,14 +1,15 @@
 import { FaArrowLeft } from "react-icons/fa";
 import { Link } from "react-router-dom";
+import Button from "../../components/ui/Button"
 
 
 const QuizOption = () => {
   return (
-    <section className="w-full bg-white flex flex-col items-center justify-center px-2 overflow-x-hidden ">
+    <section className="w-full bg-white flex flex-col items-center justify-center pt-4 px-2 ">
 
 
            
-  <div className="w-full mt-20  flex flex-col items-center justify-center px-4">
+  <div className="w-full   flex flex-col items-center justify-center px-4">
 
   {/* Question */}
   <h2 className="text-2xl sm:text-3xl lg:text-4xl text-[#0C46C4] font-bold text-center ">
@@ -37,11 +38,13 @@ const QuizOption = () => {
   </div>
 
 
-  <div className="w-full flex items-center justify-center mt-14 max-w-2xl px-10">
-     <Link to="/quiz-multiple-options" className="text-lg sm:text-xl text-center text-white bg-[#28C2A0] px-4 py-3 rounded-xl w-full cursor-pointer">
+  <Button 
+  variant="primary" 
+  className="mt-6">
+     <Link to="/quiz-multiple-options">
       See More Questions
     </Link>
-  </div>
+  </Button>
 </div>
 
   

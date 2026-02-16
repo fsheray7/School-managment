@@ -7,18 +7,19 @@ import {
   FaUserGraduate,
   FaLevelUpAlt,
 } from "react-icons/fa";
-import studentsData from "../../data/admindata/students/students";
+import classesData from "../../data/admindata/classes";
 import Button from "../../components/ui/Button";
 
 import {
-  CLASS_OPTIONS,
-  getSectionsByClass,
   SESSION_OPTIONS,
   getNextClass,
 } from "../../constants/Store";
 import CustomDropdown from "../../components/ui/CustomDropdown";
 import { useToast } from "../../context/ToastContext";
-import { getStudentAggregatedMarks } from "../../utils/marksManager";
+import {
+  getSubmittedPromotionData,
+  getAvailablePromotionSubmissions,
+} from "../../utils/marksManager";
 
 const StudentPromotion = () => {
   // Filter States
@@ -35,12 +36,33 @@ const StudentPromotion = () => {
   const [selectedStudents, setSelectedStudents] = useState([]);
   const [isAllSelected, setIsAllSelected] = useState(false);
   const [promoteAllPassed, setPromoteAllPassed] = useState(false);
+  const [availableSubmissions, setAvailableSubmissions] = useState([]);
+
+  useEffect(() => {
+    setAvailableSubmissions(getAvailablePromotionSubmissions());
+  }, []);
 
   // Dynamic Options
-  const fromSections = getSectionsByClass(filters.fromClass);
-  const toSections = getSectionsByClass(filters.toClass);
+  const fromClassOptions = [
+    ...new Set(availableSubmissions.map((s) => s.class)),
+  ];
+  const fromSections = [
+    ...new Set(
+      availableSubmissions
+        .filter((s) => s.class === filters.fromClass)
+        .map((s) => s.section),
+    ),
+  ];
 
   const { showToast } = useToast();
+
+  const getSectionsByClass = (className) => {
+    if (!className) return [];
+    const sections = classesData
+      .filter((c) => c.className === className)
+      .map((c) => c.section);
+    return [...new Set(sections)]; // Return unique sections
+  };
 
   // Handlers
   const handleFilterChange = (name, value) => {
@@ -79,45 +101,35 @@ const StudentPromotion = () => {
   };
 
   const handleLoadStudents = () => {
-    // Load students and get their actual result status from marks data
     if (!filters.fromClass || !filters.fromSection) {
       showToast("Please select From Class and Section", "error");
       return;
     }
 
-    const filtered = studentsData
-      .filter(
-        (s) =>
-          s.class === filters.fromClass && s.section === filters.fromSection,
-      )
-      .map((s) => {
-        // Get aggregated marks data for this student from localStorage
-        const studentMarks = getStudentAggregatedMarks(
-          s.id,
-          filters.fromClass,
-          filters.fromSection,
-        );
+    const promotionResults = getSubmittedPromotionData(
+      filters.fromClass,
+      filters.fromSection,
+    );
 
-        // Use actual result status from saved marks, or default to "Pass" if no marks found
-        const resultStatus = studentMarks ? studentMarks.overallStatus : "";
+    const studentsWithPromotionStatus = promotionResults.map((s) => ({
+      ...s,
+      resultStatus: s.overallStatus, // Use status from submitted data
+      isChecked: false,
+    }));
 
-        return {
-          ...s,
-          resultStatus,
-          isChecked: false,
-        };
-      });
-
-    if (filtered.length === 0) {
+    if (studentsWithPromotionStatus.length === 0) {
       showToast(
-        "No students found for the selected class and section.",
+        "No submitted results found for the selected class and section.",
         "error",
       );
     } else {
-      showToast(`Loaded ${filtered.length} students successfully.`, "success");
+      showToast(
+        `Loaded ${studentsWithPromotionStatus.length} students successfully.`,
+        "success",
+      );
     }
 
-    setStudents(filtered);
+    setStudents(studentsWithPromotionStatus);
     setSelectedStudents([]);
     setIsAllSelected(false);
     setPromoteAllPassed(false);
@@ -175,8 +187,7 @@ const StudentPromotion = () => {
   };
 
   return (
-    <div className="flex flex-col gap-6 mt-14 w-full min-h-screen pb-24">
-     
+    <div className="flex flex-col gap-6 w-full mt-5 ">
       {/* FILTER CARD */}
       <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100 grid grid-cols-1 lg:grid-cols-12 gap-4 items-end">
         {/* From */}
@@ -188,7 +199,7 @@ const StudentPromotion = () => {
             <CustomDropdown
               value={filters.fromClass}
               onChange={(val) => handleFilterChange("fromClass", val)}
-              options={CLASS_OPTIONS}
+              options={fromClassOptions}
               placeholder="Select Class"
               searchable={true}
             />
@@ -297,13 +308,6 @@ const StudentPromotion = () => {
               </thead>
               <tbody className="divide-y divide-gray-50 text-sm">
                 {students.map((student) => {
-                  // Get marks data for this student from localStorage
-                  const studentMarks = getStudentAggregatedMarks(
-                    student.id,
-                    filters.fromClass,
-                    filters.fromSection,
-                  );
-
                   return (
                     <tr
                       key={student.id}
@@ -334,40 +338,43 @@ const StudentPromotion = () => {
                         {student.class} - {student.section}
                       </td>
                       <td className="p-4">
-                        {filters.toClass && filters.toSection ? (
-                          <span className="text-green-700 font-medium">
-                            {filters.toClass} - {filters.toSection}
-                          </span>
+                        {student.resultStatus === "Pass" ? (
+                          filters.toClass && filters.toSection ? (
+                            <span className="text-green-700 font-medium">
+                              {filters.toClass} - {filters.toSection}
+                            </span>
+                          ) : (
+                            <span className="text-gray-400 text-xs italic">
+                              Not selected
+                            </span>
+                          )
                         ) : (
-                          <span className="text-gray-400 text-xs italic">
-                            Not selected
+                          <span className="text-red-500 text-xs font-semibold">
+                            N/A
                           </span>
                         )}
                       </td>
+
                       <td className="p-4 text-center">
                         <span className="font-semibold text-gray-700">
-                          {studentMarks
-                            ? studentMarks.totalPossibleMarks
-                            : "N/A"}
+                          {student.totalPossible || "N/A"}
                         </span>
                       </td>
                       <td className="p-4 text-center">
                         <span className="font-semibold text-blue-600">
-                          {studentMarks
-                            ? studentMarks.totalObtainedMarks
-                            : "N/A"}
+                          {student.totalObtained || "N/A"}
                         </span>
                       </td>
                       <td className="p-4 text-center">
                         <span
                           className={`font-bold ${
-                            studentMarks && studentMarks.overallPercentage >= 40
+                            student.overallPercentage >= 40
                               ? "text-green-600"
                               : "text-red-600"
                           }`}
                         >
-                          {studentMarks
-                            ? `${studentMarks.overallPercentage}%`
+                          {student.overallPercentage
+                            ? `${student.overallPercentage}%`
                             : "N/A"}
                         </span>
                       </td>

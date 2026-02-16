@@ -4,8 +4,8 @@ import Button from "../ui/Button";
 import FileUpload from "../ui/FileUpload";
 
 import { useSettings } from "../../context/SettingsContext";
-
 import { useToast } from "../../context/ToastContext";
+import { addNotice } from "../../utils/noticeManager";
 
 const NoticeForm = () => {
   const { showToast } = useToast();
@@ -19,6 +19,7 @@ const NoticeForm = () => {
     isImportant: false,
     expiryDate: "",
     attachment: null,
+    attachmentName: "",
   });
 
   const audienceOptions = ["All", "Teachers", "Students", "Parents"];
@@ -55,7 +56,19 @@ const NoticeForm = () => {
   const handleFileChange = (e) => {
     const file = e.target.files[0];
     if (file) {
-      setFormData((prev) => ({ ...prev, attachment: file }));
+      if (file.size > 2 * 1024 * 1024) {
+        showToast("File size should be less than 2MB", "error");
+        return;
+      }
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setFormData((prev) => ({
+          ...prev,
+          attachment: reader.result,
+          attachmentName: file.name,
+        }));
+      };
+      reader.readAsDataURL(file);
     }
   };
 
@@ -69,14 +82,29 @@ const NoticeForm = () => {
       isImportant: false,
       expiryDate: "",
       attachment: null,
+      attachmentName: "",
     });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("Notice Data Submitted:", formData);
-    // Add API call logic here
-    showToast("Notice sent successfully!");
+    if (!formData.title || !formData.details || !formData.audience) {
+      showToast("Please fill in required fields", "warning");
+      return;
+    }
+
+    const { attachmentName, ...noticePayload } = formData;
+    const result = addNotice({
+      ...noticePayload,
+      attachmentName: attachmentName,
+    });
+
+    if (result.success) {
+      showToast(result.message, "success");
+      handleClear();
+    } else {
+      showToast(result.message, "error");
+    }
   };
 
   return (

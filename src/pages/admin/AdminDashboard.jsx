@@ -1,5 +1,5 @@
 import React from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import Cards from "../../components/cards/admincards/Cards";
 import GenderDonutChart from "../../charts/genderchat/GenderDonutChart";
 import ManagementValueChart from "../../charts/managementvalue/ManagementValueChart";
@@ -12,7 +12,7 @@ import RecentActivity from "../../components/cards/admincards/RecentActivity";
 const AdminDashboard = () => {
   const navigate = useNavigate();
   return (
-    <section className="flex flex-col items-center justify-center w-full bg-white gap-8 pb-10 pt-15 transition-all duration-300 ">
+    <section className="flex flex-col items-center justify-center w-full bg-white gap-8 pb-10 pt-5 transition-all duration-300 px-6 ">
       {/* 1. KPI CARDS */}
       <div className="w-full flex  flex-col gap-6">
         <div className="flex items-center gap-2">
@@ -28,7 +28,9 @@ const AdminDashboard = () => {
       <div className="w-full flex flex-col gap-6">
         <div className="flex items-center gap-2">
           <div className="h-6 w-1.5 rounded-full bg-[blue]"></div>
-          <h2 className="text-xl font-bold text-[var(--text-primary-color)]">Today Overview</h2>
+          <h2 className="text-xl font-bold text-[var(--text-primary-color)]">
+            Today Overview
+          </h2>
         </div>
         <TodayOverviewStrip />
       </div>

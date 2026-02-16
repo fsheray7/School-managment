@@ -3,9 +3,8 @@ import "./App.css";
 import WelcomePage from "./pages/WelcomePage";
 import ProfileSelection from "./pages/ProfileSelection";
 import TeacherDashboard from "./pages/teacher/TeacherDashboard";
-import AddAccount from "./pages/teacher/AddAcoount";
-import AddClasses from "./pages/teacher/AddClasses";
 import HomeWork from "./pages/teacher/HomeWork";
+import AddAttendance from "./pages/teacher/AddAttendance";
 import Attendance from "./pages/teacher/Attendance";
 import Results from "./pages/teacher/Results";
 import AddMarks from "./pages/teacher/AddMarks";
@@ -72,13 +71,12 @@ function App() {
 
           {/* Teacher Routes */}
           <Route path="/teacher-dashboard" element={<TeacherDashboard />} />
+          <Route path="/add-attendance" element={<AddAttendance />} />
           <Route path="/attendance" element={<Attendance />} />
           <Route path="/homework" element={<HomeWork />} />
           <Route path="/results" element={<Results />} />
           <Route path="/marks" element={<AddMarks />} />
           <Route path="/solutions" element={<Solutions />} />
-          <Route path="/add-account" element={<AddAccount />} />
-          <Route path="/add-classes" element={<AddClasses />} />
           <Route path="/exam-routine" element={<ExamRoutine />} />
           <Route path="/notice-teacher" element={<NoticeTeacher />} />
 

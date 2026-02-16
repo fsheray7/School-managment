@@ -133,16 +133,7 @@ const DashboardLayout = () => {
         path: "/notice-teacher",
         icon: <IoNotifications size={20} />,
       },
-      {
-        label: "Add Account",
-        path: "/add-account",
-        icon: <FaUserCircle size={20} />,
-      },
-      {
-        label: "Add Classes",
-        path: "/add-classes",
-        icon: <IoPeople size={20} />,
-      },
+
       {
         label: "Exam Routine",
         path: "/exam-routine",
@@ -190,7 +181,7 @@ const DashboardLayout = () => {
   };
 
   return (
-    <div className="relative w-full  ">
+    <div className="relative h-screen w-full   ">
       <Sidebar
         role={role}
         isOpen={isSidebarOpen}
@@ -202,8 +193,8 @@ const DashboardLayout = () => {
         onToggleSidebar={() => setIsSidebarOpen(!isSidebarOpen)}
         isSidebarOpen={isSidebarOpen}
       />
-      <main className="w-full flex lg:pl-64 transition-all duration-300">
-        <div className="py-4 w-full px-3 md:px-6">
+      <main className="w-full flex lg:pl-64 pt-14 transition-all duration-300">
+        <div className="px-1 w-full">
           <Outlet />
         </div>
       </main>

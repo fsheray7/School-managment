@@ -1,7 +1,7 @@
 import { useState } from "react";
-import { FaArrowLeft } from "react-icons/fa";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import QuizCard from "../../components/cards/quizcards/QuizCards";
+import Button from "../../components/ui/Button"
 import  quizquestions  from "../../data/quizzes/historyquiz/quizoptions";
 // import  quizquestions";
 const QuizMultipleOptions = () => {
@@ -9,11 +9,11 @@ const QuizMultipleOptions = () => {
   const navigate = useNavigate();
 
   return (
-    <section className=" w-full  bg-white flex flex-col items-center">
+    <section className=" w-full   bg-white flex flex-col items-center">
 
 
        
-<div className=" w-full px-6 mt-34 bg-gray-100">
+<div className=" w-full pt-6 px-4 bg-gray-100">
   <div className="
     grid 
     grid-cols-1 
@@ -32,21 +32,21 @@ const QuizMultipleOptions = () => {
   </div>
   {visibleQuestions < quizquestions.length && (
     <div className="flex justify-center mt-4 pb-10">
-      <button
+      <Button
         onClick={() => setVisibleQuestions(quizquestions.length)}
-        className="px-6 py-2 bg-[#0C46C4] text-white rounded-lg hover:bg-[#0A3A9A] transition-colors"
+        variant="primary"
       >
         Show More
-      </button>
+      </Button>
     </div>
   )}
     <div className="flex justify-center mt-4 pb-10">
-      <button
+      <Button
         onClick={() => navigate("/quiz-score")}
-        className="px-6 py-2 bg-[#0C46C4] text-white rounded-lg hover:bg-[#0A3A9A] transition-colors"
+        variant="primary"
       >
         Submit
-      </button>
+      </Button>
     </div>
 </div>
 

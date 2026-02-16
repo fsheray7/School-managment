@@ -1,15 +1,4 @@
-# Codebase Structure Suggestions
-
-After reviewing the current `src` directory, I've identified several areas where we can improve the organization for better scalability, maintainability, and reusability.
-
-## Current State Observations
-
-- **Role-based Duplication**: Components are heavily split into `admincomponents`, `studentcomp`, and `teachercomp`. This often leads to duplicated code for similar elements like tables, modals, and buttons.
-- **Shared Logic**: There is no dedicated folder for shared logic (hooks) or utilities, making it harder to share code across different parts of the application.
-- **Naming Inconsistency**: We have `admin`, `studentpages`, and `teacherpages`. A more consistent naming pattern would be better.
-- **UI vs Feature Components**: Basic UI elements (like the new `DataTable`) are mixed with domain-specific logic.
-
-## Proposed Structure Improvements
+# Codebase Structure
 
 ### 1. Dedicated `shared/` or `ui/` Directory
 
@@ -40,7 +29,7 @@ Strengthen the `layout/` folder to handle base wrappers for Admin, Student, and 
 
 ---
 
-## Recommended Folder Map
+## Folder Map
 
 ```text
 src/
@@ -62,12 +51,3 @@ src/
 ├── utils/           # Helper functions
 └── App.jsx          # Main routing & configuration
 ```
-
-## Immediate Next Steps (Recommendation)
-
-1.  **Consolidate UI Components**: Move `DataTable`, `DataCard`, `ActionButtons`, and `DeleteModal` into a new `src/components/ui/` folder.
-2.  **Standardize Page Folders**: Rename `studentpages` to `student` and `teacherpages` to `teacher` to match `admin`.
-3.  **Create a Utils Folder**: Move any shared formatting logic there.
-
-> [!TIP]
-> This structure will make the project feel much more premium and "Enterprise Ready" as it grows.

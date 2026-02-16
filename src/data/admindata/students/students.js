@@ -686,6 +686,20 @@ const studentsData = [
     guardianContact: "0300-1111111",
     guardianName: "Mastan",
   },
+  {
+    id: 49,
+    fullName: "tariq",
+    userName: "tariq",
+    password: "tariq123",
+    gender: "Male",
+    email: "tariq@school.edu",
+    class: "Play Group",
+    section: "A",
+    rollNumber: "PG-003",
+    address: "Street 2, Islamabad",
+    guardianContact: "0301-1111111",
+    guardianName: "Tariq",
+  },
 ];
 
 const finalStudentsData = studentsData.map((s) => ({

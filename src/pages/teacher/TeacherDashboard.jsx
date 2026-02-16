@@ -16,6 +16,9 @@ import classesData from "../../data/admindata/classes";
 import coursesData from "../../data/admindata/courses";
 import { UPCOMING_EVENTS, CIRCULARS } from "../../data/admindata/dashboardData";
 
+import { getNoticesForUser } from "../../utils/noticeManager";
+import NoticePreviewModal from "../../components/common/NoticePreviewModal";
+
 const TeacherDashboard = () => {
   const navigate = useNavigate();
   const [teacher, setTeacher] = useState(null);
@@ -26,6 +29,9 @@ const TeacherDashboard = () => {
     pendingHomework: 1,
     papersToCheck: 15,
   });
+  const [notices, setNotices] = useState([]);
+  const [selectedNotice, setSelectedNotice] = useState(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   useEffect(() => {
     const storedTeacher = localStorage.getItem("currentTeacher");
@@ -52,26 +58,35 @@ const TeacherDashboard = () => {
           papersToCheck: 15,
         });
       }
+
+      // Load notices
+      const teacherNotices = getNoticesForUser("teacher");
+      setNotices(teacherNotices.slice(0, 5));
     } else {
       navigate("/");
     }
   }, [navigate]);
 
+  const handleNoticeClick = (notice) => {
+    setSelectedNotice(notice);
+    setIsModalOpen(true);
+  };
+
   if (!teacher) return null;
 
   return (
-    <section className="flex flex-col w-full bg-[#f8fafc] overflow-y-auto px-4 sm:px-8 pb-10 pt-24 gap-8">
+    <section className="flex flex-col w-full bg-[#f8fafc] overflow-y-auto  pb-10 pt-4 gap-4">
       {/* Welcome Banner */}
-      <div className="relative w-full bg-gradient-to-r from-[#e0f2fe] to-[#f0f9ff] rounded-3xl p-8 sm:p-12 shadow-sm border border-blue-50 flex items-center justify-between overflow-hidden">
+      <div className="relative w-full bg-gradient-to-r from-[#e0f2fe] to-[#f0f9ff] rounded-3xl p-4 md:p-8  shadow-sm border border-blue-50 flex items-center justify-between overflow-hidden">
         {/* Abstract Background Shapes */}
         <div className="absolute top-[-20%] left-[-5%] w-64 h-64 bg-blue-100 rounded-full opacity-20 blur-3xl"></div>
         <div className="absolute bottom-[-10%] right-[10%] w-48 h-48 bg-blue-200 rounded-full opacity-30 blur-2xl"></div>
 
         <div className="z-10 max-w-2xl">
-          <h1 className="text-3xl sm:text-4xl font-bold text-[#1e293b] mb-4">
+          <h1 className="text-lg md:text-2xl font-bold text-[#1e293b] mb-4">
             Welcome, {teacher.fullName}!
           </h1>
-          <p className="text-[#64748b] text-base sm:text-lg leading-relaxed max-w-lg">
+          <p className="text-[#64748b] text-xs md:text-base sm:text-lg leading-relaxed max-w-lg">
             "Education is the most powerful weapon which you can use to change
             the world." Manage your classes and stay updated with school
             activities.
@@ -93,21 +108,21 @@ const TeacherDashboard = () => {
         </div>
       </div>
 
-      <div className="grid grid-cols-1 xl:grid-cols-3 gap-8 w-full">
+      <div className="grid grid-cols-1 xl:grid-cols-3 gap-2 w-full">
         {/* Middle Section: Overview & Circulars */}
-        <div className="xl:col-span-2 flex flex-col gap-8">
+        <div className="xl:col-span-2 flex flex-col gap-2">
           {/* Today's Overview */}
           <div className="bg-white rounded-3xl shadow-sm p-6 sm:p-8 border border-gray-100">
-            <div className="flex items-center justify-between mb-8">
-              <h2 className="text-xl font-bold text-[#1e293b]">
+            <div className="flex items-center justify-between mb-6">
+              <h2 className="text-sm md:text-xl font-bold text-[#1e293b]">
                 Today's Overview
               </h2>
-              <button className="text-[var(--primary-color)] text-sm font-semibold flex items-center gap-1 hover:underline">
+              <button className="text-[var(--primary-color)] text-xs md:text-sm font-semibold flex items-center gap-1 hover:underline">
                 View Details <FaChevronRight size={10} />
               </button>
             </div>
 
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6">
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
               <StatCard
                 icon={<FaUserCheck className="text-[#10b981]" />}
                 count={stats.present}
@@ -139,49 +154,62 @@ const TeacherDashboard = () => {
           <div className="bg-white rounded-3xl shadow-sm p-6 sm:p-8 border border-gray-100">
             <div className="flex items-center justify-between mb-8">
               <h2 className="text-xl font-bold text-[#1e293b]">Circulars</h2>
-              <button className="text-[var(--primary-color)] text-sm font-semibold flex items-center gap-1 hover:underline">
-                View All <FaChevronRight size={10} />
-              </button>
             </div>
 
-            <div className="flex flex-col gap-6">
-              {CIRCULARS.map((circular) => (
-                <div
-                  key={circular.id}
-                  className="flex items-start justify-between group cursor-pointer border-b border-gray-50 pb-4 last:border-0 last:pb-0"
-                >
-                  <div className="flex gap-4">
-                    <div
-                      className={`p-3 rounded-2xl ${circular.type === "trophy" ? "bg-[#fff7ed]" : "bg-[#f0fdf4]"} text-[#f97316]`}
-                    >
-                      {circular.type === "trophy" ? (
-                        <FaTrophy size={20} className="text-[#f59e0b]" />
-                      ) : (
-                        <HiOutlineSpeakerphone
-                          size={20}
-                          className="text-[#10b981]"
-                        />
-                      )}
-                    </div>
-                    <div>
-                      <h3 className="font-bold text-[#334155] group-hover:text-[var(--primary-color)] transition-colors">
-                        {circular.title}
-                      </h3>
-                      <p className="text-sm text-[#94a3b8] flex items-center gap-2 mt-1">
-                        {circular.date}{" "}
-                        <span className="w-1.5 h-1.5 rounded-full bg-[#10b981]"></span>{" "}
-                        {circular.tag}
-                      </p>
+            <div className="flex flex-col gap-4">
+              {notices.length === 0 ? (
+                <div className="flex flex-col items-center justify-center py-10 text-gray-400 opacity-50">
+                  <HiOutlineSpeakerphone size={40} className="mb-4" />
+                  <p className="italic">No active circulars.</p>
+                </div>
+              ) : (
+                notices.map((notice) => (
+                  <div
+                    key={notice.id}
+                    onClick={() => handleNoticeClick(notice)}
+                    className="flex items-start justify-between group cursor-pointer border-b border-gray-50 pb-4 last:border-0 last:pb-0"
+                  >
+                    <div className="flex gap-4">
+                      <div
+                        className={`p-3 rounded-2xl ${
+                          notice.isImportant ? "bg-[#fff7ed]" : "bg-[#f0fdf4]"
+                        } text-[#f97316]`}
+                      >
+                        {notice.isImportant ? (
+                          <FaTrophy size={20} className="text-[#f59e0b]" />
+                        ) : (
+                          <HiOutlineSpeakerphone
+                            size={20}
+                            className="text-[#10b981]"
+                          />
+                        )}
+                      </div>
+                      <div>
+                        <h3 className="font-bold text-[#334155] group-hover:text-[var(--primary-color)] transition-colors">
+                          {notice.title}
+                        </h3>
+                        <p className="text-sm text-[#94a3b8] flex items-center gap-2 mt-1">
+                          {new Date(notice.createdAt).toLocaleDateString()}
+                          {notice.isImportant && (
+                            <>
+                              <span className="w-1.5 h-1.5 rounded-full bg-[#f59e0b]"></span>
+                              <span className="text-[#f59e0b] font-bold text-[10px] uppercase">
+                                Important
+                              </span>
+                            </>
+                          )}
+                        </p>
+                      </div>
                     </div>
                   </div>
-                </div>
-              ))}
+                ))
+              )}
             </div>
           </div>
         </div>
 
         {/* Right Section: Upcoming Events & My Class */}
-        <div className="flex flex-col gap-8">
+        <div className="flex flex-col gap-2">
           {/* Upcoming Events */}
           <div className="bg-white rounded-3xl shadow-sm p-6 sm:p-8 border border-gray-100">
             <div className="flex items-center justify-between mb-8">
@@ -303,13 +331,18 @@ const TeacherDashboard = () => {
           </div>
         </div>
       </div>
+      <NoticePreviewModal
+        notice={selectedNotice}
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+      />
     </section>
   );
 };
 
 const StatCard = ({ icon, count, label, bgColor }) => (
   <div
-    className={`p-5 rounded-[2rem] ${bgColor} flex flex-col items-center justify-center text-center group hover:scale-[1.02] transition-all duration-300 shadow-sm border border-black/5`}
+    className={`p-4 rounded-[2rem] ${bgColor} flex flex-col items-center justify-center text-center group hover:scale-[1.02] transition-all duration-300 shadow-sm border border-black/5`}
   >
     <div className="mb-3 text-2xl group-hover:scale-110 transition-transform">
       {icon}

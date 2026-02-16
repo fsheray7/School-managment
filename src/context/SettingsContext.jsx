@@ -18,7 +18,6 @@ export const SettingsProvider = ({ children }) => {
       schoolLogo: "/welcomepage/logo.png",
       theme: "light",
       primaryColor: "#0C46C4",
-      secondaryColor: "#22D3EE",
 
       // New School Info
       schoolAddress: "123 Education Lane, Learning City",
@@ -32,17 +31,23 @@ export const SettingsProvider = ({ children }) => {
       timezone: "Asia/Karachi",
       language: "English",
       currency: "PKR",
-      textPrimaryColor: "#0C46C4",
+      textPrimaryColor: "#000000",
 
       // Account
       adminUsername: "admin",
-      adminPassword: "password123",
+      adminPassword: "admin12",
     };
 
     const saved = localStorage.getItem("school_settings");
     if (!saved) return defaultSettings;
 
     const parsed = JSON.parse(saved);
+
+    // Migration logic for admin credentials
+    if (parsed.adminPassword === "password123") {
+      parsed.adminPassword = "admin12";
+    }
+
     // Merge saved with defaults to handle new keys
     return { ...defaultSettings, ...parsed };
   });

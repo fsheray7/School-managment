@@ -5,10 +5,12 @@ import CustomDropdown from "../ui/CustomDropdown";
 const TeacherSelector = ({ onSelectionChange }) => {
   const [teacher, setTeacher] = useState(null);
   const [assignedCourses, setAssignedCourses] = useState([]);
+
   const [selection, setSelection] = useState({
     class: "",
     section: "",
     subject: "",
+    terminal: "",
   });
 
   useEffect(() => {
@@ -45,15 +47,20 @@ const TeacherSelector = ({ onSelectionChange }) => {
     }
   }, [selection, onSelectionChange]);
 
+  const handleTerminalChange = (newTerminal) => {
+    setSelection((prev) => ({ ...prev, terminal: newTerminal }));
+  };
+
   const handleClassChange = (newClass) => {
     const firstCourseForClass = assignedCourses.find(
       (c) => c.class === newClass,
     );
-    setSelection({
+    setSelection((prev) => ({
+      ...prev,
       class: newClass,
       section: firstCourseForClass ? firstCourseForClass.section : "",
       subject: firstCourseForClass ? firstCourseForClass.courseName : "",
-    });
+    }));
   };
 
   const handleSectionChange = (newSection) => {
@@ -89,7 +96,21 @@ const TeacherSelector = ({ onSelectionChange }) => {
     .map((c) => c.courseName);
 
   return (
-    <div className="flex flex-col sm:flex-row gap-4 w-full max-w-4xl bg-white p-4  mt-4">
+    <div className="grid grid-cols-2 md:grid-cols-4 gap-4 w-full pt-4 bg-white ">
+      {/* Terminal Dropdown */}
+      <div className="flex-1 flex flex-col gap-1">
+        <label className="text-xs font-bold text-gray-500 uppercase tracking-wider ml-1">
+          Terminal
+        </label>
+        <CustomDropdown
+          options={["First Terminal", "Second Terminal"]}
+          value={selection.terminal}
+          onChange={handleTerminalChange}
+          placeholder="Select Terminal"
+          triggerClassName="border-gray-200 focus:border-[var(--primary-color)]"
+        />
+      </div>
+
       {/* Class Dropdown */}
       <div className="flex-1 flex flex-col gap-1">
         <label className="text-xs font-bold text-gray-500 uppercase tracking-wider ml-1">

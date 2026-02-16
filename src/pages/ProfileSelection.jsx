@@ -2,7 +2,8 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { FaChalkboardTeacher, FaUser } from "react-icons/fa";
 import { FaUserGraduate } from "react-icons/fa6";
-import Login from "../components/rolecomp/Login";
+import Login from "../components/login/Login";
+import Button from "../components/ui/Button";
 
 const ProfileSelection = () => {
   const [selectedRole, setSelectedRole] = useState(null);
@@ -47,12 +48,12 @@ const ProfileSelection = () => {
     "flex flex-col p-2 items-center justify-center md:w-16 md:h-16 lg:w-16 lg:h-16 w-10 h-10 rounded-xl text-white cursor-pointer hover:brightness-90 transition shadow-md";
 
   return (
-    <section className="relative w-full min-h-screen bg-white flex flex-col items-center px-4 sm:px-6 md:px-8 py-8 md:justify-center overflow-hidden">
+    <section className="relative w-full  bg-white flex flex-col items-center px-4 sm:px-6 md:px-8 py-8 md:justify-center overflow-hidden">
       {/* Background Decorative Circle */}
       <div
         className="absolute   rounded-full bg-[#28C2A0]
        w-170 h-170 sm:w-200 sm:h-200 md:w-340 md:h-340 lg:w-340 lg:h-340 
-       -top-120 sm:-top-122 md:-top-280 lg:-top-310 transition-all duration-300"
+       -top-140 sm:-top-122 md:-top-300 lg:-top-310 transition-all duration-300"
       />
 
       {/* Header Logo */}
@@ -74,12 +75,12 @@ const ProfileSelection = () => {
         </div>
       </div>
 
-      <div className="z-50 w-full max-w-lg mt-50 sm:mt-28 md:mt-0 flex flex-col items-center">
+      <div className="z-50 w-full max-w-lg mt-40 sm:mt-28 md:mt-45 lg:mt-40 flex flex-col items-center">
         {!selectedRole ? (
-          <div className="flex flex-col items-center gap-8 sm:gap-10">
+          <div className="flex flex-col items-center gap-6">
             <h1
               className="text-lg md:text-2xl font-bold text-center"
-              style={{ color: "var(--primary-color)" }}
+              style={{ color: "var(--text-primary-color)" }}
             >
               Choose your option
             </h1>
@@ -99,7 +100,7 @@ const ProfileSelection = () => {
                   </div>
                   <span
                     className="mt-3 text-md font-semibold text-gray-700 transition-colors"
-                    style={{ color: "var(--primary-color)" }}
+                    style={{ color: "var(--text-primary-color)" }}
                   >
                     {label}
                   </span>
@@ -108,18 +109,15 @@ const ProfileSelection = () => {
             </div>
           </div>
         ) : (
-          <div className="bg-white rounded-2xl w-full max-w-[400px] mt-4 sm:mt-8 md:mt-30 p-4">
-            <button
+          <div className="bg-white rounded-2xl w-full max-w-[400px] mt-2 sm:mt-8 md:mt-4">
+            <Button
               onClick={handleBackToRoles}
-              className="group relative text-sm font-semibold flex items-center hover:scale-105 transition duration-300 cursor-pointer gap-2 mb-4"
-              style={{ color: "var(--primary-color)" }}
+              variant="ghost"
+              className="py-1 text-xs "
             >
-              <span>← Back to Selection</span>
-              <span
-                className="absolute -bottom-1 left-1/2 w-0 h-0.5 transition-all duration-300 -translate-x-1/2 group-hover:w-full"
-                style={{ backgroundColor: "var(--primary-color)" }}
-              ></span>
-            </button>
+              ← Back to Selection
+             
+            </Button>
 
             <h2
               className="text-lg md:text-lg font-bold text-center mb-4 capitalize"

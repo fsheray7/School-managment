@@ -6,13 +6,28 @@ import {
   FaCalendarAlt,
   FaClipboardCheck,
 } from "react-icons/fa";
+import studentsData from "../../../data/admindata/students/students";
+import teachersData from "../../../data/teachers/teacher";
+import classesData from "../../../data/admindata/classes";
 
 const TodayOverviewStrip = () => {
+  // Calculate dynamic values
+  const totalStudents = studentsData.length;
+  // Simulate today's attendance until real data is available
+  const presentStudents = Math.floor(totalStudents * 0.95);
+
+  const teachersOnLeave = teachersData.filter(
+    (t) => t.status === "Inactive",
+  ).length;
+  const activeClasses = classesData.filter(
+    (c) => c.status === "Active",
+  ).length;
+
   const overviewData = [
     {
       id: 1,
       label: "Today Attendance",
-      value: "820 / 1000",
+      value: `${presentStudents} / ${totalStudents}`,
       subLabel: "Present",
       icon: <FaUserCheck />,
       color: "text-green-600",
@@ -20,14 +35,14 @@ const TodayOverviewStrip = () => {
     {
       id: 2,
       label: "Teachers on Leave",
-      value: "3",
+      value: teachersOnLeave.toString(),
       icon: <FaUserMinus />,
       color: "text-red-500",
     },
     {
       id: 3,
       label: "Classes Running Now",
-      value: "12",
+      value: activeClasses.toString(),
       icon: <FaChalkboardTeacher />,
       color: "text-blue-600",
     },
