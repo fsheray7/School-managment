@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useSettings } from "../../context/SettingsContext";
 import Button from "../../components/ui/Button";
 import FileUpload from "../../components/ui/FileUpload";
@@ -14,6 +14,7 @@ import {
 } from "react-icons/fa";
 
 import { useToast } from "../../context/ToastContext";
+import { admins as defaultAdmins } from "../../data/admindata/admins";
 
 const SettingCard = ({ title, children }) => (
   <div className="bg-white p-6 rounded-2xl shadow-sm border  border-gray-100 flex flex-col gap-5">
@@ -91,8 +92,6 @@ const Settings = () => {
     currency,
     secondaryColor,
     textPrimaryColor,
-    adminUsername,
-    adminPassword,
     updateSettings,
   } = useSettings();
 
@@ -112,9 +111,25 @@ const Settings = () => {
     currency,
     secondaryColor,
     textPrimaryColor,
-    adminUsername,
-    adminPassword,
+    adminUsername: "",
+    adminPassword: "",
   });
+
+  const [currentAdmin, setCurrentAdmin] = useState(null);
+
+  useEffect(() => {
+    // Load current admin from localStorage
+    const storedAdmin = localStorage.getItem("currentAdmin");
+    if (storedAdmin) {
+      const parsedAdmin = JSON.parse(storedAdmin);
+      setCurrentAdmin(parsedAdmin);
+      setLocalSettings((prev) => ({
+        ...prev,
+        adminUsername: parsedAdmin.username,
+        adminPassword: parsedAdmin.password,
+      }));
+    }
+  }, []);
 
   const [isLogoPreviewOpen, setIsLogoPreviewOpen] = useState(false);
 
@@ -179,7 +194,7 @@ const Settings = () => {
       setConfirmPasswordError("Please enter your current password.");
       return;
     }
-    if (confirmPassword !== adminPassword) {
+    if (confirmPassword !== currentAdmin?.password) {
       setConfirmPasswordError("Incorrect password. Please try again.");
       return;
     }
@@ -187,7 +202,24 @@ const Settings = () => {
     const passwordChanged = !!passwordFields.newPassword;
     const settingsToUpdate = { ...localSettings };
     if (passwordChanged) {
-      settingsToUpdate.adminPassword = passwordFields.newPassword;
+      // Update admin password locally
+      if (currentAdmin) {
+        const updatedAdmin = {
+          ...currentAdmin,
+          username: localSettings.adminUsername,
+          password: passwordFields.newPassword,
+        };
+        setCurrentAdmin(updatedAdmin);
+        localStorage.setItem("currentAdmin", JSON.stringify(updatedAdmin));
+
+        // Update in the main admins list
+        const storedAdmins = JSON.parse(localStorage.getItem("admins") || "[]");
+        const allAdmins = storedAdmins.length > 0 ? storedAdmins : defaultAdmins;
+        const newAdminsList = allAdmins.map((a) =>
+          a.id === currentAdmin.id ? updatedAdmin : a
+        );
+        localStorage.setItem("admins", JSON.stringify(newAdminsList));
+      }
     }
 
     updateSettings(settingsToUpdate);

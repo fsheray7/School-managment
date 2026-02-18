@@ -6,13 +6,12 @@ import teachersData from "../../data/teachers/teacher";
 import { useNavigate } from "react-router-dom";
 import { useToast } from "../../context/ToastContext";
 import { useSettings } from "../../context/SettingsContext";
+import { admins as defaultAdmins } from "../../data/admindata/admins";
 
 const Login = ({ onLoginSuccess, role }) => {
   const { showToast } = useToast();
   const navigate = useNavigate();
   const {
-    adminUsername,
-    adminPassword,
     superAdminUsername,
     superAdminPassword,
     setIsSuperAdmin,
@@ -56,13 +55,18 @@ const Login = ({ onLoginSuccess, role }) => {
         showToast("Invalid username or password!", "error");
       }
     } else if (role === "admin") {
-      if (
-        loginData.username.trim() === adminUsername &&
-        loginData.password.trim() === adminPassword
-      ) {
+      const storedAdmins = JSON.parse(localStorage.getItem("admins") || "[]");
+      const allAdmins = storedAdmins.length > 0 ? storedAdmins : defaultAdmins;
+
+      const admin = allAdmins.find(
+        (a) => a.username === loginData.username && a.password === loginData.password
+      );
+
+      if (admin && admin.status === "Active") {
+        localStorage.setItem("currentAdmin", JSON.stringify(admin));
         showToast("Logged in as Administrator!", "success");
         if (onLoginSuccess) {
-          onLoginSuccess({ role: "admin", fullName: "Admin User" });
+          onLoginSuccess({ role: "admin", fullName: admin.name });
         }
       } else {
         showToast("Invalid admin credentials!", "error");

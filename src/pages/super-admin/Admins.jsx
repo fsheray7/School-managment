@@ -13,7 +13,7 @@ import StatusToggle from "../../components/ui/StatusToggle";
 import ConfirmationModal from "../../components/ui/ConfirmationModal";
 import DetailsModal from "../../components/ui/DetailsModal";
 import DeleteModal from "../../components/ui/DeleteModal";
-import { admins as adminsData } from "../../data/admindata/admins";
+import { getAdmins, saveAdmins } from "../../utils/adminStorage";
 
 const Admins = () => {
   const navigate = useNavigate();
@@ -111,15 +111,20 @@ const Admins = () => {
 
   const nextStatus = adminToUpdate?.status === "Active" ? "Inactive" : "Active";
 
-  const filteredAdmins = admins.filter((admin) => {
-    const matchesSearch =
-      admin.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      admin.school.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      admin.email.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesStatus =
-      statusFilter === "All Status" ? true : admin.status === statusFilter;
-    return matchesSearch && matchesStatus;
-  });
+ const filteredAdmins = admins.filter((admin) => {
+  const lowerSearchTerm = searchTerm.toLowerCase();
+  const matchesSearch = (admin.name || "").toLowerCase().includes(lowerSearchTerm) ||
+    (admin.school || "").toLowerCase().includes(lowerSearchTerm) ||
+    (admin.email || "").toLowerCase().includes(lowerSearchTerm) ||
+    (admin.phone || "").toLowerCase().includes(lowerSearchTerm) ||
+    (admin.username || "").toLowerCase().includes(lowerSearchTerm);
+
+  const matchesStatus =
+    statusFilter === "All Status" ? true : admin.status === statusFilter;
+
+  return matchesSearch && matchesStatus;
+});
+
 
   const totalPages = Math.ceil(filteredAdmins.length / itemsPerPage);
   const paginatedAdmins = filteredAdmins.slice(
@@ -133,9 +138,9 @@ const Admins = () => {
       key: "name",
       render: (admin) => (
         <div className="flex flex-col text-left">
-          <span className="font-bold text-gray-800 mb-0.5">{admin.name}</span>
-          <span className="text-xs text-gray-500">{admin.email}</span>
-          <span className="text-[10px] text-gray-400 mt-1">{admin.phone}</span>
+          <span className="font-bold text-gray-800 mb-0.5">{admin.name || "—"}</span>
+          <span className="text-xs text-gray-500">{admin.email || "—"}</span>
+          <span className="text-[10px] text-gray-400 mt-1">{admin.phone || "—"}</span>
         </div>
       ),
     },
@@ -145,15 +150,33 @@ const Admins = () => {
       render: (admin) => (
         <div className="flex items-center gap-2">
           <div className="w-8 h-8 rounded-lg bg-gray-100 flex items-center justify-center text-[10px] font-bold text-gray-500">
-            {admin.school
+            {(admin.school || "")
               .split(" ")
               .map((n) => n[0])
               .join("")}
           </div>
-          <span className="text-sm font-medium text-gray-600">
+          <span className="text-sm font-medium text-gray-600 ">
             {admin.school}
           </span>
         </div>
+      ),
+    },
+    {
+      header: "Username",
+      key: "username",
+      render: (admin) => (
+        <span className="text-sm font-medium text-gray-700 bg-gray-100 px-2 py-1 rounded">
+          {admin.username || "—"}
+        </span>
+      ),
+    },
+    {
+      header: "Password",
+      key: "password",
+      render: (admin) => (
+        <span className="text-xs text-gray-400 font-mono">
+          {admin.password ? "••••••" : "No Password"}
+        </span>
       ),
     },
     {

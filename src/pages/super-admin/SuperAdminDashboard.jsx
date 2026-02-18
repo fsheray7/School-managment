@@ -10,7 +10,7 @@ import ActionButtons from "../../components/ui/ActionButtons";
 import Button from "../../components/ui/Button";
 import StatusToggle from "../../components/ui/StatusToggle";
 import ConfirmationModal from "../../components/ui/ConfirmationModal";
-import { admins as adminsData } from "../../data/admindata/admins";
+import { getAdmins, saveAdmins } from "../../utils/adminStorage";
 import { trendChartData } from "../../data/finance/TrendChartData";
 
 const SuperAdminDashboard = () => {
@@ -22,10 +22,7 @@ const SuperAdminDashboard = () => {
   const [isConfirmOpen, setIsConfirmOpen] = useState(false);
   const [adminToUpdate, setAdminToUpdate] = useState(null);
 
-  const [admins, setAdmins] = useState(() => {
-    const storedAdmins = localStorage.getItem("admins");
-    return storedAdmins ? JSON.parse(storedAdmins) : adminsData;
-  });
+  const [admins, setAdmins] = useState(getAdmins());
 
   const totalRevenue = trendChartData.reduce(
     (acc, item) => acc + item.collection,
@@ -81,7 +78,7 @@ const SuperAdminDashboard = () => {
       a.id === adminToUpdate.id ? { ...a, status: newStatus } : a,
     );
     setAdmins(updatedAdmins);
-    localStorage.setItem("admins", JSON.stringify(updatedAdmins));
+    saveAdmins(updatedAdmins);
     showToast(
       `${adminToUpdate.name}'s status changed to ${newStatus}`,
       "success",

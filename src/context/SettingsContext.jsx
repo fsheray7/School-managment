@@ -41,10 +41,6 @@ export const SettingsProvider = ({ children }) => {
       // Super Admin
       superAdminUsername: "super-admin",
       superAdminPassword: "super-admin12",
-
-      // Account
-      adminUsername: "admin",
-      adminPassword: "admin12",
     };
 
     const saved = localStorage.getItem("school_settings");
@@ -53,8 +49,6 @@ export const SettingsProvider = ({ children }) => {
     const parsed = JSON.parse(saved);
 
     // Migration: fix old passwords
-    if (parsed.adminPassword === "password123")
-      parsed.adminPassword = "admin12";
     if (parsed.superAdminPassword === "password123")
       parsed.superAdminPassword = "super-admin12";
 

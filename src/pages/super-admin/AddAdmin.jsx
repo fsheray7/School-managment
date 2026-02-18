@@ -4,14 +4,14 @@ import { useToast } from "../../context/ToastContext";
 import DynamicForm from "../../components/ui/DynamicForm";
 import { FaUserPlus, FaArrowLeft } from "react-icons/fa";
 import Button from "../../components/ui/Button";
-import { admins as initialAdmins } from "../../data/admindata/admins";
+import { getAdmins, saveAdmins } from "../../utils/adminStorage";
 
 const AddAdmin = () => {
   const navigate = useNavigate();
   const { showToast } = useToast();
 
   const [formData, setFormData] = useState({
-    fullName: "",
+    name: "",
     email: "",
     phone: "",
     school: "",
@@ -31,7 +31,7 @@ const AddAdmin = () => {
       fullWidth: true,
     },
     {
-      name: "fullName",
+      name: "name",
       label: "Full Name",
       type: "input",
       inputType: "text",
@@ -105,6 +105,18 @@ const AddAdmin = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    const currentAdmins = getAdmins();
+
+    // Validation for duplicate email or username
+    if (currentAdmins.some((admin) => admin.email === formData.email)) {
+      showToast("An admin with this email already exists.", "error");
+      return;
+    }
+    if (currentAdmins.some((admin) => admin.username === formData.username)) {
+      showToast("This username is already taken.", "error");
+      return;
+    }
+
     if (formData.password !== formData.confirmPassword) {
       showToast("Passwords do not match!", "error");
       return;
@@ -119,18 +131,17 @@ const AddAdmin = () => {
       });
     }
 
+    const { confirmPassword, ...adminData } = formData;
+
     const newAdmin = {
       id: Date.now(),
-      name: formData.fullName,
-      ...formData,
+      ...adminData,
       profileImage: profileImageBase64,
     };
 
-    const stored = localStorage.getItem("admins");
-    const currentAdmins = stored ? JSON.parse(stored) : initialAdmins;
     const updatedAdmins = [...currentAdmins, newAdmin];
 
-    localStorage.setItem("admins", JSON.stringify(updatedAdmins));
+    saveAdmins(updatedAdmins);
 
     showToast("Administrator added successfully!", "success");
     navigate("/super-admin-admins");
