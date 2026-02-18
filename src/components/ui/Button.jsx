@@ -21,13 +21,13 @@ const Button = ({
       "border border-[var(--primary-color)]text-sm ",
 
     ghost:
-      "text-[var(--primary-color)] hover:text-[var(--primary-color)] cursor-pointer px-4 py-1.5 rounded-full hover:scale-105 transition-all duration-300 hover:bg-[var(--primary-color)]/20",
+      "text-[var(--primary-color)] hover:text-[var(--primary-color)] cursor-pointer px-2 py-2 rounded-full hover:scale-102 transition-all duration-300 ",
 
     danger:
-      "bg-red-600 hover:bg-red-700 text-white rounded-md px-6 py-2 cursor-pointer hover:scale-105 transition-all duration-300 ",
+      "bg-red-600 hover:bg-red-700 text-white rounded-md px-6 py-1.5 cursor-pointer hover:scale-105 transition-all duration-300 ",
 
     success:
-      "bg-green-600 hover:bg-green-700 text-white rounded-md px-6 py-2 cursor-pointer hover:scale-105 transition-all duration-300 ",
+      "bg-green-600 hover:bg-green-700 text-white rounded-md px-6 py-1.5 cursor-pointer hover:scale-105 transition-all duration-300 ",
 
     add: "border border-[var(--primary-color)] text-[var(--primary-color)] hover:bg-[var(--primary-color)] hover:text-white px-6 py-1.5 rounded-lg shadow-md font-medium text-sm gap-2 whitespace-nowrap hover:scale-105 transition-all duration-300 cursor-pointer ",
 

@@ -1,7 +1,5 @@
 import React, { useState, useEffect } from "react";
 import {
-  FaCheck,
-  FaTimes,
   FaFilter,
   FaArrowRight,
   FaUserGraduate,
@@ -10,10 +8,7 @@ import {
 import classesData from "../../data/admindata/classes";
 import Button from "../../components/ui/Button";
 
-import {
-  SESSION_OPTIONS,
-  getNextClass,
-} from "../../constants/Store";
+import { SESSION_OPTIONS, getNextClass } from "../../constants/Store";
 import CustomDropdown from "../../components/ui/CustomDropdown";
 import { useToast } from "../../context/ToastContext";
 import {
@@ -416,7 +411,7 @@ const StudentPromotion = () => {
       )}
 
       {/* BOTTOM ACTION BAR */}
-      <div className="fixed bottom-0 left-0 right-0 lg:left-64 bg-white border-t border-gray-200 p-4 px-8 shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.05)] z-30 flex flex-col sm:flex-row justify-between items-center gap-4 transition-all duration-300">
+      <div className="fixed bottom-0 left-0 right-0 lg:left-56 bg-white border-t border-gray-200 p-4 px-8 shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.05)] z-30 flex flex-col sm:flex-row justify-between items-center gap-4 transition-all duration-300">
         <div className="flex items-center gap-3">
           <input
             type="checkbox"

@@ -14,10 +14,11 @@ import {
   getSectionsByClass,
   ROLE_OPTIONS,
   GENDER_OPTIONS,
-  STATUS_OPTIONS,
   DEPARTMENT_OPTIONS,
   TEACHER_TYPE,
 } from "../../constants/Store";
+import StatusToggle from "../../components/ui/StatusToggle";
+import ConfirmationModal from "../../components/ui/ConfirmationModal";
 
 const Teachers = () => {
   const { showToast } = useToast();
@@ -26,7 +27,8 @@ const Teachers = () => {
     teachersData.map((teacher) => ({
       ...teacher,
       profilePhoto: teacher.profileImage,
-      password: teacher.password || "password123", // Keep default if not in data
+      password: teacher.password || "password123",
+      status: teacher.status || "Active",
     })),
   );
 
@@ -35,6 +37,8 @@ const Teachers = () => {
   const [isEditMode, setIsEditMode] = useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [itemToDelete, setItemToDelete] = useState(null);
+  const [isConfirmOpen, setIsConfirmOpen] = useState(false);
+  const [teacherToUpdate, setTeacherToUpdate] = useState(null);
 
   // Filter State
   const [searchQuery, setSearchQuery] = useState("");
@@ -46,6 +50,29 @@ const Teachers = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 10;
   const [typeFilter, setTypeFilter] = useState("");
+
+  const handleToggleStatus = (teacher) => {
+    setTeacherToUpdate(teacher);
+    setIsConfirmOpen(true);
+  };
+
+  const confirmStatusUpdate = () => {
+    if (!teacherToUpdate) return;
+
+    const newStatus =
+      teacherToUpdate.status === "Active" ? "Inactive" : "Active";
+    setTeachers((prev) =>
+      prev.map((t) =>
+        t.id === teacherToUpdate.id ? { ...t, status: newStatus } : t,
+      ),
+    );
+    showToast(
+      `${teacherToUpdate.fullName}'s status changed to ${newStatus}`,
+      "success",
+    );
+    setIsConfirmOpen(false);
+    setTeacherToUpdate(null);
+  };
 
   const handleViewDetails = (teacher) => {
     setSelectedTeacher(teacher);
@@ -94,6 +121,9 @@ const Teachers = () => {
     setCurrentPage(1);
   };
 
+  const nextStatus =
+    teacherToUpdate?.status === "Active" ? "Inactive" : "Active";
+
   // Derive unique options
   const uniqueSubjects = [
     ...new Set(teachers.map((item) => item.subject)),
@@ -137,21 +167,8 @@ const Teachers = () => {
     { header: "Full Name", key: "fullName", fontBold: true },
     { header: "Subject", key: "subject", hiddenOnMobile: true },
     { header: "Department", key: "department", hiddenOnMobile: true },
-    {
-      header: "Status",
-      key: "status",
-      render: (teacher) => (
-        <span
-          className={`px-2 py-1 rounded-full text-xs font-semibold ${
-            teacher.status === "Active"
-              ? "bg-green-100 text-green-700"
-              : "bg-red-100 text-red-700"
-          }`}
-        >
-          {teacher.status}
-        </span>
-      ),
-    },
+    { header: "Contact", key: "contact", hiddenOnMobile: true },
+    { header: "Email", key: "email", hiddenOnMobile: true },
     {
       header: "Type",
       key: "type",
@@ -164,87 +181,67 @@ const Teachers = () => {
         </span>
       ),
     },
+    {
+      header: "Status",
+      key: "status",
+      render: (teacher) => (
+        <StatusToggle
+          status={teacher.status}
+          onToggle={() => handleToggleStatus(teacher)}
+        />
+      ),
+    },
   ];
 
   const fields = [
-    { label: "", key: "profilePhoto", type: "image", isFullWidth: true },
+    { label: "", name: "profilePhoto", type: "image", fullWidth: true },
     {
-      type: "grid",
-      gridFields: [
-        { label: "Teacher ID", key: "teacherId", type: "text" },
-        { label: "Full Name", key: "fullName", type: "text" },
-      ],
+      label: "Teacher ID",
+      name: "teacherId",
+      type: "input",
+      inputType: "text",
+    },
+    { label: "Full Name", name: "fullName", type: "input", inputType: "text" },
+    { label: "Email", name: "email", type: "input", inputType: "email" },
+    { label: "Contact", name: "contact", type: "input", inputType: "text" },
+    {
+      label: "Gender",
+      name: "gender",
+      type: "dropdown",
+      options: GENDER_OPTIONS,
     },
     {
-      type: "grid",
-      gridFields: [
-        { label: "Email", key: "email", type: "email" },
-        { label: "Contact", key: "contact", type: "text" },
-      ],
+      label: "Department",
+      name: "department",
+      type: "dropdown",
+      options: DEPARTMENT_OPTIONS,
     },
     {
-      type: "grid",
-      gridFields: [
-        {
-          label: "Gender",
-          key: "gender",
-          type: "select",
-          options: GENDER_OPTIONS,
-        },
-        {
-          label: "Department",
-          key: "department",
-          type: "select",
-          options: DEPARTMENT_OPTIONS,
-        },
-      ],
+      label: "Qualification",
+      name: "qualification",
+      type: "input",
+      inputType: "text",
     },
     {
-      type: "grid",
-      gridFields: [
-        { label: "Qualification", key: "qualification", type: "text" },
-        { label: "Experience", key: "experience", type: "text" },
-      ],
+      label: "Experience",
+      name: "experience",
+      type: "input",
+      inputType: "text",
+    },
+    { label: "Subject", name: "subject", type: "input", inputType: "text" },
+    { label: "Role", name: "role", type: "dropdown", options: ROLE_OPTIONS },
+    {
+      label: "Type",
+      name: "type",
+      type: "dropdown",
+      options: TEACHER_TYPE,
     },
     {
-      type: "grid",
-      gridFields: [
-        { label: "Subject", key: "subject", type: "text" },
-        { label: "Role", key: "role", type: "select", options: ROLE_OPTIONS },
-      ],
+      label: "Password",
+      name: "password",
+      type: "input",
+      inputType: "password",
     },
-    {
-      type: "grid",
-      gridFields: [
-        {
-          label: "Status",
-          key: "status",
-          type: "select",
-          options: STATUS_OPTIONS,
-          render: (t) => (
-            <span
-              className={`px-2 py-1 rounded-full text-xs font-semibold ${t.status === "Active" ? "bg-green-100 text-green-700" : "bg-red-100 text-red-700"}`}
-            >
-              {t.status}
-            </span>
-          ),
-        },
-        {
-          label: "Type",
-          key: "type",
-          type: "select",
-          options: TEACHER_TYPE,
-          render: (t) => (
-            <span
-              className={`px-2 py-1 rounded-full text-xs font-semibold ${t.type === "Regular" ? "bg-green-100 text-green-700" : "bg-blue-100 text-blue-700"}`}
-            >
-              {t.type}
-            </span>
-          ),
-        },
-      ],
-    },
-    { label: "Password", key: "password", type: "password" },
   ];
 
   const renderMobileCard = (teacher) => (
@@ -264,6 +261,16 @@ const Teachers = () => {
             >
               {val}
             </span>
+          ),
+        },
+        {
+          label: "Status",
+          value: teacher.status,
+          render: (val) => (
+            <StatusToggle
+              status={val}
+              onToggle={() => handleToggleStatus(teacher)}
+            />
           ),
         },
       ]}
@@ -355,6 +362,27 @@ const Teachers = () => {
         onClose={() => setIsDeleteModalOpen(false)}
         onConfirm={confirmDelete}
         itemName={itemToDelete?.fullName}
+      />
+      <ConfirmationModal
+        isOpen={isConfirmOpen}
+        onClose={() => setIsConfirmOpen(false)}
+        onConfirm={confirmStatusUpdate}
+        title="Change Teacher Status"
+        message={
+          <span>
+            Are you sure you want to change the status to{" "}
+            <span
+              className={`px-2 py-1 rounded text-xs font-bold ${
+                nextStatus === "Active"
+                  ? "bg-green-100 text-green-700"
+                  : "bg-red-100 text-red-700"
+              }`}
+            >
+              {nextStatus}
+            </span>{" "}
+            for <strong>{teacherToUpdate?.fullName}</strong>?
+          </span>
+        }
       />
     </section>
   );

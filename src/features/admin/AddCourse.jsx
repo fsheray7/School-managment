@@ -83,7 +83,7 @@ const AddCourse = () => {
   };
 
   return (
-    <div className="flex justify-center mt-15   items-center">
+    <div className="flex justify-center   items-center">
       <DynamicForm
         title="Course Information"
         fields={courseFields}

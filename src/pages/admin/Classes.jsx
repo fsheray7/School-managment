@@ -13,7 +13,6 @@ import {
   CLASS_OPTIONS,
   getSectionsByClass,
   DEPARTMENT_OPTIONS,
-  STATUS_OPTIONS,
 } from "../../constants/Store";
 
 const Classes = () => {
@@ -29,17 +28,11 @@ const Classes = () => {
   // Filter State
   const [searchQuery, setSearchQuery] = useState("");
   const [classFilter, setClassFilter] = useState("");
-  const [sectionFilter, setSectionFilter] = useState("");
   const [departmentFilter, setDepartmentFilter] = useState("");
 
   // Pagination State
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 10;
-
-  // Reset section filter when class filter changes
-  useEffect(() => {
-    setSectionFilter("");
-  }, [classFilter]);
 
   const handleViewDetails = (classItem) => {
     setSelectedClass(classItem);
@@ -60,7 +53,8 @@ const Classes = () => {
 
   const confirmDelete = () => {
     if (itemToDelete) {
-      setClasses(classes.filter((c) => c.id !== itemToDelete.id));
+      // Delete all rows belonging to this grouped class
+      setClasses(classes.filter((c) => c.className !== itemToDelete.className));
       setIsDeleteModalOpen(false);
       setItemToDelete(null);
       showToast("Class deleted successfully!");
@@ -84,23 +78,17 @@ const Classes = () => {
   const resetFilters = () => {
     setSearchQuery("");
     setClassFilter("");
-    setSectionFilter("");
     setDepartmentFilter("");
     setCurrentPage(1);
   };
 
   // Derive unique options
-  const uniqueClasses = [
-    ...new Set(classes.map((item) => item.className)),
-  ].sort();
-  const uniqueSections = [
-    ...new Set(classes.map((item) => item.section)),
-  ].sort();
   const uniqueDepartments = [
     ...new Set(classes.map((item) => item.department)),
   ].sort();
 
-  const filteredClasses = classes.filter((classItem) => {
+  // Filter the raw data first
+  const filteredRawClasses = classes.filter((classItem) => {
     const matchesSearch =
       classItem.className.toLowerCase().includes(searchQuery.toLowerCase()) ||
       classItem.section.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -108,113 +96,128 @@ const Classes = () => {
     const matchesClass = classFilter
       ? classItem.className === classFilter
       : true;
-    const matchesSection = sectionFilter
-      ? classItem.section === sectionFilter
-      : true;
     const matchesDepartment = departmentFilter
       ? classItem.department === departmentFilter
       : true;
 
-    return matchesSearch && matchesClass && matchesSection && matchesDepartment;
+    return matchesSearch && matchesClass && matchesDepartment;
   });
 
+  // Group sections by className
+  const groupedClasses = Object.values(
+    filteredRawClasses.reduce((acc, item) => {
+      if (!acc[item.className]) {
+        acc[item.className] = {
+          id: item.id,
+          className: item.className,
+          department: item.department,
+          sections: [],
+          totalStudents: 0,
+          classTeacher: item.classTeacher,
+          // Keep original items for reference
+          _items: [],
+        };
+      }
+      acc[item.className].sections.push(item.section);
+      acc[item.className].totalStudents += item.totalStudents;
+      acc[item.className]._items.push(item);
+      return acc;
+    }, {}),
+  );
+
   // Pagination Logic
-  const totalPages = Math.ceil(filteredClasses.length / itemsPerPage);
-  const paginatedClasses = filteredClasses.slice(
+  const totalPages = Math.ceil(groupedClasses.length / itemsPerPage);
+  const paginatedClasses = groupedClasses.slice(
     (currentPage - 1) * itemsPerPage,
     currentPage * itemsPerPage,
   );
 
   const columns = [
     { header: "Class", key: "className", fontBold: true },
-    { header: "Section", key: "section" },
-    { header: "Department", key: "department", hiddenOnMobile: true },
-    { header: "Students", key: "totalStudents", hiddenOnMobile: true },
-    { header: "Class Teacher", key: "classTeacher", hiddenOnMobile: true },
     {
-      header: "Status",
-      key: "status",
+      header: "Sections",
+      key: "sections",
       render: (classItem) => (
-        <span
-          className={`px-2 py-1 rounded-full text-xs font-semibold ${classItem.status === "Active" ? "bg-green-100 text-green-700" : "bg-red-100 text-red-700"}`}
-        >
-          {classItem.status}
-        </span>
+        <div className="flex flex-wrap gap-1.5">
+          {classItem.sections.map((sec) => (
+            <span
+              key={sec}
+              className="px-2.5 py-1 rounded-full text-xs font-semibold bg-blue-100 text-blue-700"
+            >
+              {sec}
+            </span>
+          ))}
+        </div>
       ),
     },
+    { header: "Department", key: "department", hiddenOnMobile: true },
+    { header: "Total Students", key: "totalStudents", hiddenOnMobile: true },
+    { header: "Class Teacher", key: "classTeacher", hiddenOnMobile: true },
   ];
 
   const fields = [
     {
-      type: "grid",
-      gridFields: [
-        {
-          label: "Class",
-          key: "className",
-          type: "select",
-          options: CLASS_OPTIONS,
-        },
-        {
-          label: "Section",
-          key: "section",
-          type: "select",
-          options: getSectionsByClass(selectedClass?.className || ""),
-        },
-      ],
+      label: "Class",
+      name: "className",
+      type: "dropdown",
+      options: CLASS_OPTIONS,
     },
     {
-      type: "grid",
-      gridFields: [
-        {
-          label: "Department",
-          key: "department",
-          type: "select",
-          options: DEPARTMENT_OPTIONS,
-        },
-        { label: "Total Students", key: "totalStudents", type: "number" },
-      ],
+      label: "Department",
+      name: "department",
+      type: "dropdown",
+      options: DEPARTMENT_OPTIONS,
     },
-    { label: "Class Teacher", key: "classTeacher", type: "text" },
     {
-      label: "Status",
-      key: "status",
-      type: "select",
-      options: STATUS_OPTIONS,
+      label: "Sections",
+      name: "sections",
+      type: "input",
+      inputType: "text",
       render: (classItem) => (
-        <span
-          className={`px-2 py-1 rounded-full text-xs font-semibold ${classItem.status === "Active" ? "bg-green-100 text-green-700" : "bg-red-100 text-red-700"}`}
-        >
-          {classItem.status}
-        </span>
+        <div className="flex flex-wrap gap-1.5">
+          {(classItem.sections || []).map((sec) => (
+            <span
+              key={sec}
+              className="px-2.5 py-1 rounded-full text-xs font-semibold bg-blue-100 text-blue-700"
+            >
+              {sec}
+            </span>
+          ))}
+        </div>
       ),
+    },
+    {
+      label: "Total Students",
+      name: "totalStudents",
+      type: "input",
+      inputType: "number",
+    },
+    {
+      label: "Class Teacher",
+      name: "classTeacher",
+      type: "input",
+      inputType: "text",
     },
   ];
 
   const renderMobileCard = (classItem) => (
     <DataCard
-      title={`${classItem.className} - ${classItem.section}`}
+      title={classItem.className}
       fields={[
+        {
+          label: "Sections",
+          value: classItem.sections.join(", "),
+        },
         { label: "Department", value: classItem.department },
         { label: "Students", value: classItem.totalStudents },
         { label: "Class Teacher", value: classItem.classTeacher },
-        {
-          label: "Status",
-          value: classItem.status,
-          render: (val) => (
-            <span
-              className={`px-2 py-0.5 rounded-full text-[10px] ${val === "Active" ? "bg-green-100 text-green-700" : "bg-red-100 text-red-700"}`}
-            >
-              {val}
-            </span>
-          ),
-        },
       ]}
       actions={
         <ActionButtons
           onView={() => handleViewDetails(classItem)}
           onEdit={() => handleEdit(classItem)}
           onDelete={() => handleDelete(classItem)}
-          itemName={`${classItem.className} - ${classItem.section}`}
+          itemName={classItem.className}
         />
       }
     />
@@ -238,12 +241,6 @@ const Classes = () => {
               placeholder: "Class",
             },
             {
-              value: sectionFilter,
-              onChange: setSectionFilter,
-              options: getSectionsByClass(classFilter),
-              placeholder: "Section",
-            },
-            {
               value: departmentFilter,
               onChange: setDepartmentFilter,
               options: uniqueDepartments,
@@ -261,7 +258,7 @@ const Classes = () => {
             onView={() => handleViewDetails(classItem)}
             onEdit={() => handleEdit(classItem)}
             onDelete={() => handleDelete(classItem)}
-            itemName={`${classItem.className} - ${classItem.section}`}
+            itemName={classItem.className}
           />
         )}
         renderMobileCard={renderMobileCard}
@@ -273,7 +270,7 @@ const Classes = () => {
         currentPage={currentPage}
         totalPages={totalPages}
         onPageChange={setCurrentPage}
-        totalItems={filteredClasses.length}
+        totalItems={groupedClasses.length}
         itemsPerPage={itemsPerPage}
       />
 
@@ -294,11 +291,7 @@ const Classes = () => {
         isOpen={isDeleteModalOpen}
         onClose={() => setIsDeleteModalOpen(false)}
         onConfirm={confirmDelete}
-        itemName={
-          itemToDelete
-            ? `${itemToDelete.className} - ${itemToDelete.section}`
-            : ""
-        }
+        itemName={itemToDelete ? itemToDelete.className : ""}
       />
     </section>
   );

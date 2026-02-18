@@ -1,14 +1,19 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { FaChalkboardTeacher, FaUser } from "react-icons/fa";
+import {
+  FaChalkboardTeacher,
+  FaUser,
+  FaChartPie,
+  FaCogs,
+} from "react-icons/fa";
 import { FaUserGraduate } from "react-icons/fa6";
 import Login from "../components/login/Login";
 import Button from "../components/ui/Button";
+import { useSettings } from "../context/SettingsContext";
 
 const ProfileSelection = () => {
   const [selectedRole, setSelectedRole] = useState(null);
   const navigate = useNavigate();
-
   const handleRoleSelect = (role) => {
     setSelectedRole(role);
   };
@@ -33,7 +38,7 @@ const ProfileSelection = () => {
     }
   };
 
-  const ROLES = [
+  const NORMAL_ROLES = [
     { id: "admin", label: "Admin", icon: FaUser, iconSize: 40 },
     {
       id: "teacher",
@@ -43,6 +48,8 @@ const ProfileSelection = () => {
     },
     { id: "student", label: "Student", icon: FaUserGraduate, iconSize: 44 },
   ];
+
+  const ROLES = NORMAL_ROLES;
 
   const boxStyle =
     "flex flex-col p-2 items-center justify-center md:w-16 md:h-16 lg:w-16 lg:h-16 w-10 h-10 rounded-xl text-white cursor-pointer hover:brightness-90 transition shadow-md";
@@ -116,11 +123,10 @@ const ProfileSelection = () => {
               className="py-1 text-xs "
             >
               ← Back to Selection
-             
             </Button>
 
             <h2
-              className="text-lg md:text-lg font-bold text-center mb-4 capitalize"
+              className="text-lg md:text-lg font-bold text-center -mt-20 mb-4 capitalize"
               style={{ color: "var(--primary-color)" }}
             >
               {selectedRole} Login

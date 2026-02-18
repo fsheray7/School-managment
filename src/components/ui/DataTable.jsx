@@ -80,7 +80,7 @@ const DataTable = ({
           </thead>
 
           {/* ================= BODY ================= */}
-          <tbody className="divide-y divide-gray-100 text-center text-xs text-gray-700">
+          <tbody className="divide-y divide-gray-100 text-start text-xs text-gray-700 ">
             {data.map((item, rowIndex) => (
               <tr
                 key={item.id || rowIndex}
@@ -89,14 +89,14 @@ const DataTable = ({
                 {flattenedColumns.map((col, colIndex) => (
                   <td
                     key={colIndex}
-                    className="px-1 py-3 truncate"
+                    className="px-3 py-3 truncate"
                   >
                     {col.render ? col.render(item) : item[col.key]}
                   </td>
                 ))}
 
                 {renderActions && (
-                  <td className="px-4 py-2 text-center">
+                  <td className="px-4 py-2 text-start">
                     {renderActions(item)}
                   </td>
                 )}

@@ -18,7 +18,7 @@ const FileUpload = ({
   return (
     <div className={`flex flex-col gap-2 ${className}`}>
       {label && <label className={labelClassName}>{label}</label>}
-      <div className="flex items-center gap-4">
+      <div className="flex flex-wrap items-center gap-3">
         <label
           className="flex items-center gap-2 px-6 py-2 bg-white border rounded-lg cursor-pointer hover:scale-101 transform duration-300 border border-gray-300 transition-all font-medium whitespace-nowrap"
           style={{

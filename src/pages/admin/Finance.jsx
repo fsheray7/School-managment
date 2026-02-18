@@ -125,17 +125,9 @@ const Finance = () => {
   );
 
   return (
-    <div className="flex flex-col gap-6 w-full">
+    <div className="flex px-4 pt-4 flex-col gap-6 w-full">
       {/* Header */}
-      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-        <div>
-          <h1 className="text-2xl font-bold text-[var(--text-primary-color)]">
-            Finance & Accounts
-          </h1>
-          <p className="text-sm text-gray-500">
-            Overview of school financial status and fee collections.
-          </p>
-        </div>
+      <div className="flex  sm:flex-row items-start sm:items-center justify-end gap-4">
         <Button
         variant="primary"
         >
@@ -209,7 +201,7 @@ const Finance = () => {
 
       {/* Detailed Transaction Table */}
       <section
-        className="bg-white p-6 rounded-xl shadow-sm border-t-8"
+        className="bg-white p-6 rounded-xl border-t-8"
         style={{ borderTopColor: "var(--primary-color)" }}
       >
         <div className="flex flex-col sm:flex-row items-center  justify-between mb-6 gap-4">

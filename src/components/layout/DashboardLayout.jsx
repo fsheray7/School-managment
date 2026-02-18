@@ -29,6 +29,17 @@ const DashboardLayout = () => {
   // Determine role based on path
   const getRole = () => {
     if (
+      location.pathname.includes("/super-admin") ||
+      [
+        "/super-admin-dashboard",
+        "/super-admin-admins",
+        "/super-admin-revenue",
+        "/super-admin-settings",
+      ].includes(location.pathname)
+    ) {
+      return "super-admin";
+    }
+    if (
       location.pathname.includes("/admin") ||
       [
         "/teachers",
@@ -178,6 +189,28 @@ const DashboardLayout = () => {
         icon: <FaUserCircle size={20} />,
       },
     ],
+    "super-admin": [
+      {
+        label: "Dashboard",
+        path: "/super-admin-dashboard",
+        icon: <FaSchool size={20} />,
+      },
+      {
+        label: "Admins",
+        path: "/super-admin-admins",
+        icon: <IoPeople size={20} />,
+      },
+      {
+        label: "Revenue",
+        path: "/super-admin-revenue",
+        icon: <FaWallet size={20} />,
+      },
+      {
+        label: "Settings",
+        path: "/super-admin-settings",
+        icon: <FaCog size={20} />,
+      },
+    ],
   };
 
   return (
@@ -193,7 +226,7 @@ const DashboardLayout = () => {
         onToggleSidebar={() => setIsSidebarOpen(!isSidebarOpen)}
         isSidebarOpen={isSidebarOpen}
       />
-      <main className="w-full flex lg:pl-64 pt-14 transition-all duration-300">
+      <main className="w-full flex lg:pl-56 pt-14 transition-all duration-300">
         <div className="px-1 w-full">
           <Outlet />
         </div>

@@ -73,7 +73,7 @@ const AddClass = () => {
   };
 
   return (
-    <div className="flex justify-center mt-15 items-center">
+    <div className="flex justify-center  items-center">
       <DynamicForm
         title="Class Information"
         fields={classFields}

@@ -9,7 +9,14 @@ import { useSettings } from "../../context/SettingsContext";
 
 const Login = ({ onLoginSuccess, role }) => {
   const { showToast } = useToast();
-  const { adminUsername, adminPassword } = useSettings();
+  const navigate = useNavigate();
+  const {
+    adminUsername,
+    adminPassword,
+    superAdminUsername,
+    superAdminPassword,
+    setIsSuperAdmin,
+  } = useSettings();
   const [loginData, setLoginData] = useState({
     username: "",
     password: "",
@@ -60,6 +67,17 @@ const Login = ({ onLoginSuccess, role }) => {
       } else {
         showToast("Invalid admin credentials!", "error");
       }
+    } else if (role === "super-admin") {
+      if (
+        loginData.username.trim() === superAdminUsername &&
+        loginData.password.trim() === superAdminPassword
+      ) {
+        showToast("Logged in as Super Administrator!", "success");
+        setIsSuperAdmin(true);
+        navigate("/super-admin-dashboard");
+      } else {
+        showToast("Invalid super admin credentials!", "error");
+      }
     } else {
       // Default success for other roles for now
       showToast("Logged in successfully!", "success");
@@ -102,7 +120,15 @@ const Login = ({ onLoginSuccess, role }) => {
   ];
 
   return (
-    <div className="w-full  flex flex-col items-center">
+    <div className="w-full  flex mt-20 flex-col items-center">
+      {role === "super-admin" && (
+        <h1
+          className="text-2xl font-bold mb-8 -mt-10"
+          style={{ color: "var(--primary-color)" }}
+        >
+          Super Admin Login
+        </h1>
+      )}
       <DynamicForm
         fields={loginFields}
         formData={loginData}

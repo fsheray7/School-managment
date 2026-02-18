@@ -136,7 +136,7 @@ const GenerateFee = () => {
   };
 
   return (
-    <div className="flex justify-center items-center">
+    <div className="flex px-4   justify-center items-center">
       <DynamicForm
         title="Generate Fee Invoice"
         fields={feeFields}

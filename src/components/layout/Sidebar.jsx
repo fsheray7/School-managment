@@ -3,10 +3,14 @@ import { FaTimes } from "react-icons/fa";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useSettings } from "../../context/SettingsContext";
 
-const Sidebar = ({ isOpen, setIsOpen, menuItems = [] }) => {
+const Sidebar = ({ isOpen, setIsOpen, menuItems = [], role = "admin" }) => {
   const location = useLocation();
   const navigate = useNavigate();
-  const { schoolLogo, schoolName } = useSettings();
+  const { schoolLogo, schoolName, systemLogo, systemName } = useSettings();
+
+  const isSuperAdmin = role === "super-admin";
+  const displayLogo = isSuperAdmin ? systemLogo : schoolLogo;
+  const displayName = isSuperAdmin ? systemName : schoolName;
 
   const handleNavigation = (path) => {
     navigate(path);
@@ -31,7 +35,7 @@ const Sidebar = ({ isOpen, setIsOpen, menuItems = [] }) => {
         className={`
           fixed top-0 left-0  overflow-hidden h-full
           z-50 transition-all duration-300
-          ${isOpen ? "translate-x-0 w-64" : "-translate-x-full w-64 lg:translate-x-0"}
+          ${isOpen ? "translate-x-0 w-56" : "-translate-x-full w-56 lg:translate-x-0"}
         `}
         style={{ backgroundColor: "var(--primary-color)" }}
       >
@@ -54,13 +58,17 @@ const Sidebar = ({ isOpen, setIsOpen, menuItems = [] }) => {
               className="w-15 h-15 object-contain"
             />
             <img
-              src={schoolLogo}
-              alt="School Logo"
-              className="absolute w-12 h-12 object-contain"
+              src={
+                typeof displayLogo === "string"
+                  ? displayLogo
+                  : "/logo/superlogo.png"
+              }
+              alt="Logo"
+              className="absolute w-12 h-12 rounded-full object-contain"
             />
           </div>
-          <span className="text-[var(--text-primary-color)] text-base font-bold text-center px-4 leading-tight drop-shadow-sm">
-            {schoolName}
+          <span className="text-[var(--text-primary-color)] text-base font-bold text-center px-1 leading-tight drop-shadow-sm">
+            {displayName}
           </span>
         </div>
 

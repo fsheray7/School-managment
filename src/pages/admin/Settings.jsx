@@ -9,6 +9,8 @@ import {
   FaTimes,
   FaEye,
   FaEyeSlash,
+  FaSave,
+  FaLock,
 } from "react-icons/fa";
 
 import { useToast } from "../../context/ToastContext";
@@ -122,7 +124,12 @@ const Settings = () => {
     confirmPassword: "",
   });
 
-  const [showOldPass, setShowOldPass] = useState(false);
+  // Confirmation modal state
+  const [showConfirmModal, setShowConfirmModal] = useState(false);
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [confirmPasswordError, setConfirmPasswordError] = useState("");
+  const [showModalCurrentPass, setShowModalCurrentPass] = useState(false);
+
   const [showNewPass, setShowNewPass] = useState(false);
   const [showConfirmPass, setShowConfirmPass] = useState(false);
 
@@ -136,7 +143,7 @@ const Settings = () => {
     "#10B981",
     "#F59E0B",
     "#f82525ff",
-    "#8B5CF6",
+    "#a220f3ff",
     "#48ece9",
     "#000000",
     "#FFFFFF",
@@ -153,45 +160,44 @@ const Settings = () => {
     }
   };
 
-  const handleSave = () => {
-    // 1. Check if Username or Password has changed
-    const usernameChanged = localSettings.adminUsername !== adminUsername;
+  const handleSaveClick = () => {
     const passwordChanged = !!passwordFields.newPassword;
-
-    if (usernameChanged || passwordChanged) {
-      // Must provide old password for any account change
-      if (!passwordFields.oldPassword) {
-        showToast(
-          "Please provide old password to change credentials.",
-          "warning",
-        );
+    if (passwordChanged) {
+      if (passwordFields.newPassword !== passwordFields.confirmPassword) {
+        showToast("New passwords do not match!", "error");
         return;
-      }
-      if (passwordFields.oldPassword !== adminPassword) {
-        showToast("Incorrect old password!", "error");
-        return;
-      }
-
-      // If password is being changed, check confirmation
-      if (passwordChanged) {
-        if (passwordFields.newPassword !== passwordFields.confirmPassword) {
-          showToast("New passwords do not match!", "error");
-          return;
-        }
-        // Update the password in localSettings before saving
-        localSettings.adminPassword = passwordFields.newPassword;
       }
     }
+    // Open confirmation modal
+    setConfirmPassword("");
+    setConfirmPasswordError("");
+    setShowConfirmModal(true);
+  };
 
-    updateSettings(localSettings);
+  const handleConfirmSave = () => {
+    if (!confirmPassword) {
+      setConfirmPasswordError("Please enter your current password.");
+      return;
+    }
+    if (confirmPassword !== adminPassword) {
+      setConfirmPasswordError("Incorrect password. Please try again.");
+      return;
+    }
+
+    const passwordChanged = !!passwordFields.newPassword;
+    const settingsToUpdate = { ...localSettings };
+    if (passwordChanged) {
+      settingsToUpdate.adminPassword = passwordFields.newPassword;
+    }
+
+    updateSettings(settingsToUpdate);
     showToast("Settings saved successfully!", "success");
 
     // Clear password fields after save
-    setPasswordFields({
-      oldPassword: "",
-      newPassword: "",
-      confirmPassword: "",
-    });
+    setPasswordFields({ newPassword: "", confirmPassword: "" });
+    setConfirmPassword("");
+    setConfirmPasswordError("");
+    setShowConfirmModal(false);
   };
 
   return (
@@ -208,7 +214,7 @@ const Settings = () => {
             </p>
           </div>
           <Button
-            onClick={handleSave}
+            onClick={handleSaveClick}
             className="  text-sm shadow-lg shadow-blue-100 border border-[var(--primary-color)]"
             variant="ghost"
           >
@@ -294,25 +300,7 @@ const Settings = () => {
                   setLocalSettings((p) => ({ ...p, adminUsername: val }))
                 }
               />
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                <InputField
-                  label="Old Password"
-                  placeholder="Enter old password"
-                  type={showOldPass ? "text" : "password"}
-                  value={passwordFields.oldPassword}
-                  onChange={(val) =>
-                    setPasswordFields((p) => ({ ...p, oldPassword: val }))
-                  }
-                  suffix={
-                    <button
-                      type="button"
-                      onClick={() => setShowOldPass(!showOldPass)}
-                      className="text-[var(--primary-color)] hover:text-[var(--primary-color)] transition-colors cursor-pointer"
-                    >
-                      {showOldPass ? <FaEyeSlash /> : <FaEye />}
-                    </button>
-                  }
-                />
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <InputField
                   label="New Password"
                   placeholder="Enter new password"
@@ -651,7 +639,7 @@ const Settings = () => {
                     </label>
                     <button
                       className="w-full py-3 rounded-xl text-white font-extrabold text-sm transition-all shadow-md active:scale-95 translate-y-0 hover:-translate-y-0.5"
-                      onClick={() => handleSave()}
+                      onClick={handleSaveClick}
                       style={{ backgroundColor: localSettings.primaryColor }}
                     >
                       Save Settings
@@ -670,6 +658,92 @@ const Settings = () => {
           </div>
         </div>
       </div>
+      {/* Confirmation Modal */}
+      {showConfirmModal && (
+        <div className="fixed inset-0 z-[70] flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm">
+          <div className="bg-white rounded-3xl shadow-2xl w-full max-w-md p-8 flex flex-col gap-6 relative animate-fade-in">
+            {/* Close */}
+            <button
+              onClick={() => setShowConfirmModal(false)}
+              className="absolute top-4 right-4 text-gray-400 hover:text-gray-600 transition-colors p-1"
+            >
+              <FaTimes size={18} />
+            </button>
+
+            {/* Icon + Title */}
+            <div className="flex flex-col items-center gap-3 text-center">
+              <div
+                className="w-14 h-14 rounded-2xl flex items-center justify-center text-white shadow-lg"
+                style={{ backgroundColor: localSettings.primaryColor }}
+              >
+                <FaLock size={22} />
+              </div>
+              <h2 className="text-xl font-extrabold text-gray-800">
+                Confirm Changes
+              </h2>
+              <p className="text-sm text-gray-500">
+                Enter your current password to save all changes.
+              </p>
+            </div>
+
+            {/* Password Input */}
+            <div className="flex flex-col gap-2">
+              <label className="text-xs font-bold text-gray-500 uppercase tracking-wider">
+                Current Password
+              </label>
+              <div className="relative">
+                <input
+                  type={showModalCurrentPass ? "text" : "password"}
+                  value={confirmPassword}
+                  onChange={(e) => {
+                    setConfirmPassword(e.target.value);
+                    setConfirmPasswordError("");
+                  }}
+                  onKeyDown={(e) => e.key === "Enter" && handleConfirmSave()}
+                  placeholder="Enter your current password"
+                  className={`w-full px-4 py-3 pr-12 text-sm border rounded-xl focus:outline-none transition-all ${
+                    confirmPasswordError
+                      ? "border-red-400 bg-red-50 focus:ring-2 focus:ring-red-100"
+                      : "border-gray-200 bg-gray-50 focus:border-[var(--primary-color)] focus:ring-2 focus:ring-blue-50"
+                  }`}
+                />
+                <Button
+                  type="button"
+                  variant="ghost"
+                  onClick={() => setShowModalCurrentPass((p) => !p)}
+                  className="absolute hover:bg-transparent right-4 top-1/2 -translate-y-1/2 text-[var(--primary-color)] hover:text-[var(--primary-color)]/80 transition-colors"
+                >
+                  {showModalCurrentPass ? <FaEyeSlash /> : <FaEye />}
+                </Button>
+              </div>
+              {confirmPasswordError && (
+                <p className="text-xs text-red-500 font-semibold mt-1 animate-pulse">
+                  {confirmPasswordError}
+                </p>
+              )}
+            </div>
+
+            {/* Actions */}
+            <div className="flex gap-3">
+              <Button
+                onClick={() => setShowConfirmModal(false)}
+                variant="reset"
+                className="flex-1 py-3 rounded-xl border border-gray-200 text-gray-600 font-semibold hover:bg-gray-100 transition-colors"
+              >
+                Cancel
+              </Button>
+              <Button
+                onClick={handleConfirmSave}
+                variant="primary"
+                className="flex-1 py-3 rounded-xl font-bold shadow-lg flex items-center justify-center gap-2"
+              >
+                <FaSave size={14} />
+                Confirm & Save
+              </Button>
+            </div>
+          </div>
+        </div>
+      )}
       {/* Logo Preview Modal */}
       {isLogoPreviewOpen && (
         <div className="fixed inset-0 z-[60] flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-fade-in">

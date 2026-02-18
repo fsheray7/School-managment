@@ -42,6 +42,13 @@ import NoticeTeacher from "./pages/teacher/Notice";
 import Classes from "./pages/admin/Classes";
 import AddClass from "./features/admin/AddClass";
 import StudentPromotion from "./pages/admin/StudentPromotion";
+import Login from "./components/login/Login";
+import SuperAdminDashboard from "./pages/super-admin/SuperAdminDashboard";
+import Admins from "./pages/super-admin/Admins";
+import Revenue from "./pages/super-admin/Revenue";
+import SuperAdminSettings from "./pages/super-admin/Settings";
+
+import AddAdmin from "./pages/super-admin/AddAdmin";
 
 function App() {
   return (
@@ -49,6 +56,9 @@ function App() {
       <Routes>
         <Route path="/select-profile" element={<ProfileSelection />} />
         <Route path="/" element={<WelcomePage />} />
+
+        {/* Super admin route */}
+        <Route path="/super-admin" element={<Login role="super-admin" />} />
 
         {/* Unified Layout for All Roles */}
         <Route element={<DashboardLayout />}>
@@ -101,6 +111,19 @@ function App() {
           />
           <Route path="/quiz-score" element={<QuizScore />} />
           <Route path="/student-profile" element={<StudentProfile />} />
+
+          {/* Super Admin Routes */}
+          <Route
+            path="/super-admin-dashboard"
+            element={<SuperAdminDashboard />}
+          />
+          <Route path="/super-admin-admins" element={<Admins />} />
+          <Route path="/super-admin-revenue" element={<Revenue />} />
+          <Route
+            path="/super-admin-settings"
+            element={<SuperAdminSettings />}
+          />
+          <Route path="/super-admin-add-admin" element={<AddAdmin />} />
         </Route>
       </Routes>
     </Router>

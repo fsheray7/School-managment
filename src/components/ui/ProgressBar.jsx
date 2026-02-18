@@ -3,7 +3,7 @@ import { FaCheck } from "react-icons/fa";
 
 const ProgressBar = ({ currentStep, steps }) => {
   return (
-    <div className="w-full max-w-3xl mt-18 px-4">
+    <div className="w-full max-w-6xl mt-18 px-4">
       <div className="relative flex justify-between items-center w-full">
         {/* Background Line */}
         <div className="absolute top-1/2 left-0 w-full h-1 bg-gray-200 -z-10 transform -translate-y-1/2 rounded-full"></div>

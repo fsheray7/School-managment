@@ -293,7 +293,7 @@ const AddTeacher = () => {
   const steps = Object.values(tabConfigs);
 
   return (
-    <div className="flex flex-col justify-start items-center w-full">
+    <div className="flex flex-col justify-center items-center w-full">
       <ProgressBar currentStep={activeTab} steps={steps} />
       <DynamicForm
         title={`Step ${activeTab}: ${currentConfig.title}`}

@@ -10,6 +10,8 @@ import DataCard from "../../components/ui/DataCard";
 import Pagination from "../../components/ui/Pagination";
 import { useToast } from "../../context/ToastContext";
 import { CLASS_OPTIONS, getSectionsByClass } from "../../constants/Store";
+import StatusToggle from "../../components/ui/StatusToggle";
+import ConfirmationModal from "../../components/ui/ConfirmationModal";
 
 const Courses = () => {
   const { showToast } = useToast();
@@ -20,6 +22,8 @@ const Courses = () => {
   const [isEditMode, setIsEditMode] = useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [itemToDelete, setItemToDelete] = useState(null);
+  const [isConfirmOpen, setIsConfirmOpen] = useState(false);
+  const [courseToUpdate, setCourseToUpdate] = useState(null);
 
   // Filter State
   const [searchQuery, setSearchQuery] = useState("");
@@ -35,6 +39,29 @@ const Courses = () => {
   useEffect(() => {
     setSectionFilter("");
   }, [classFilter]);
+
+  const handleToggleStatus = (course) => {
+    setCourseToUpdate(course);
+    setIsConfirmOpen(true);
+  };
+
+  const confirmStatusUpdate = () => {
+    if (!courseToUpdate) return;
+
+    const newStatus =
+      courseToUpdate.status === "Active" ? "Inactive" : "Active";
+    setCourses((prev) =>
+      prev.map((c) =>
+        c.id === courseToUpdate.id ? { ...c, status: newStatus } : c,
+      ),
+    );
+    showToast(
+      `${courseToUpdate.courseName}'s status changed to ${newStatus}`,
+      "success",
+    );
+    setIsConfirmOpen(false);
+    setCourseToUpdate(null);
+  };
 
   const handleViewDetails = (course) => {
     setSelectedCourse(course);
@@ -114,6 +141,9 @@ const Courses = () => {
     currentPage * itemsPerPage,
   );
 
+  const nextStatus =
+    courseToUpdate?.status === "Active" ? "Inactive" : "Active";
+
   const columns = [
     { header: "Course Name", key: "courseName", fontBold: true },
     { header: "Code", key: "courseCode" },
@@ -124,55 +154,44 @@ const Courses = () => {
       header: "Status",
       key: "status",
       render: (course) => (
-        <span
-          className={`px-2 py-1 rounded-full text-xs font-semibold ${course.status === "Active" ? "bg-green-100 text-green-700" : "bg-red-100 text-red-700"}`}
-        >
-          {course.status}
-        </span>
+        <StatusToggle
+          status={course.status}
+          onToggle={() => handleToggleStatus(course)}
+        />
       ),
     },
   ];
 
   const fields = [
     {
-      type: "grid",
-      gridFields: [
-        { label: "Course Name", key: "courseName", type: "text" },
-        { label: "Course Code", key: "courseCode", type: "text" },
-      ],
-    },
-    { label: "Instructor", key: "instructor", type: "text" },
-    {
-      type: "grid",
-      gridFields: [
-        {
-          label: "Class",
-          key: "class",
-          type: "select",
-          options: CLASS_OPTIONS,
-        },
-        {
-          label: "Section",
-          key: "section",
-          type: "select",
-          options: getSectionsByClass(selectedCourse?.class || ""),
-        },
-      ],
+      label: "Course Name",
+      name: "courseName",
+      type: "input",
+      inputType: "text",
     },
     {
-      label: "Status",
-      key: "status",
-      type: "select",
-      options: ["Active", "Inactive"],
-      render: (course) => (
-        <div>
-          <span
-            className={`px-2 py-1 rounded-full text-xs font-semibold ${course.status === "Active" ? "bg-green-100 text-green-700" : "bg-red-100 text-red-700"}`}
-          >
-            {course.status}
-          </span>
-        </div>
-      ),
+      label: "Course Code",
+      name: "courseCode",
+      type: "input",
+      inputType: "text",
+    },
+    {
+      label: "Instructor",
+      name: "instructor",
+      type: "input",
+      inputType: "text",
+    },
+    {
+      label: "Class",
+      name: "class",
+      type: "dropdown",
+      options: CLASS_OPTIONS,
+    },
+    {
+      label: "Section",
+      name: "section",
+      type: "dropdown",
+      options: getSectionsByClass(selectedCourse?.class || ""),
     },
   ];
 
@@ -188,11 +207,10 @@ const Courses = () => {
           label: "Status",
           value: course.status,
           render: (val) => (
-            <span
-              className={`px-2 py-0.5 rounded-full text-[10px] ${val === "Active" ? "bg-green-100 text-green-700" : "bg-red-100 text-red-700"}`}
-            >
-              {val}
-            </span>
+            <StatusToggle
+              status={val}
+              onToggle={() => handleToggleStatus(course)}
+            />
           ),
         },
       ]}
@@ -283,6 +301,28 @@ const Courses = () => {
         onClose={() => setIsDeleteModalOpen(false)}
         onConfirm={confirmDelete}
         itemName={itemToDelete?.courseName}
+      />
+
+      <ConfirmationModal
+        isOpen={isConfirmOpen}
+        onClose={() => setIsConfirmOpen(false)}
+        onConfirm={confirmStatusUpdate}
+        title="Change Course Status"
+        message={
+          <span>
+            Are you sure you want to set the status{" "}
+            <span
+              className={`px-2 py-1 rounded text-xs font-bold ${
+                nextStatus === "Active"
+                  ? "bg-green-100 text-green-700"
+                  : "bg-red-100 text-red-700"
+              }`}
+            >
+              {nextStatus}
+            </span>{" "}
+            for <strong>{courseToUpdate?.courseName}</strong>?
+          </span>
+        }
       />
     </section>
   );

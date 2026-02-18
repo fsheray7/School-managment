@@ -14,6 +14,7 @@ import ActionButtons from "../../components/ui/ActionButtons";
 import DataCard from "../../components/ui/DataCard";
 import Pagination from "../../components/ui/Pagination";
 import { useToast } from "../../context/ToastContext";
+
 const StudentsAdmin = () => {
   const { showToast } = useToast();
   const navigate = useNavigate();
@@ -28,8 +29,8 @@ const StudentsAdmin = () => {
   const [isEditMode, setIsEditMode] = useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [itemToDelete, setItemToDelete] = useState(null);
-  const [searchQuery, setSearchQuery] = useState("");
 
+  const [searchQuery, setSearchQuery] = useState("");
   const [genderFilter, setGenderFilter] = useState("");
   const [classFilter, setClassFilter] = useState("");
   const [sectionFilter, setSectionFilter] = useState("");
@@ -106,30 +107,57 @@ const StudentsAdmin = () => {
   );
 
   const columns = [
+    { header: "Roll No", key: "rollNumber" },
+    { header: "ID", key: "id" },
     { header: "Full Name", key: "fullName", fontBold: true },
     { header: "Gd.Name", key: "guardianName" },
     { header: "Gender", key: "gender" },
     { header: "Email", key: "email", hiddenOnMobile: true },
     { header: "Class", key: "class" },
     { header: "Section", key: "section" },
-    { header: "Gd.Contact", key: "guardianContact", hiddenOnMobile: true },
   ];
 
   const fields = [
-    { label: "", key: "profilePhoto", type: "image" }, // Profile Photo
-    { label: "Full Name", key: "fullName", type: "text" },
-    { label: "Guardian Name", key: "guardianName", type: "text" },
-    { label: "Email", key: "email", type: "email" },
+    { label: "", name: "profilePhoto", type: "image", fullWidth: true },
+    { label: "Full Name", name: "fullName", type: "input", inputType: "text" },
     {
-      type: "grid",
-      gridFields: [
-        { label: "Class", key: "class", type: "text" },
-        { label: "Section", key: "section", type: "text" },
-      ],
+      label: "Guardian Name",
+      name: "guardianName",
+      type: "input",
+      inputType: "text",
     },
-    { label: "Guardian Contact", key: "guardianContact", type: "text" },
-    { label: "Username", key: "userName", type: "text" }, // Username
-    { label: "Password", key: "password", type: "password" }, // Password
+    { label: "Email", name: "email", type: "input", inputType: "email" },
+    {
+      label: "Class",
+      name: "class",
+      type: "dropdown",
+      options: CLASS_OPTIONS,
+    },
+    {
+      label: "Section",
+      name: "section",
+      type: "dropdown",
+      options: getSectionsByClass(selectedStudent?.class || ""),
+    },
+    {
+      label: "Guardian Contact",
+      name: "guardianContact",
+      type: "input",
+      inputType: "text",
+    },
+    {
+      label: "Gender",
+      name: "gender",
+      type: "dropdown",
+      options: GENDER_OPTIONS,
+    },
+    { label: "Username", name: "userName", type: "input", inputType: "text" },
+    {
+      label: "Password",
+      name: "password",
+      type: "input",
+      inputType: "password",
+    },
   ];
 
   const renderMobileCard = (student) => (
@@ -142,6 +170,7 @@ const StudentsAdmin = () => {
         { label: "Class", value: student.class },
         { label: "Section", value: student.section },
         { label: "Contact", value: student.guardianContact },
+        { label: "Roll No", value: student.rollNumber },
       ]}
       actions={
         <ActionButtons

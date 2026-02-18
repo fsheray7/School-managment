@@ -2,11 +2,14 @@ import React, { useState, useEffect } from "react";
 import { FaArrowLeft, FaPrint, FaDownload } from "react-icons/fa";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import Button from "../../components/ui/Button";
+import DataTable from "../../components/ui/DataTable";
+import DataCard from "../../components/ui/DataCard";
+import ActionButtons from "../../components/ui/ActionButtons";
 
 const MarksStudent = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  const { terminal } = location.state || { terminal: "First Terminal" }; // Default or handle missing state
+  const { terminal } = location.state || { terminal: "First Terminal" };
 
   const [student, setStudent] = useState(null);
   const [resultData, setResultData] = useState([]);
@@ -23,12 +26,8 @@ const MarksStudent = () => {
       const studentData = JSON.parse(storedStudent);
       setStudent(studentData);
 
-      // Fetch Marks Data
-      // marksData structure (confirmed from marksManager):
-      // [ { studentId, rollNumber, fullName, class, section, subject, terminal, totalMarks, obtainedMarks, percentage, grade, status, academicYear, savedAt }, ... ]
       const allMarks = JSON.parse(localStorage.getItem("studentMarks")) || [];
 
-      // Filter for this student, class, section, and terminal
       const relevantMarks = allMarks.filter(
         (record) =>
           record.studentId === studentData.id &&
@@ -37,7 +36,6 @@ const MarksStudent = () => {
           record.section === studentData.section,
       );
 
-      // Process data for UI
       let totalObtained = 0;
       let totalMax = 0;
 
@@ -52,13 +50,12 @@ const MarksStudent = () => {
           obtained: obtained,
           max: max,
           percentage: max > 0 ? ((obtained / max) * 100).toFixed(2) : "0.00",
-          passed: record.status === "Pass", // Use saved status
+          passed: record.status === "Pass",
         };
       });
 
       setResultData(processedData);
 
-      // Calculate Summary
       const percentage =
         totalMax > 0 ? ((totalObtained / totalMax) * 100).toFixed(2) : 0;
       let grade = "F";
@@ -80,11 +77,60 @@ const MarksStudent = () => {
     }
   }, [navigate, terminal]);
 
+  const columns = [
+    { header: "Subject", key: "subject", fontBold: true },
+    { header: "Max Marks", key: "max", className: "text-center" },
+    {
+      header: "Obtained",
+      key: "obtained",
+      className: "text-center font-bold text-gray-800",
+    },
+    {
+      header: "Percentage",
+      key: "percentage",
+      className: "text-center font-bold text-gray-800",
+      render: (r) => `${r.percentage}%`,
+    },
+    {
+      header: "Status",
+      key: "passed",
+      className: "text-center",
+      render: (r) => (
+        <span
+          className={`px-2 py-1 rounded text-xs font-bold ${r.passed ? "bg-green-100 text-green-700" : "bg-red-100 text-red-700"}`}
+        >
+          {r.passed ? "PASS" : "FAIL"}
+        </span>
+      ),
+    },
+  ];
+
+  const renderMobileCard = (r) => (
+    <DataCard
+      title={r.subject}
+      fields={[
+        { label: "Max", value: r.max },
+        { label: "Obtained", value: r.obtained },
+        { label: "Percentage", value: `${r.percentage}%` },
+        {
+          label: "Status",
+          value: r.passed ? "PASS" : "FAIL",
+          render: (val) => (
+            <span
+              className={`font-bold ${val === "PASS" ? "text-green-600" : "text-red-600"}`}
+            >
+              {val}
+            </span>
+          ),
+        },
+      ]}
+    />
+  );
+
   if (!student) return null;
 
   return (
     <section className="w-full bg-[#f3f4f6] min-h-screen pt-4 pb-10 flex flex-col items-center gap-6 px-4">
-      {/* HEADER BAR */}
       <div className="w-full max-w-4xl bg-white rounded-xl shadow-sm p-4 flex justify-between items-center">
         <div className="flex items-center gap-4">
           <Link
@@ -105,8 +151,7 @@ const MarksStudent = () => {
         </Button>
       </div>
 
-      {/* STUDENT INFO CARD */}
-      <div className="w-full max-w-4xl bg-white rounded-xl shadow-sm p-6 grid grid-cols-1 md:grid-cols-3 gap-6">
+      <div className="w-full max-w-4xl bg-white rounded-xl shadow-sm p-6 grid grid-cols-1 md:grid-cols-3 gap-6 text-sm">
         <div className="flex flex-col gap-1">
           <span className="text-xs font-bold text-gray-400 uppercase">
             Student Name
@@ -133,8 +178,7 @@ const MarksStudent = () => {
         </div>
       </div>
 
-      {/* RESULTS TABLE */}
-      <div className="w-full max-w-4xl bg-white rounded-2xl shadow-sm overflow-hidden">
+      <div className="w-full max-w-4xl bg-white rounded-2xl shadow-sm overflow-hidden flex flex-col">
         <div className="bg-blue-600 px-6 py-4 flex justify-between items-center text-white">
           <h3 className="font-bold text-lg">Detailed Marks</h3>
           <span className="text-sm text-blue-100 font-medium">
@@ -142,80 +186,43 @@ const MarksStudent = () => {
           </span>
         </div>
 
-        <div className="overflow-x-auto">
-          <table className="w-full text-left border-collapse">
-            <thead>
-              <tr className="bg-gray-50 border-b border-gray-100 text-xs font-bold text-gray-500 uppercase tracking-wider">
-                <th className="px-6 py-4">Subject</th>
-                <th className="px-6 py-4 text-center">Max Marks</th>
-                <th className="px-6 py-4 text-center">Obtained</th>
-                <th className="px-6 py-4 text-center">Percentage</th>
-                <th className="px-6 py-4 text-center">Status</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-gray-50">
-              {resultData.length === 0 ? (
-                <tr>
-                  <td
-                    colSpan="4"
-                    className="px-6 py-8 text-center text-gray-400 italic"
-                  >
-                    No marks found for this terminal.
-                  </td>
-                </tr>
-              ) : (
-                resultData.map((result, idx) => (
-                  <tr
-                    key={idx}
-                    className="hover:bg-blue-50/50 transition-colors"
-                  >
-                    <td className="px-6 py-4 font-semibold text-gray-700">
-                      {result.subject}
-                    </td>
-                    <td className="px-6 py-4 text-center text-gray-500">
-                      {result.max}
-                    </td>
-                    <td className="px-6 py-4 text-center font-bold text-gray-800">
-                      {result.obtained}
-                    </td>
-                    <td className="px-6 py-4 text-center font-bold text-gray-800">
-                      {result.percentage}%
-                    </td>
-                    <td className="px-6 py-4 text-center">
-                      <span
-                        className={`px-2 py-1 rounded text-xs font-bold ${result.passed ? "bg-green-100 text-green-700" : "bg-red-100 text-red-700"}`}
-                      >
-                        {result.passed ? "PASS" : "FAIL"}
-                      </span>
-                    </td>
-                  </tr>
-                ))
-              )}
-            </tbody>
-            {/* Footer Row for Total */}
-            {resultData.length > 0 && (
-              <tfoot className="bg-gray-50 border-t border-gray-200">
-                <tr>
-                  <td className="px-6 py-4 font-bold text-gray-800 text-right">
-                    TOTAL
-                  </td>
-                  <td className="px-6 py-4 text-center font-bold text-gray-800">
-                    {summary.totalMax}
-                  </td>
-                  <td className="px-6 py-4 text-center font-bold text-blue-700 text-lg">
-                    {summary.totalObtained}
-                  </td>
-                  <td className="px-6 py-4 text-center font-bold text-blue-700 text-lg">
-                    {summary.percentage}%
-                  </td>
-                </tr>
-              </tfoot>
-            )}
-          </table>
-        </div>
+        <DataTable
+          columns={columns}
+          data={resultData}
+          renderMobileCard={renderMobileCard}
+          emptyMessage="No marks found for this terminal."
+        />
+
+        {resultData.length > 0 && (
+          <div className="bg-gray-50 border-t border-gray-100 p-6 flex flex-col md:flex-row justify-between items-center gap-4">
+            <div className="flex gap-8 text-sm font-bold">
+              <div className="flex flex-col">
+                <span className="text-gray-400 uppercase text-[10px]">
+                  Total Max
+                </span>
+                <span className="text-gray-800">{summary.totalMax}</span>
+              </div>
+              <div className="flex flex-col">
+                <span className="text-gray-400 uppercase text-[10px]">
+                  Total Obtained
+                </span>
+                <span className="text-blue-700 text-lg">
+                  {summary.totalObtained}
+                </span>
+              </div>
+              <div className="flex flex-col">
+                <span className="text-gray-400 uppercase text-[10px]">
+                  Aggregate
+                </span>
+                <span className="text-blue-700 text-lg">
+                  {summary.percentage}%
+                </span>
+              </div>
+            </div>
+          </div>
+        )}
       </div>
 
-      {/* SUMMARY CARDS */}
       {resultData.length > 0 && (
         <div className="w-full max-w-4xl grid grid-cols-2 md:grid-cols-4 gap-4">
           <div className="bg-white p-4 rounded-xl shadow-sm border-l-4 border-blue-500 flex flex-col items-center justify-center">

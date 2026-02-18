@@ -12,7 +12,7 @@ import {
 } from "../../utils/notificationsManager.jsx";
 
 const Navbar = ({ onToggleSidebar, isSidebarOpen, role = "admin" }) => {
-  const { schoolLogo } = useSettings();
+  const { schoolLogo, systemLogo, superAdminUsername } = useSettings();
   const location = useLocation();
   const navigate = useNavigate();
   const [isNotificationOpen, setIsNotificationOpen] = useState(false);
@@ -99,6 +99,11 @@ const Navbar = ({ onToggleSidebar, isSidebarOpen, role = "admin" }) => {
     "/quiz-multiple-options": "Multiple Choice Quiz",
     "/quiz-score": "Quiz Result",
     "/student-profile": "My Profile",
+    // Super Admin Routes
+    "/super-admin-dashboard": "Super Admin Dashboard",
+    "/super-admin-admins": "Administrators",
+    "/super-admin-revenue": "Revenue Analytics",
+    "/super-admin-settings": "Super Admin Settings",
   };
 
   const currentTitle =
@@ -113,6 +118,7 @@ const Navbar = ({ onToggleSidebar, isSidebarOpen, role = "admin" }) => {
     admin: "Admin",
     teacher: "Teacher",
     student: "Student",
+    "super-admin": "Super Admin",
   };
 
   const [currentUserName, setCurrentUserName] = useState(
@@ -144,6 +150,10 @@ const Navbar = ({ onToggleSidebar, isSidebarOpen, role = "admin" }) => {
         // Load teacher notifications
         setNotifications(getTeacherNotifications(updatedTeacher));
       }
+    } else if (role === "super-admin") {
+      setCurrentUserName(superAdminUsername || "Super Admin");
+      setProfileImage("");
+      setNotifications([]); // Super admin notifications placeholder
     } else {
       setCurrentUserName(roleNames[role] || "Admin");
       setProfileImage("");
@@ -152,7 +162,10 @@ const Navbar = ({ onToggleSidebar, isSidebarOpen, role = "admin" }) => {
     }
   }, [role, location.pathname]); // Update on route change too
 
+  const { setIsSuperAdmin } = useSettings();
+
   const handleLogout = () => {
+    setIsSuperAdmin(false);
     navigate("/select-profile");
     setIsProfileOpen(false);
   };
@@ -161,6 +174,7 @@ const Navbar = ({ onToggleSidebar, isSidebarOpen, role = "admin" }) => {
     if (role === "admin") navigate("/settings");
     else if (role === "teacher") navigate("/teacher-dashboard");
     else if (role === "student") navigate("/student-profile");
+    else if (role === "super-admin") navigate("/super-admin-settings");
     else navigate("/settings");
     setIsProfileOpen(false);
   };
@@ -199,7 +213,7 @@ const Navbar = ({ onToggleSidebar, isSidebarOpen, role = "admin" }) => {
   };
 
   return (
-    <nav className="fixed top-0 left-0 right-0 h-14 bg-white shadow-md z-40 transition-all duration-300 lg:left-64 flex items-center px-4 justify-between">
+    <nav className="fixed top-0 left-0 right-0 h-14 bg-white shadow-md z-40 transition-all duration-300 lg:left-56 flex items-center px-4 justify-between">
       {/* Left Side: Hamburger (mobile), Logo, Title */}
       <div className="flex items-center gap-3">
         {/* Animated Hamburger Toggle Button - Only visible on small screens */}
@@ -336,9 +350,12 @@ const Navbar = ({ onToggleSidebar, isSidebarOpen, role = "admin" }) => {
           >
             <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-full flex items-center justify-center overflow-hidden border border-gray-300 bg-gray-50 flex-shrink-0">
               <img
-                src={profileImage || schoolLogo}
+                src={
+                  profileImage ||
+                  (role === "super-admin" ? systemLogo : schoolLogo)
+                }
                 alt="Profile"
-                className={`${!profileImage ? "p-1" : ""} w-full h-full object-contain`}
+                className={`${!profileImage ? "p-1" : ""} w-full h-full rounded-full object-contain`}
               />
             </div>
             <span
