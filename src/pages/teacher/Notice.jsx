@@ -4,11 +4,12 @@ import FileUpload from "../../components/ui/FileUpload";
 import CustomDropdown from "../../components/ui/CustomDropdown";
 import coursesData from "../../data/admindata/courses";
 import { useToast } from "../../context/ToastContext";
+import { useTeacher } from "../../context/TeacherContext";
 import { addNotice } from "../../utils/noticeManager";
 
 const NoticeTeacher = () => {
   const { showToast } = useToast();
-  const [teacher, setTeacher] = useState(null);
+  const { currentTeacher: teacher } = useTeacher();
   const [assignedCourses, setAssignedCourses] = useState([]);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -24,18 +25,14 @@ const NoticeTeacher = () => {
   });
 
   useEffect(() => {
-    const storedTeacher = localStorage.getItem("currentTeacher");
-    if (storedTeacher) {
-      const teacherData = JSON.parse(storedTeacher);
-      setTeacher(teacherData);
-
+    if (teacher) {
       // Filter courses where this teacher is the instructor
       const filtered = coursesData.filter(
-        (course) => course.instructor === teacherData.fullName,
+        (course) => course.instructor === teacher.fullName,
       );
       setAssignedCourses(filtered);
     }
-  }, []);
+  }, [teacher]);
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;

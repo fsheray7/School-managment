@@ -4,6 +4,7 @@ import FileUpload from "../../components/ui/FileUpload";
 import CustomDropdown from "../../components/ui/CustomDropdown";
 import coursesData from "../../data/admindata/courses";
 import { useToast } from "../../context/ToastContext";
+import { useTeacher } from "../../context/TeacherContext";
 import DataTable from "../../components/ui/DataTable";
 import Pagination from "../../components/ui/Pagination";
 import DataCard from "../../components/ui/DataCard";
@@ -13,7 +14,7 @@ const HomeWork = () => {
   const { showToast } = useToast();
   const [homeworkFile, setHomeworkFile] = useState(null);
   const [description, setDescription] = useState("");
-  const [teacher, setTeacher] = useState(null);
+  const { currentTeacher: teacher } = useTeacher();
   const [assignedCourses, setAssignedCourses] = useState([]);
   const [selection, setSelection] = useState({
     class: "",
@@ -28,13 +29,9 @@ const HomeWork = () => {
   const itemsPerPage = 5;
 
   useEffect(() => {
-    const storedTeacher = localStorage.getItem("currentTeacher");
-    if (storedTeacher) {
-      const teacherData = JSON.parse(storedTeacher);
-      setTeacher(teacherData);
-
+    if (teacher) {
       const filtered = coursesData.filter(
-        (course) => course.instructor === teacherData.fullName,
+        course => course.instructor === teacher.fullName
       );
       setAssignedCourses(filtered);
 
@@ -42,7 +39,7 @@ const HomeWork = () => {
         setSelection({
           class: filtered[0].class,
           section: filtered[0].section,
-          subject: filtered[0].courseName,
+          subject: filtered[0].courseName
         });
       }
     }
@@ -51,7 +48,7 @@ const HomeWork = () => {
     const storedHomework =
       JSON.parse(localStorage.getItem("homeworkData")) || [];
     setHomeworkList(storedHomework);
-  }, []);
+  }, [teacher]);
 
   const handleClassChange = (newClass) => {
     const firstCourseForClass = assignedCourses.find(

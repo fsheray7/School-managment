@@ -12,6 +12,7 @@ import {
 } from "react-icons/hi";
 import { IoSearchOutline, IoChevronDown } from "react-icons/io5";
 import { useNavigate } from "react-router-dom";
+import { useTeacher } from "../../context/TeacherContext";
 
 // Helper to generate mock attendance data for a month
 // Helper to get real attendance data from localStorage
@@ -103,6 +104,7 @@ const Attendance = () => {
   const [currentYear, setCurrentYear] = useState(new Date().getFullYear());
   const [weeks, setWeeks] = useState([]);
   const [selectedWeekIndex, setSelectedWeekIndex] = useState(0);
+  const { currentTeacher } = useTeacher();
 
   // New States for Redesign
   const [searchTerm, setSearchTerm] = useState("");
@@ -121,19 +123,17 @@ const Attendance = () => {
   }));
 
   useEffect(() => {
-    const storedTeacher = localStorage.getItem("currentTeacher");
-    if (storedTeacher) {
-      const teacherData = JSON.parse(storedTeacher);
+    if (currentTeacher) {
       setTeacherInfo({
-        fullName: teacherData.fullName || "Teacher",
-        class: teacherData.class || "",
-        section: teacherData.section || "",
+        fullName: currentTeacher.fullName || "Teacher",
+        class: currentTeacher.class || "",
+        section: currentTeacher.section || "",
       });
 
-      if (teacherData.class && teacherData.section) {
+      if (currentTeacher.class && currentTeacher.section) {
         const filtered = studentsData.filter(
           (s) =>
-            s.class === teacherData.class && s.section === teacherData.section,
+            s.class === currentTeacher.class && s.section === currentTeacher.section,
         );
         setFilteredStudents(filtered);
 
@@ -161,7 +161,7 @@ const Attendance = () => {
         setSelectedWeekIndex(currentWeekIndex);
       }
     }
-  }, [currentYear, currentMonth]);
+  }, [currentYear, currentMonth, currentTeacher]);
 
   const selectedWeek = weeks[selectedWeekIndex];
   const daysInSelectedWeek = selectedWeek

@@ -10,7 +10,7 @@ import ActionButtons from "../../components/ui/ActionButtons";
 import Button from "../../components/ui/Button";
 import StatusToggle from "../../components/ui/StatusToggle";
 import ConfirmationModal from "../../components/ui/ConfirmationModal";
-import { getAdmins, saveAdmins } from "../../utils/adminStorage";
+import { useAdmin } from "../../context/AdminContext.jsx";
 import { trendChartData } from "../../data/finance/TrendChartData";
 
 const SuperAdminDashboard = () => {
@@ -22,7 +22,7 @@ const SuperAdminDashboard = () => {
   const [isConfirmOpen, setIsConfirmOpen] = useState(false);
   const [adminToUpdate, setAdminToUpdate] = useState(null);
 
-  const [admins, setAdmins] = useState(getAdmins());
+  const { admins, toggleAdminStatus } = useAdmin();
 
   const totalRevenue = trendChartData.reduce(
     (acc, item) => acc + item.collection,
@@ -42,7 +42,7 @@ const SuperAdminDashboard = () => {
   const stats = [
     {
       title: "Total Admins",
-      value: admins.length,
+      value: admins ? admins.length : 0,
       icon: <FaUserShield size={24} />,
       color: "bg-blue-600",
       trend: "+2 this month",
@@ -74,11 +74,7 @@ const SuperAdminDashboard = () => {
     if (!adminToUpdate) return;
 
     const newStatus = adminToUpdate.status === "Active" ? "Inactive" : "Active";
-    const updatedAdmins = admins.map((a) =>
-      a.id === adminToUpdate.id ? { ...a, status: newStatus } : a,
-    );
-    setAdmins(updatedAdmins);
-    saveAdmins(updatedAdmins);
+    toggleAdminStatus(adminToUpdate.id);
     showToast(
       `${adminToUpdate.name}'s status changed to ${newStatus}`,
       "success",
@@ -87,8 +83,8 @@ const SuperAdminDashboard = () => {
     setAdminToUpdate(null);
   };
 
-  const totalPages = Math.ceil(admins.length / itemsPerPage);
-  const paginatedAdmins = admins.slice(
+  const totalPages = Math.ceil((admins || []).length / itemsPerPage);
+  const paginatedAdmins = (admins || []).slice(
     (currentPage - 1) * itemsPerPage,
     currentPage * itemsPerPage,
   );
@@ -209,7 +205,7 @@ const SuperAdminDashboard = () => {
             currentPage={currentPage}
             totalPages={totalPages}
             onPageChange={setCurrentPage}
-            totalItems={admins.length}
+            totalItems={(admins || []).length}
             itemsPerPage={itemsPerPage}
           />
         </div>

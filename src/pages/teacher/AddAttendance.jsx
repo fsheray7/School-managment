@@ -2,24 +2,24 @@ import React, { useState, useEffect } from "react";
 import studentsData from "../../data/admindata/students/students";
 import Button from "../../components/ui/Button";
 import Toast from "../../components/ui/Toast";
+import { useTeacher } from "../../context/TeacherContext";
 
 const AddAttendance = () => {
   const [teacherInfo, setTeacherInfo] = useState({ class: "", section: "" });
   const [attendanceDate, setAttendanceDate] = useState(
-    new Date().toISOString().split("T")[0],
+    new Date().toISOString().split("T")[0]
   );
   const [filteredStudents, setFilteredStudents] = useState([]);
   const [attendanceRecords, setAttendanceRecords] = useState({});
   const [showToast, setShowToast] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const { currentTeacher } = useTeacher();
 
   useEffect(() => {
-    const storedTeacher = localStorage.getItem("currentTeacher");
-    if (storedTeacher) {
-      const teacherData = JSON.parse(storedTeacher);
+    if (currentTeacher) {
       // Use the teacher's primary class and section
-      const teacherClass = teacherData.class || "";
-      const teacherSection = teacherData.section || "";
+      const teacherClass = currentTeacher.class || "";
+      const teacherSection = currentTeacher.section || "";
 
       setTeacherInfo({ class: teacherClass, section: teacherSection });
 
@@ -38,7 +38,7 @@ const AddAttendance = () => {
         setAttendanceRecords(initialRecords);
       }
     }
-  }, []);
+  }, [currentTeacher]);
 
   const handleAttendanceChange = (studentId, status) => {
     setAttendanceRecords((prev) => ({

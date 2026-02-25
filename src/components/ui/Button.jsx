@@ -15,7 +15,7 @@ const Button = ({
 
   const variants = {
     primary:
-      "bg-[var(--primary-color)] hover:brightness-90 cursor-pointer hover:scale-105 transition-all duration-300 text-white rounded-md px-4 py-1.5 ",
+      "bg-[var(--primary-color)] text-xs md: text-base hover:brightness-90 cursor-pointer hover:scale-102 transition-all duration-300 text-white rounded-md px-4 py-1.5 ",
 
     outline:
       "border border-[var(--primary-color)]text-sm ",

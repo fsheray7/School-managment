@@ -1,8 +1,11 @@
 // Marks Management Utility for localStorage-based persistence
 // Handles saving, loading, and updating student marks
 
+import studentsData from "../data/admindata/students/students";
+
 const MARKS_STORAGE_KEY = "studentMarks";
 const SUBMITTED_RESULTS_KEY = "submittedResults";
+const STUDENTS_STORAGE_KEY = "studentsData";
 
 /**
  * Get all marks from localStorage
@@ -292,6 +295,66 @@ export const submitResultsForPromotion = ({
 };
 
 /**
+ * Get all students (from localStorage or default data)
+ */
+export const getStudents = () => {
+  try {
+    const stored = localStorage.getItem(STUDENTS_STORAGE_KEY);
+    return stored ? JSON.parse(stored) : studentsData;
+  } catch (error) {
+    console.error("Error loading students:", error);
+    return studentsData;
+  }
+};
+
+/**
+ * Promote students to the next class
+ * Updates Class, Section and Roll Number
+ */
+export const promoteStudents = (studentsToPromote, targetClass, targetSection) => {
+  try {
+    const allStudents = getStudents();
+    let updatedCount = 0;
+
+    const updatedStudents = allStudents.map((student) => {
+      const isPromoted = studentsToPromote.some((s) => s.id === student.id);
+      
+      if (isPromoted) {
+        updatedCount++;
+        
+        // Generate new roll number logic
+        let newRollNumber = student.rollNumber;
+        
+        // Determine prefix based on target class
+        let newPrefix = "C";
+        if (targetClass.includes("Play")) newPrefix = "PG";
+        else if (targetClass.includes("Nursery")) newPrefix = "N";
+        else if (targetClass.includes("KG")) newPrefix = "KG";
+        else {
+          const classNumMatch = targetClass.match(/\d+/);
+          if (classNumMatch) newPrefix = `C${classNumMatch[0]}`;
+        }
+
+        // Replace old prefix with new prefix if pattern matches (e.g., C5-001 -> C6-001)
+        const parts = newRollNumber.split('-');
+        if (parts.length > 1) {
+           newRollNumber = `${newPrefix}-${parts[parts.length - 1]}`;
+        }
+
+        return { ...student, class: targetClass, section: targetSection, rollNumber: newRollNumber };
+      }
+      return student;
+    });
+
+    localStorage.setItem(STUDENTS_STORAGE_KEY, JSON.stringify(updatedStudents));
+    return { success: true, message: `Successfully promoted ${updatedCount} students to ${targetClass} ${targetSection}` };
+  } catch (error) {
+    console.error("Error promoting students:", error);
+    return { success: false, message: "Failed to promote students." };
+  }
+};
+
+/**
  * Retrieves the submitted promotion data for a specific class and section.
  */
 export const getSubmittedPromotionData = (className, section) => {
@@ -383,4 +446,6 @@ export default {
   submitResultsForPromotion,
   getSubmittedPromotionData,
   getAvailablePromotionSubmissions,
+  promoteStudents,
+  getStudents,
 };

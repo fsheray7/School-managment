@@ -1,6 +1,6 @@
 import React from "react";
 
-const StatusToggle = ({ status, onToggle, label = true }) => {
+const StatusToggle = ({ status, onToggle, label = false }) => {
   const isActive = status === "Active";
 
   return (

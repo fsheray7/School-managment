@@ -293,7 +293,7 @@ const AddTeacher = () => {
   const steps = Object.values(tabConfigs);
 
   return (
-    <div className="flex flex-col justify-center items-center w-full">
+    <div className="flex flex-col justify-center items-center px-6 w-full">
       <ProgressBar currentStep={activeTab} steps={steps} />
       <DynamicForm
         title={`Step ${activeTab}: ${currentConfig.title}`}
@@ -302,6 +302,8 @@ const AddTeacher = () => {
         setFormData={setTeacherData}
         onSubmit={handleSubmit}
         onClick={handleBack}
+        submitButtonClassName=""
+        buttonAreaClassName="col-span-2 flex items-center gap-4 justify-center"
       >
         {activeTab < 5 ? "Next" : "Add Teacher"}
       </DynamicForm>

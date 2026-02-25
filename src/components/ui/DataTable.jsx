@@ -6,6 +6,7 @@ const DataTable = ({
   renderActions,
   renderMobileCard,
   emptyMessage = "No data found.",
+  tableClassName ="bg-[var(--primary-color)]/10 uppercase font-bold text-[var(--primary-color)]  ",
 }) => {
 
   // Flatten columns (for tbody rendering)
@@ -22,9 +23,8 @@ const DataTable = ({
         <table className="w-full table-fixed text-left border-collapse">
           
           <thead
-            className="bg-[var(--primary-color)]/10 uppercase text-md font-bold"
-            style={{ color: "var(--primary-color)" }}
-          >
+            className={tableClassName}
+                      >
             {/* ===== FIRST HEADER ROW ===== */}
             <tr>
               {columns.map((col, index) => {
@@ -46,7 +46,7 @@ const DataTable = ({
                   <th
                     key={index}
                     rowSpan={hasGroupedHeaders ? 2 : 1}
-                    className="px-2 text-[12px]  py-3 truncate"
+                    className="px-2 text-xs  py-3 truncate"
                   >
                     {col.header}
                   </th>
@@ -56,7 +56,7 @@ const DataTable = ({
               {renderActions && (
                 <th
                   rowSpan={hasGroupedHeaders ? 2 : 1}
-                  className="px-4 py-3 text-[10px] text-center"
+                  className="px-4 py-3 text-xs text-center"
                 >
                   Actions
                 </th>
@@ -69,7 +69,7 @@ const DataTable = ({
                 {columns.map((col) =>
                   col.children
                     ? col.children.map((child, i) => (
-                        <th key={i} className="px-2 text-[var(--text-primary-color)] text-[10px]  text-center">
+                        <th key={i} className="px-2 text-[var(--text-primary-color)] text-xs  text-center">
                           {child.header}
                         </th>
                       ))
@@ -89,7 +89,7 @@ const DataTable = ({
                 {flattenedColumns.map((col, colIndex) => (
                   <td
                     key={colIndex}
-                    className="px-3 py-3 truncate"
+                    className="px-3 py-3 "
                   >
                     {col.render ? col.render(item) : item[col.key]}
                   </td>

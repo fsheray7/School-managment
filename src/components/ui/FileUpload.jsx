@@ -20,10 +20,7 @@ const FileUpload = ({
       {label && <label className={labelClassName}>{label}</label>}
       <div className="flex flex-wrap items-center gap-3">
         <label
-          className="flex items-center gap-2 px-6 py-2 bg-white border rounded-lg cursor-pointer hover:scale-101 transform duration-300 border border-gray-300 transition-all font-medium whitespace-nowrap"
-          style={{
-            color: "var(--primary-color)",
-          }}
+          className="flex items-center gap-2 px-6 py-2 bg-white rounded-lg cursor-pointer hover:scale-101 transform duration-300  transition-all font-medium whitespace-nowrap text-[var(--primary-color)]"
         >
           <FaUpload size={14} />
           <span className="text-sm">Choose File</span>

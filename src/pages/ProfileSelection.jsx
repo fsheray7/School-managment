@@ -11,30 +11,30 @@ import Login from "../components/login/Login";
 import Button from "../components/ui/Button";
 import { useSettings } from "../context/SettingsContext";
 
-const ProfileSelection = () => {
-  const [selectedRole, setSelectedRole] = useState(null);
+const ProfileSelection = ({ initialRole }) => {
+  const [selectedRole, setSelectedRole] = useState(initialRole || null);
   const navigate = useNavigate();
   const handleRoleSelect = (role) => {
     setSelectedRole(role);
   };
 
   const handleBackToRoles = () => {
-    setSelectedRole(null);
+    if (initialRole) {
+      navigate("/");
+    } else {
+      setSelectedRole(null);
+    }
   };
 
   const handleLoginSuccess = (userData) => {
     if (selectedRole === "teacher") {
-      if (userData) {
-        localStorage.setItem("currentTeacher", JSON.stringify(userData));
-      }
       navigate("/teacher-dashboard");
     } else if (selectedRole === "student") {
-      if (userData) {
-        localStorage.setItem("currentStudent", JSON.stringify(userData));
-      }
       navigate("/student-dashboard");
     } else if (selectedRole === "admin") {
       navigate("/admin-dashboard");
+    } else if (selectedRole === "super-admin") {
+      navigate("/super-admin-dashboard");
     }
   };
 

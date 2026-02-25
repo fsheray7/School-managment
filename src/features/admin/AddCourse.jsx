@@ -83,7 +83,7 @@ const AddCourse = () => {
   };
 
   return (
-    <div className="flex justify-center   items-center">
+    <div className="flex mt-8 justify-start   items-center px-6">
       <DynamicForm
         title="Course Information"
         fields={courseFields}
@@ -91,7 +91,9 @@ const AddCourse = () => {
         setFormData={setCourseData}
         onSubmit={handleSubmit}
         onClick={handleBack}
-      >
+        submitButtonClassName=""
+        buttonAreaClassName="col-span-2 flex justify-center items-center gap-4"
+        >
         Add Course
       </DynamicForm>
     </div>

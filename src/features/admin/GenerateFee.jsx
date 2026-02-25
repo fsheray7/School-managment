@@ -122,7 +122,7 @@ const GenerateFee = () => {
       name: "dueDate",
       type: "input",
       inputType: "date",
-      label: "Due Date",
+      label: "due date",
       required: true,
       fullWidth: true,
     },
@@ -136,13 +136,18 @@ const GenerateFee = () => {
   };
 
   return (
-    <div className="flex px-4   justify-center items-center">
+    <div className="flex px-4 flex-col  justify-start items-center">
+      <h1 className="text-2xl font-bold pt-3 text-[var(--text-primary-color)]">
+        Generate Fee for students
+      </h1>
       <DynamicForm
         title="Generate Fee Invoice"
         fields={feeFields}
         formData={feeData}
         setFormData={setFeeData}
         onSubmit={handleSubmit}
+        submitButtonClassName=""
+        buttonAreaClassName="col-span-2 flex justify-center items-center gap-4"
         onClick={() => navigate("/admin-dashboard")}
       >
         Generate Invoice

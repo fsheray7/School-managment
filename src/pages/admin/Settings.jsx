@@ -14,7 +14,7 @@ import {
 } from "react-icons/fa";
 
 import { useToast } from "../../context/ToastContext";
-import { admins as defaultAdmins } from "../../data/admindata/admins";
+import { admins as defaultAdmins } from "../../data/admindata/superadmin/admins";
 
 const SettingCard = ({ title, children }) => (
   <div className="bg-white p-6 rounded-2xl shadow-sm border  border-gray-100 flex flex-col gap-5">
@@ -214,9 +214,10 @@ const Settings = () => {
 
         // Update in the main admins list
         const storedAdmins = JSON.parse(localStorage.getItem("admins") || "[]");
-        const allAdmins = storedAdmins.length > 0 ? storedAdmins : defaultAdmins;
+        const allAdmins =
+          storedAdmins.length > 0 ? storedAdmins : defaultAdmins;
         const newAdminsList = allAdmins.map((a) =>
-          a.id === currentAdmin.id ? updatedAdmin : a
+          a.id === currentAdmin.id ? updatedAdmin : a,
         );
         localStorage.setItem("admins", JSON.stringify(newAdminsList));
       }

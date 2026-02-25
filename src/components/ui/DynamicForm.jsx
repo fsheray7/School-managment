@@ -11,14 +11,15 @@ const DynamicForm = ({
   onSubmit,
   children,
   onClick,
-  className = "grid grid-cols-1 sm:grid-cols-2 gap-x-2 md:gap-x-8 gap-y-2 md:gap-y-3 max-w-2xl bg-white px-1 py-2 md:p-4 rounded-lg relative",
+  className = "grid grid-cols-1 sm:grid-cols-2 gap-x-2 md:gap-x-8 gap-y-4 md:gap-y-6 max-w-2xl bg-white px-1  rounded-lg relative",
   showDefaultHeader = true,
-  buttonAreaClassName = "col-span-2 sm:col-span-2 flex gap-4 items-center justify-center mt-2 border-t border-gray-50 ",
-  submitButtonClassName = "w-full sm:w-64  rounded-2xl shadow-lg font-bold",
+  buttonAreaClassName = "col-span-2 sm:col-span-2 flex gap-4 items-center justify-center mt-6 border-t border-gray-50 pt-4",
+  submitButtonClassName = "w-full rounded-2xl shadow-lg font-bold",
   submitButtonVariant = "primary",
   readOnly = false,
 }) => {
   const [passwordVisibility, setPasswordVisibility] = useState({});
+  const [focusedField, setFocusedField] = useState(null);
 
   const handleChange = (name, value, type, files) => {
     if (type === "file") {
@@ -35,6 +36,20 @@ const DynamicForm = ({
     }));
   };
 
+  const handleFocus = (fieldName) => {
+    setFocusedField(fieldName);
+  };
+
+  const handleBlur = () => {
+    setFocusedField(null);
+  };
+
+  // Check if field has value
+  const hasValue = (field) => {
+    const value = formData[field.name];
+    return value !== null && value !== undefined && value !== "";
+  };
+
   return (
     <form className={`w-full max-w-2xl ${className}`} onSubmit={onSubmit}>
       {showDefaultHeader && (
@@ -44,26 +59,20 @@ const DynamicForm = ({
       {fields.map((field, index) => {
         const isPasswordField = field.inputType === "password";
         const isVisible = passwordVisibility[field.name];
+        const isFocused = focusedField === field.name;
+        const fieldHasValue = hasValue(field);
 
-        return (
-          <div
-            key={index}
-            className={`flex flex-col gap-2 ${
-              field.fullWidth ? "col-span-2" : "col-span-1"
-            } ${field.containerClassName || ""}`}
-          >
-            {field.label && (
-              <label
-                className={`text-xs md:text-sm font-semibold text-gray-700 ${field.labelClassName || ""}`}
-              >
-                {field.label}{" "}
-                {field.required && <span className="text-red-500">*</span>}
-              </label>
-            )}
-
-            <div className="relative w-full">
-              {/* IMAGE TYPE (special handling for profile photos) */}
-              {field.type === "image" && (
+        // Skip floating label for image type
+        if (field.type === "image") {
+          return (
+            <div
+              key={index}
+              className={`flex flex-col gap-2 ${
+                field.fullWidth ? "col-span-2" : "col-span-1"
+              } ${field.containerClassName || ""}`}
+            >
+              <div className="relative w-full">
+                {/* IMAGE TYPE (special handling for profile photos) */}
                 <div className="flex flex-col items-center justify-center mb-4">
                   <div className="relative group">
                     <img
@@ -113,8 +122,20 @@ const DynamicForm = ({
                     </span>
                   )}
                 </div>
-              )}
+              </div>
+            </div>
+          );
+        }
 
+        // Regular field with floating label
+        return (
+          <div
+            key={index}
+            className={`flex flex-col ${
+              field.fullWidth ? "col-span-2" : "col-span-1"
+            } ${field.containerClassName || ""}`}
+          >
+            <div className="relative w-full">
               {/* INPUT (text, email, password, date, etc.) */}
               {field.type === "input" && field.inputType !== "file" && (
                 <div className="relative">
@@ -155,6 +176,22 @@ const DynamicForm = ({
                     )
                   ) : (
                     <>
+                      {/* Floating Label */}
+                      <label
+                        className={`absolute left-3 transition-all duration-200 pointer-events-none
+                          ${isFocused || fieldHasValue
+                            ? '-top-2.5 text-[12px] bg-white px-1 text-gray-500'
+                            : 'top-2.5 text-xs md:text-md text-gray-400'
+                          }`}
+                        style={{
+                          transform: isFocused || fieldHasValue ? 'translateY(0)' : 'translateY(0)',
+                          zIndex: 5,
+                        }}
+                      >
+                        {field.label}
+                        {field.required && <span className="text-red-500 ml-1">*</span>}
+                      </label>
+
                       <input
                         type={
                           isPasswordField
@@ -173,12 +210,15 @@ const DynamicForm = ({
                             e.target.files,
                           )
                         }
-                        placeholder={field.placeholder}
+                        placeholder=""
                         required={field.required}
-                        className={`w-full px-3 py-2.5 text-xs md:text-sm focus:outline-none transition-all ${
-                          field.inputClassName ||
-                          "border border-gray-300 rounded-md bg-gray-50/30 focus:bg-white focus:border-[var(--primary-color)] shadow-sm"
-                        }`}
+                        onFocus={() => handleFocus(field.name)}
+                        onBlur={handleBlur}
+                        className={`w-full px-3 py-2.5 text-xs md:text-sm focus:outline-none transition-all bg-transparent
+                          ${isFocused 
+                            ? 'border border-[var(--primary-color)] rounded-md shadow-sm' 
+                            : 'border-0 border-b-2 border-gray-200 rounded-none'
+                          }`}
                       />
 
                       {/* Icons Handling */}
@@ -210,9 +250,9 @@ const DynamicForm = ({
                 </div>
               )}
 
-              {/* FILE UPLOAD (handled by FileUpload component) */}
+              {/* FILE UPLOAD with border bottom style */}
               {field.type === "input" && field.inputType === "file" && (
-                <div className="w-full">
+                <div className="relative">
                   {readOnly ? (
                     <div className="w-full px-3 py-2.5 text-xs md:text-sm bg-gray-50/50 rounded-md border border-gray-100 text-gray-700 font-medium h-10 flex items-center">
                       {formData[field.name] ? (
@@ -226,94 +266,134 @@ const DynamicForm = ({
                       )}
                     </div>
                   ) : (
-                    <FileUpload
-                      file={formData[field.name]}
-                      onChange={(e) =>
-                        handleChange(
-                          field.name,
-                          e.target.value,
-                          field.inputType,
-                          e.target.files,
-                        )
-                      }
-                      onClear={() =>
-                        setFormData((prev) => ({ ...prev, [field.name]: null }))
-                      }
-                      helperText="" // DynamicForm usually handles its own labels/context
-                    />
+                    <div className={`transition-all ${isFocused ? 'border border-[var(--primary-color)] rounded-md p-2' : 'border-0 border-b-2 border-gray-200 rounded-none'}`}>
+                      {/* Floating Label for File Upload */}
+                      <label
+                        className={`absolute -top-2.5 left-3 text-[10px] bg-white px-1 text-gray-500 transition-all duration-200 z-10`}
+                      >
+                        {field.label}
+                        {field.required && <span className="text-red-500 ml-1">*</span>}
+                      </label>
+                      <FileUpload
+                        file={formData[field.name]}
+                        onChange={(e) =>
+                          handleChange(
+                            field.name,
+                            e.target.value,
+                            field.inputType,
+                            e.target.files,
+                          )
+                        }
+                        onClear={() =>
+                          setFormData((prev) => ({ ...prev, [field.name]: null }))
+                        }
+                        helperText=""
+                        onFocus={() => handleFocus(field.name)}
+                        onBlur={handleBlur}
+                      />
+                    </div>
                   )}
                 </div>
               )}
 
-              {/* TEXTAREA */}
+              {/* TEXTAREA with border bottom style */}
               {field.type === "textarea" && (
-                <div className="w-full">
+                <div className="relative">
                   {readOnly ? (
-                     field.render ? (
+                    field.render ? (
                       field.render(formData)
                     ) : (
-                    <div className="w-full p-3 text-xs md:text-sm bg-gray-50/50 rounded-md border border-gray-100 text-gray-700 font-medium whitespace-pre-wrap min-h-[100px]">
-                      {formData[field.name] || (
-                        <span className="text-gray-300 italic">No content</span>
-                      )}
-                    </div>
+                      <div className="w-full p-3 text-xs md:text-sm bg-gray-50/50 rounded-md border border-gray-100 text-gray-700 font-medium whitespace-pre-wrap min-h-[100px]">
+                        {formData[field.name] || (
+                          <span className="text-gray-300 italic">No content</span>
+                        )}
+                      </div>
                     )
                   ) : (
-                    <textarea
-                      name={field.name}
-                      value={formData[field.name] || ""}
-                      onChange={(e) => handleChange(field.name, e.target.value)}
-                      placeholder={field.placeholder}
-                      required={field.required}
-                      className={`w-full p-2 text-sm focus:outline-none min-h-[100px] ${
-                        field.inputClassName ||
-                        "border border-gray-300 rounded-md"
-                      }`}
-                    />
+                    <>
+                      {/* Floating Label */}
+                      <label
+                        className={`absolute left-3 transition-all duration-200 pointer-events-none
+                          ${isFocused || fieldHasValue
+                            ? '-top-2.5 text-[10px] bg-white px-1 text-gray-500'
+                            : 'top-2.5 text-xs md:text-sm text-gray-400'
+                          }`}
+                        style={{ zIndex: 5 }}
+                      >
+                        {field.label}
+                        {field.required && <span className="text-red-500 ml-1">*</span>}
+                      </label>
+                      <textarea
+                        name={field.name}
+                        value={formData[field.name] || ""}
+                        onChange={(e) => handleChange(field.name, e.target.value)}
+                        placeholder=""
+                        required={field.required}
+                        onFocus={() => handleFocus(field.name)}
+                        onBlur={handleBlur}
+                        className={`w-full p-2 pt-4 text-sm focus:outline-none min-h-[100px] bg-transparent transition-all
+                          ${isFocused 
+                            ? 'border border-[var(--primary-color)] rounded-md shadow-sm' 
+                            : 'border-0 border-b-2 border-gray-200 rounded-none'
+                          }`}
+                      />
+                    </>
                   )}
                 </div>
               )}
 
-              {/* DROPDOWN */}
+              {/* DROPDOWN with border bottom style */}
               {field.type === "dropdown" && (
-                <div className="w-full">
+                <div className="relative">
                   {readOnly ? (
-                     field.render ? (
+                    field.render ? (
                       field.render(formData)
                     ) : (
-                    <div className="w-full px-3 py-2.5 text-xs md:text-sm bg-gray-50/50 rounded-md border border-gray-100 text-gray-700 font-medium h-10 flex items-center">
-                      {formData[field.name] ? (
-                        Array.isArray(formData[field.name]) ? (
-                          formData[field.name].join(", ")
+                      <div className="w-full px-3 py-2.5 text-xs md:text-sm bg-gray-50/50 rounded-md border border-gray-100 text-gray-700 font-medium h-10 flex items-center">
+                        {formData[field.name] ? (
+                          Array.isArray(formData[field.name]) ? (
+                            formData[field.name].join(", ")
+                          ) : (
+                            formData[field.name]
+                          )
                         ) : (
-                          formData[field.name]
-                        )
-                      ) : (
-                        <span className="text-gray-300 italic">
-                          Not selected
-                        </span>
-                      )}
-                    </div>
+                          <span className="text-gray-300 italic">
+                            Not selected
+                          </span>
+                        )}
+                      </div>
                     )
                   ) : (
-                    <CustomDropdown
-                      options={
-                        typeof field.options === "function"
-                          ? field.options(formData)
-                          : field.options
-                      }
-                      value={formData[field.name]}
-                      onChange={(val) => handleChange(field.name, val)}
-                      placeholder={field.placeholder}
-                      containerClassName="w-full"
-                      triggerClassName={
-                        field.inputClassName ||
-                        "border border-gray-300 rounded-lg"
-                      }
-                      multiSelect={field.multiSelect}
-                      searchable={field.searchable}
-                      creatable={field.creatable}
-                    />
+                    <>
+                      {/* Floating Label */}
+                      <label
+                        className={`absolute -top-2.5 left-3 text-[12px] bg-white px-1 text-gray-500 transition-all duration-200 z-10`}
+                      >
+                        {field.label}
+                        {field.required && <span className="text-red-500 ml-1">*</span>}
+                      </label>
+                      <div >
+                        <CustomDropdown
+                          options={
+                            typeof field.options === "function"
+                              ? field.options(formData)
+                              : field.options
+                          }
+                          value={formData[field.name]}
+                          onChange={(val) => handleChange(field.name, val)}
+                          placeholder=""
+                          containerClassName="w-full"
+                          triggerClassName={`pt-4  bg-transparent transition-all ${isFocused ? 'border border-[var(--primary-color)] rounded-md' : 'border-0 border-b-2 border-gray-200 rounded-none'} ${
+                            field.inputClassName || ""
+                          }`}
+                          multiSelect={field.multiSelect}
+                          searchable={field.searchable}
+                          creatable={field.creatable}
+                          onFocus={() => handleFocus(field.name)}
+                          onBlur={handleBlur}
+                        />
+                      </div>
+                    </>
                   )}
                 </div>
               )}
@@ -330,7 +410,8 @@ const DynamicForm = ({
               variant={submitButtonVariant}
               className={submitButtonClassName}
             >
-              {children}
+               {/* Safe rendering */}
+        {Array.isArray(children) ? children[0] : children}
             </Button>
           )}
           {onClick && (

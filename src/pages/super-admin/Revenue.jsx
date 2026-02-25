@@ -76,10 +76,10 @@ const Revenue = () => {
       status: "Paid",
     },
     {
-      id: "TRX-9642",
-      school: "LGS School",
-      date: "Feb 05, 2026",
-      amount: "PKR 55,000",
+      id: "TRX-9645",
+      school: "CSC School",
+      date: "Feb 25, 2026",
+      amount: "PKR 155,000",
       status: "Paid",
     },
   ];
@@ -148,7 +148,7 @@ const Revenue = () => {
           value: tx.status,
           render: (val) => (
             <span
-              className={`font-black text-[9px] uppercase ${
+              className={`font-black  text-[9px] uppercase ${
                 val === "Paid" ? "text-emerald-600" : "text-amber-600"
               }`}
             >
@@ -196,7 +196,7 @@ const Revenue = () => {
         {metrics.map((metric, idx) => (
           <div
             key={idx}
-            className="bg-white px-6 py-3 rounded-2xl shadow-sm border border-gray-50 group hover:shadow-md transition-all duration-300"
+            className="bg-white px-6 py-3 border-t-8 border-[var(--primary-color)] rounded-2xl shadow-sm  group hover:shadow-md transition-all duration-300"
           >
             <p className="text-xs font-bold text-gray-400 uppercase tracking-widest">
               {metric.title}
@@ -232,7 +232,7 @@ const Revenue = () => {
       </div>
 
       {/* Transactions */}
-      <div className="bg-white rounded-3xl shadow-sm border border-gray-50 overflow-hidden p-6 flex flex-col gap-6">
+      <div className="bg-white rounded-3xl border-t-8 border-[var(--primary-color)] shadow-sm overflow-hidden p-6 flex flex-col gap-6">
         <div className="flex items-center justify-between">
           <h2 className="text-lg font-bold text-gray-800 text-[var(--text-primary-color)]">
             Recent Billing Transactions

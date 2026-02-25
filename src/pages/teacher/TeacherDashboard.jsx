@@ -16,12 +16,13 @@ import classesData from "../../data/admindata/classes";
 import coursesData from "../../data/admindata/courses";
 import { UPCOMING_EVENTS, CIRCULARS } from "../../data/admindata/dashboardData";
 
+import { useTeacher } from "../../context/TeacherContext";
 import { getNoticesForUser } from "../../utils/noticeManager";
 import NoticePreviewModal from "../../components/common/NoticePreviewModal";
 
 const TeacherDashboard = () => {
   const navigate = useNavigate();
-  const [teacher, setTeacher] = useState(null);
+  const { currentTeacher: teacher } = useTeacher();
   const [myClass, setMyClass] = useState(null);
   const [stats, setStats] = useState({
     present: 0,
@@ -34,13 +35,10 @@ const TeacherDashboard = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   useEffect(() => {
-    const storedTeacher = localStorage.getItem("currentTeacher");
-    if (storedTeacher) {
-      const sessionData = JSON.parse(storedTeacher);
+    if (teacher) {
       // Refresh teacher data from the source to get latest profileImage
       const updatedTeacher =
-        teachersData.find((t) => t.id === sessionData.id) || sessionData;
-      setTeacher(updatedTeacher);
+        teachersData.find((t) => t.id === teacher.id) || teacher;
 
       // Find the class where this teacher is the Class Teacher
       const assignedClass = classesData.find(
@@ -65,7 +63,7 @@ const TeacherDashboard = () => {
     } else {
       navigate("/");
     }
-  }, [navigate]);
+  }, [navigate, teacher]);
 
   const handleNoticeClick = (notice) => {
     setSelectedNotice(notice);

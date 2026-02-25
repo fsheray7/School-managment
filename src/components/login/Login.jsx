@@ -1,4 +1,4 @@
-import { useState } from "react";
+  import { useState } from "react";
 import { FaUser } from "react-icons/fa";
 import DynamicForm from "../ui/DynamicForm";
 import studentsData from "../../data/admindata/students/students";
@@ -6,16 +6,19 @@ import teachersData from "../../data/teachers/teacher";
 import { useNavigate } from "react-router-dom";
 import { useToast } from "../../context/ToastContext";
 import { useSettings } from "../../context/SettingsContext";
-import { admins as defaultAdmins } from "../../data/admindata/admins";
+import { admins as defaultAdmins } from "../../data/admindata/superadmin/admins";
+import { useTeacher } from "../../context/TeacherContext";
+import { useStudent } from "../../context/StudentContext";
+import { useAdmin } from "../../context/AdminContext";
 
 const Login = ({ onLoginSuccess, role }) => {
   const { showToast } = useToast();
   const navigate = useNavigate();
-  const {
-    superAdminUsername,
-    superAdminPassword,
-    setIsSuperAdmin,
-  } = useSettings();
+  const { superAdminUsername, superAdminPassword, setIsSuperAdmin } =
+    useSettings();
+  const { loginTeacher } = useTeacher();
+  const { loginStudent } = useStudent();
+  const { admins, loginAdmin } = useAdmin();
   const [loginData, setLoginData] = useState({
     username: "",
     password: "",
@@ -33,6 +36,7 @@ const Login = ({ onLoginSuccess, role }) => {
 
       if (student) {
         showToast(`Welcome back, ${student.fullName}!`, "success");
+        loginStudent(student);
         if (onLoginSuccess) {
           onLoginSuccess(student);
         }
@@ -48,6 +52,7 @@ const Login = ({ onLoginSuccess, role }) => {
 
       if (teacher) {
         showToast(`Welcome back, ${teacher.fullName}!`, "success");
+        loginTeacher(teacher);
         if (onLoginSuccess) {
           onLoginSuccess(teacher);
         }
@@ -55,15 +60,14 @@ const Login = ({ onLoginSuccess, role }) => {
         showToast("Invalid username or password!", "error");
       }
     } else if (role === "admin") {
-      const storedAdmins = JSON.parse(localStorage.getItem("admins") || "[]");
-      const allAdmins = storedAdmins.length > 0 ? storedAdmins : defaultAdmins;
-
-      const admin = allAdmins.find(
-        (a) => a.username === loginData.username && a.password === loginData.password
+      const admin = admins.find(
+        (a) =>
+          a.username === loginData.username &&
+          a.password === loginData.password,
       );
 
       if (admin && admin.status === "Active") {
-        localStorage.setItem("currentAdmin", JSON.stringify(admin));
+        loginAdmin(admin);
         showToast("Logged in as Administrator!", "success");
         if (onLoginSuccess) {
           onLoginSuccess({ role: "admin", fullName: admin.name });
@@ -78,7 +82,11 @@ const Login = ({ onLoginSuccess, role }) => {
       ) {
         showToast("Logged in as Super Administrator!", "success");
         setIsSuperAdmin(true);
-        navigate("/super-admin-dashboard");
+        if (onLoginSuccess) {
+          onLoginSuccess({ role: "super-admin" });
+        } else {
+          navigate("/super-admin-dashboard");
+        }
       } else {
         showToast("Invalid super admin credentials!", "error");
       }
@@ -125,14 +133,6 @@ const Login = ({ onLoginSuccess, role }) => {
 
   return (
     <div className="w-full  flex mt-20 flex-col items-center">
-      {role === "super-admin" && (
-        <h1
-          className="text-2xl font-bold mb-8 -mt-10"
-          style={{ color: "var(--primary-color)" }}
-        >
-          Super Admin Login
-        </h1>
-      )}
       <DynamicForm
         fields={loginFields}
         formData={loginData}

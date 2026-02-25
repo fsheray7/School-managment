@@ -10,6 +10,8 @@ import {
   getTeacherNotifications,
   getAdminNotifications,
 } from "../../utils/notificationsManager.jsx";
+import { useTeacher } from "../../context/TeacherContext";
+import { useStudent } from "../../context/StudentContext";
 
 const Navbar = ({ onToggleSidebar, isSidebarOpen, role = "admin" }) => {
   const { schoolLogo, systemLogo, superAdminUsername } = useSettings();
@@ -21,6 +23,8 @@ const Navbar = ({ onToggleSidebar, isSidebarOpen, role = "admin" }) => {
   const profileRef = useRef(null);
   const [notifications, setNotifications] = useState([]);
   const [readIds, setReadIds] = useState([]);
+  const { currentTeacher, logoutTeacher } = useTeacher();
+  const { currentStudent, logoutStudent } = useStudent();
 
   // Load readIds from localStorage on mount
   useEffect(() => {
@@ -129,26 +133,18 @@ const Navbar = ({ onToggleSidebar, isSidebarOpen, role = "admin" }) => {
 
   useEffect(() => {
     if (role === "student") {
-      const storedStudent = localStorage.getItem("currentStudent");
-      if (storedStudent) {
-        const sessionData = JSON.parse(storedStudent);
-        const updatedStudent =
-          finalStudentsData.find((s) => s.id === sessionData.id) || sessionData;
-        setCurrentUserName(updatedStudent.fullName || "Student");
-        setProfileImage(updatedStudent.profileImage || "");
+      if (currentStudent) {
+        setCurrentUserName(currentStudent.fullName || "Student");
+        setProfileImage(currentStudent.profileImage || "");
         // Load student notifications
-        setNotifications(getStudentNotifications(updatedStudent));
+        setNotifications(getStudentNotifications(currentStudent));
       }
     } else if (role === "teacher") {
-      const storedTeacher = localStorage.getItem("currentTeacher");
-      if (storedTeacher) {
-        const sessionData = JSON.parse(storedTeacher);
-        const updatedTeacher =
-          teachersData.find((t) => t.id === sessionData.id) || sessionData;
-        setCurrentUserName(updatedTeacher.fullName || "Teacher");
-        setProfileImage(updatedTeacher.profileImage || "");
+      if (currentTeacher) {
+        setCurrentUserName(currentTeacher.fullName || "Teacher");
+        setProfileImage(currentTeacher.profileImage || "");
         // Load teacher notifications
-        setNotifications(getTeacherNotifications(updatedTeacher));
+        setNotifications(getTeacherNotifications(currentTeacher));
       }
     } else if (role === "super-admin") {
       setCurrentUserName(superAdminUsername || "Super Admin");
@@ -160,12 +156,18 @@ const Navbar = ({ onToggleSidebar, isSidebarOpen, role = "admin" }) => {
       // Load admin notifications
       setNotifications(getAdminNotifications());
     }
-  }, [role, location.pathname]); // Update on route change too
+  }, [role, location.pathname, currentTeacher, currentStudent, superAdminUsername]); // Update on route change too
 
   const { setIsSuperAdmin } = useSettings();
 
   const handleLogout = () => {
-    setIsSuperAdmin(false);
+    if (role === "teacher") {
+      logoutTeacher();
+    } else if (role === "student") {
+      logoutStudent();
+    } else if (role === "super-admin") {
+      setIsSuperAdmin(false);
+    }
     navigate("/select-profile");
     setIsProfileOpen(false);
   };

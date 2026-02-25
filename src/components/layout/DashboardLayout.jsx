@@ -62,9 +62,15 @@ const DashboardLayout = () => {
     }
     if (
       location.pathname.includes("student") ||
-      ["/quiz", "/questions", "/ask-question", "/answer"].includes(
-        location.pathname,
-      )
+      [
+        "/quiz",
+        "/questions",
+        "/ask-question",
+        "/quizoptions",
+        "/quiz-multiple-options",
+        "/answer",
+        "/quiz-score",
+      ].includes(location.pathname)
     ) {
       return "student";
     }

@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import CustomDropdown from "../ui/CustomDropdown";
 import Button from "../ui/Button";
 import FileUpload from "../ui/FileUpload";
-
 import { useSettings } from "../../context/SettingsContext";
 import { useToast } from "../../context/ToastContext";
 import { addNotice } from "../../utils/noticeManager";
@@ -21,6 +20,7 @@ const NoticeForm = () => {
     attachment: null,
     attachmentName: "",
   });
+  const [focusedField, setFocusedField] = useState(null);
 
   const audienceOptions = ["All", "Teachers", "Students", "Parents"];
 
@@ -86,6 +86,19 @@ const NoticeForm = () => {
     });
   };
 
+  const handleFocus = (fieldName) => {
+    setFocusedField(fieldName);
+  };
+
+  const handleBlur = () => {
+    setFocusedField(null);
+  };
+
+  const hasValue = (fieldName) => {
+    const value = formData[fieldName];
+    return value !== null && value !== undefined && value !== "";
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!formData.title || !formData.details || !formData.audience) {
@@ -109,111 +122,188 @@ const NoticeForm = () => {
 
   return (
     <div className="w-full max-w-3xl bg-white overflow-hidden">
-      <form onSubmit={handleSubmit} className="p-1 md:p-4 space-y-2 ">
+      <form onSubmit={handleSubmit} className="p-1 md:p-4 space-y-6">
+        
         {/* Notice Title */}
-        <div className="flex flex-col gap-2">
-          <label className="text-sm font-semibold text-gray-700">
-            Notice Title <span className="text-red-500">*</span>
-          </label>
-          <input
-            type="text"
-            name="title"
-            required
-            value={formData.title}
-            onChange={handleChange}
-            placeholder="Enter notice title"
-            className="w-full p-2 bg-gray-50 border border-gray-300 rounded-lg focus:outline-none transition-all text-gray-800"
-            style={{
-              focusBorderColor: "var(--primary-color)",
-              focusRing: "2px var(--primary-color) / 0.1",
-            }}
-            // Using Tailwind focus:border-[var(--primary-color)]
-          />
+        <div className="flex flex-col">
+          <div className="relative">
+            <label
+              className={`absolute left-3 transition-all duration-200 pointer-events-none
+                ${focusedField === "title" || hasValue("title")
+                  ? '-top-2.5 text-[10px] bg-white px-1 text-gray-500'
+                  : 'top-2.5 text-xs md:text-sm text-gray-400'
+                }`}
+              style={{ zIndex: 5 }}
+            >
+              Notice Title <span className="text-red-500">*</span>
+            </label>
+            <input
+              type="text"
+              name="title"
+              required
+              value={formData.title}
+              onChange={handleChange}
+              onFocus={() => handleFocus("title")}
+              onBlur={handleBlur}
+              placeholder=""
+              className={`w-full px-3 py-2.5 text-xs md:text-sm focus:outline-none transition-all bg-transparent
+                ${focusedField === "title"
+                  ? 'border border-[var(--primary-color)] rounded-md shadow-sm'
+                  : 'border-0 border-b-2 border-gray-200 rounded-none'
+                }`}
+            />
+          </div>
         </div>
 
         {/* Notice Details */}
-        <div className="flex flex-col gap-2">
-          <label className="text-sm font-semibold text-gray-700">
-            Notice Details <span className="text-red-500">*</span>
-          </label>
-          <textarea
-            name="details"
-            required
-            rows="5"
-            value={formData.details}
-            onChange={handleChange}
-            placeholder="Write notice or event details here..."
-            className="w-full p-2.5 bg-gray-50 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[var(--primary-color)]/20 focus:border-[var(--primary-color)] outline-none transition-all text-gray-800 resize-none"
-          ></textarea>
+        <div className="flex flex-col">
+          <div className="relative">
+            <label
+              className={`absolute left-3 transition-all duration-200 pointer-events-none
+                ${focusedField === "details" || hasValue("details")
+                  ? '-top-2.5 text-[10px] bg-white px-1 text-gray-500'
+                  : 'top-2.5 text-xs md:text-sm text-gray-400'
+                }`}
+              style={{ zIndex: 5 }}
+            >
+              Notice Details <span className="text-red-500">*</span>
+            </label>
+            <textarea
+              name="details"
+              required
+              rows="5"
+              value={formData.details}
+              onChange={handleChange}
+              onFocus={() => handleFocus("details")}
+              onBlur={handleBlur}
+              placeholder=""
+              className={`w-full p-2 pt-4 text-sm focus:outline-none min-h-[100px] bg-transparent transition-all resize-none
+                ${focusedField === "details"
+                  ? 'border border-[var(--primary-color)] rounded-md shadow-sm'
+                  : 'border-0 border-b-2 border-gray-200 rounded-none'
+                }`}
+            ></textarea>
+          </div>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {/* Audience Selection */}
-          <div className="flex flex-col gap-2">
-            <label className="text-sm font-semibold text-gray-700">
-              Send Notice To
-            </label>
-            <CustomDropdown
-              options={audienceOptions}
-              value={formData.audience}
-              onChange={(val) => handleDropdownChange("audience", val)}
-              placeholder="Select Audience"
-              triggerClassName="border-gray-300 bg-gray-50 rounded-lg py-1.5"
-            />
+          <div className="flex flex-col">
+            <div className="relative">
+              <label
+                className={`absolute -top-2.5 left-3 text-[10px] bg-white px-1 text-gray-500 transition-all duration-200 z-10`}
+              >
+                Send Notice To
+              </label>
+              <div className={`transition-all ${
+                focusedField === "audience" 
+                  ? 'border border-[var(--primary-color)] rounded-md' 
+                  : 'border-0 border-b-2 border-gray-200 rounded-none'
+              }`}>
+                <CustomDropdown
+                  options={audienceOptions}
+                  value={formData.audience}
+                  onChange={(val) => handleDropdownChange("audience", val)}
+                  placeholder=""
+                  triggerClassName="pt-4 bg-transparent border-0"
+                  onFocus={() => handleFocus("audience")}
+                  onBlur={handleBlur}
+                />
+              </div>
+            </div>
           </div>
 
           {/* Expiry Date */}
-          <div className="flex flex-col gap-2">
-            <label className="text-sm font-semibold text-gray-700">
-              Expiry Date (Optional)
-            </label>
-            <input
-              type="date"
-              name="expiryDate"
-              value={formData.expiryDate}
-              onChange={handleChange}
-              className="w-full py-1.5 px-3 bg-gray-50 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all text-gray-800"
-            />
+          <div className="flex flex-col">
+            <div className="relative">
+              <label
+                className={`absolute left-3 transition-all duration-200 pointer-events-none
+                  ${focusedField === "expiryDate" || hasValue("expiryDate")
+                    ? '-top-2.5 text-[10px] bg-white px-1 text-gray-500'
+                    : 'top-2.5 text-xs md:text-sm text-gray-400'
+                  }`}
+                style={{ zIndex: 5 }}
+              >
+                Expiry Date (Optional)
+              </label>
+              <input
+                type="date"
+                name="expiryDate"
+                value={formData.expiryDate}
+                onChange={handleChange}
+                onFocus={() => handleFocus("expiryDate")}
+                onBlur={handleBlur}
+                className={`w-full py-2.5 px-3 text-xs md:text-sm focus:outline-none transition-all bg-transparent
+                  ${focusedField === "expiryDate" || hasValue("expiryDate")
+                    ? 'border border-[var(--primary-color)] rounded-md shadow-sm'
+                    : 'border-0 border-b-2 border-gray-200 rounded-none'
+                  }`}
+              />
+            </div>
           </div>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {/* Class Selection - Conditional */}
           {formData.audience === "Students" && (
-            <div className="flex flex-col gap-2 animate-fade-in">
-              <label className="text-sm font-semibold text-gray-700">
-                Class
-              </label>
-              <CustomDropdown
-                options={classOptions}
-                value={formData.class}
-                onChange={(val) => handleDropdownChange("class", val)}
-                placeholder="Select Class"
-                triggerClassName="border-gray-300 bg-gray-50 rounded-lg py-1.5"
-              />
+            <div className="flex flex-col animate-fade-in">
+              <div className="relative">
+                <label
+                  className={`absolute -top-2.5 left-3 text-[10px] bg-white px-1 text-gray-500 transition-all duration-200 z-10`}
+                >
+                  Class
+                </label>
+                <div className={`transition-all ${
+                  focusedField === "class" 
+                    ? 'border border-[var(--primary-color)] rounded-md' 
+                    : 'border-0 border-b-2 border-gray-200 rounded-none'
+                }`}>
+                  <CustomDropdown
+                    options={classOptions}
+                    value={formData.class}
+                    onChange={(val) => handleDropdownChange("class", val)}
+                    placeholder=""
+                    triggerClassName="pt-4 bg-transparent border-0"
+                    onFocus={() => handleFocus("class")}
+                    onBlur={handleBlur}
+                  />
+                </div>
+              </div>
             </div>
           )}
 
           {/* Section Selection - Conditional */}
           {formData.class && (
-            <div className="flex flex-col gap-2 animate-fade-in">
-              <label className="text-sm font-semibold text-gray-700">
-                Section
-              </label>
-              <CustomDropdown
-                options={sectionOptions}
-                value={formData.section}
-                onChange={(val) => handleDropdownChange("section", val)}
-                placeholder="Select Section"
-                triggerClassName="border-gray-300 bg-gray-50 rounded-lg py-1.5"
-              />
+            <div className="flex flex-col animate-fade-in">
+              <div className="relative">
+                <label
+                  className={`absolute -top-2.5 left-3 text-[10px] bg-white px-1 text-gray-500 transition-all duration-200 z-10`}
+                >
+                  Section
+                </label>
+                <div className={`transition-all ${
+                  focusedField === "section" 
+                    ? 'border border-[var(--primary-color)] rounded-md' 
+                    : 'border-0 border-b-2 border-gray-200 rounded-none'
+                }`}>
+                  <CustomDropdown
+                    options={sectionOptions}
+                    value={formData.section}
+                    onChange={(val) => handleDropdownChange("section", val)}
+                    placeholder=""
+                    triggerClassName="pt-4 bg-transparent border-0"
+                    onFocus={() => handleFocus("section")}
+                    onBlur={handleBlur}
+                  />
+                </div>
+              </div>
             </div>
           )}
         </div>
 
         {/* Important Toggle */}
         <div className="flex items-center gap-4 justify-between md:flex-row flex-col animate-fade-in">
-          <div className="flex  items-center gap-4 px-2 py-2">
+          <div className="flex items-center gap-4 px-2 py-2">
             <label className="relative inline-flex items-center cursor-pointer">
               <input
                 type="checkbox"
@@ -238,15 +328,28 @@ const NoticeForm = () => {
             <span className="text-xs text-gray-500 italic">pinned on top</span>
           </div>
 
-          {/* Attachment Upload */}
-          <FileUpload
-            label="Upload Attachment"
-            file={formData.attachment}
-            onChange={handleFileChange}
-            onClear={() =>
-              setFormData((prev) => ({ ...prev, attachment: null }))
-            }
-          />
+          <div className="relative w-full md:w-auto">
+            <label
+              className={`absolute -top-2.5 left-3 text-[10px] bg-white px-1 text-gray-500 transition-all duration-200 z-10`}
+            >
+              Attachment
+            </label>
+            <div className={`transition-all p-2 ${
+              focusedField === "attachment" 
+                ? 'border border-[var(--primary-color)] rounded-md' 
+                : 'border-0 rounded-none'
+            }`}>
+              <FileUpload
+                file={formData.attachment}
+                onChange={handleFileChange}
+                onClear={() =>
+                  setFormData((prev) => ({ ...prev, attachment: null }))
+                }
+                onFocus={() => handleFocus("attachment")}
+                onBlur={handleBlur}
+              />
+            </div>
+          </div>
         </div>
 
         {/* Action Buttons */}

@@ -226,7 +226,7 @@ const Courses = () => {
   );
 
   return (
-    <section className="flex flex-col items-center mt-5 justify-start w-full bg-white gap-4">
+    <section className="flex flex-col px-6 items-center mt-5 justify-start w-full bg-white gap-4">
       <div className="w-full">
         <Filters
           searchQuery={searchQuery}

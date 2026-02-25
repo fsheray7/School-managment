@@ -4,11 +4,15 @@ import Button from "../../components/ui/Button";
 import TeacherSelector from "../../components/teacher/TeacherSelector";
 import DataTable from "../../components/ui/DataTable";
 import studentsData from "../../data/admindata/students/students";
-import { getClassMarks, submitResultsForPromotion } from "../../utils/marksManager";
+import {
+  getClassMarks,
+  submitResultsForPromotion,
+} from "../../utils/marksManager";
 import ResultPreviewModal from "../../components/ui/ResultPreviewModal";
 import ActionButtons from "../../components/ui/ActionButtons";
 import PreviewModal from "../../components/ui/PreviewModal";
 import { useToast } from "../../context/ToastContext";
+import { useTeacher } from "../../context/TeacherContext";
 
 const Results = () => {
   const [selection, setSelection] = useState({
@@ -20,15 +24,12 @@ const Results = () => {
   const { showToast } = useToast();
   const [selectedStudent, setSelectedStudent] = useState(null);
   const [studentsWithMarks, setStudentsWithMarks] = useState([]);
-  const [teacher, setTeacher] = useState(null);
+  const { currentTeacher } = useTeacher();
 
-  useEffect(() => {
-    const storedTeacher = localStorage.getItem("currentTeacher");
-    if (storedTeacher) {
-      setTeacher(JSON.parse(storedTeacher));
-    }
-  }, []);
-  
+  // useEffect(() => {
+  //   // Teacher is now available via context
+  // }, []);
+
   // Two separate modal states
   const [showPreviewModal, setShowPreviewModal] = useState(false); // For all students (Result Cards)
   const [showResultModal, setShowResultModal] = useState(false); // For single student (View button)
@@ -128,18 +129,32 @@ const Results = () => {
 
     // First Term Details
     firstTerm: {
-      obtained: student.firstTerminalMarks !== "-" ? student.firstTerminalMarks : 0,
-      total: student.firstTerminalTotal !== "-" ? student.firstTerminalTotal : 100,
-      grade: student.firstTerminalGrade !== "-" ? student.firstTerminalGrade : "N/A",
-      status: student.firstTerminalStatus !== "-" ? student.firstTerminalStatus : "N/A",
+      obtained:
+        student.firstTerminalMarks !== "-" ? student.firstTerminalMarks : 0,
+      total:
+        student.firstTerminalTotal !== "-" ? student.firstTerminalTotal : 100,
+      grade:
+        student.firstTerminalGrade !== "-" ? student.firstTerminalGrade : "N/A",
+      status:
+        student.firstTerminalStatus !== "-"
+          ? student.firstTerminalStatus
+          : "N/A",
     },
 
     // Second Term Details
     secondTerm: {
-      obtained: student.secondTerminalMarks !== "-" ? student.secondTerminalMarks : 0,
-      total: student.secondTerminalTotal !== "-" ? student.secondTerminalTotal : 100,
-      grade: student.secondTerminalGrade !== "-" ? student.secondTerminalGrade : "N/A",
-      status: student.secondTerminalStatus !== "-" ? student.secondTerminalStatus : "N/A",
+      obtained:
+        student.secondTerminalMarks !== "-" ? student.secondTerminalMarks : 0,
+      total:
+        student.secondTerminalTotal !== "-" ? student.secondTerminalTotal : 100,
+      grade:
+        student.secondTerminalGrade !== "-"
+          ? student.secondTerminalGrade
+          : "N/A",
+      status:
+        student.secondTerminalStatus !== "-"
+          ? student.secondTerminalStatus
+          : "N/A",
     },
 
     // Subjects Array for Table Display
@@ -148,15 +163,35 @@ const Results = () => {
         id: 1,
         name: student.subject,
         total:
-          Number(student.firstTerminalTotal !== "-" ? student.firstTerminalTotal : 100) +
-          Number(student.secondTerminalTotal !== "-" ? student.secondTerminalTotal : 100),
+          Number(
+            student.firstTerminalTotal !== "-"
+              ? student.firstTerminalTotal
+              : 100,
+          ) +
+          Number(
+            student.secondTerminalTotal !== "-"
+              ? student.secondTerminalTotal
+              : 100,
+          ),
         obtained:
-          Number(student.firstTerminalMarks !== "-" ? student.firstTerminalMarks : 0) +
-          Number(student.secondTerminalMarks !== "-" ? student.secondTerminalMarks : 0),
-        firstTermObtained: student.firstTerminalMarks !== "-" ? student.firstTerminalMarks : 0,
-        firstTermTotal: student.firstTerminalTotal !== "-" ? student.firstTerminalTotal : 100,
-        secondTermObtained: student.secondTerminalMarks !== "-" ? student.secondTerminalMarks : 0,
-        secondTermTotal: student.secondTerminalTotal !== "-" ? student.secondTerminalTotal : 100,
+          Number(
+            student.firstTerminalMarks !== "-" ? student.firstTerminalMarks : 0,
+          ) +
+          Number(
+            student.secondTerminalMarks !== "-"
+              ? student.secondTerminalMarks
+              : 0,
+          ),
+        firstTermObtained:
+          student.firstTerminalMarks !== "-" ? student.firstTerminalMarks : 0,
+        firstTermTotal:
+          student.firstTerminalTotal !== "-" ? student.firstTerminalTotal : 100,
+        secondTermObtained:
+          student.secondTerminalMarks !== "-" ? student.secondTerminalMarks : 0,
+        secondTermTotal:
+          student.secondTerminalTotal !== "-"
+            ? student.secondTerminalTotal
+            : 100,
         grade: student.overallGrade,
         percentage: student.overallPercentage,
         status: student.overallStatus,
@@ -177,24 +212,56 @@ const Results = () => {
     // Term-wise Summary (for detailed view)
     termSummary: {
       firstTerm: {
-        obtained: Number(student.firstTerminalMarks !== "-" ? student.firstTerminalMarks : 0),
-        total: Number(student.firstTerminalTotal !== "-" ? student.firstTerminalTotal : 100),
+        obtained: Number(
+          student.firstTerminalMarks !== "-" ? student.firstTerminalMarks : 0,
+        ),
+        total: Number(
+          student.firstTerminalTotal !== "-" ? student.firstTerminalTotal : 100,
+        ),
         percentage:
-          student.firstTerminalMarks !== "-" && student.firstTerminalTotal !== "-"
-            ? ((Number(student.firstTerminalMarks) / Number(student.firstTerminalTotal)) * 100).toFixed(1)
+          student.firstTerminalMarks !== "-" &&
+          student.firstTerminalTotal !== "-"
+            ? (
+                (Number(student.firstTerminalMarks) /
+                  Number(student.firstTerminalTotal)) *
+                100
+              ).toFixed(1)
             : 0,
-        grade: student.firstTerminalGrade !== "-" ? student.firstTerminalGrade : "N/A",
-        status: student.firstTerminalStatus !== "-" ? student.firstTerminalStatus : "N/A",
+        grade:
+          student.firstTerminalGrade !== "-"
+            ? student.firstTerminalGrade
+            : "N/A",
+        status:
+          student.firstTerminalStatus !== "-"
+            ? student.firstTerminalStatus
+            : "N/A",
       },
       secondTerm: {
-        obtained: Number(student.secondTerminalMarks !== "-" ? student.secondTerminalMarks : 0),
-        total: Number(student.secondTerminalTotal !== "-" ? student.secondTerminalTotal : 100),
+        obtained: Number(
+          student.secondTerminalMarks !== "-" ? student.secondTerminalMarks : 0,
+        ),
+        total: Number(
+          student.secondTerminalTotal !== "-"
+            ? student.secondTerminalTotal
+            : 100,
+        ),
         percentage:
-          student.secondTerminalMarks !== "-" && student.secondTerminalTotal !== "-"
-            ? ((Number(student.secondTerminalMarks) / Number(student.secondTerminalTotal)) * 100).toFixed(1)
+          student.secondTerminalMarks !== "-" &&
+          student.secondTerminalTotal !== "-"
+            ? (
+                (Number(student.secondTerminalMarks) /
+                  Number(student.secondTerminalTotal)) *
+                100
+              ).toFixed(1)
             : 0,
-        grade: student.secondTerminalGrade !== "-" ? student.secondTerminalGrade : "N/A",
-        status: student.secondTerminalStatus !== "-" ? student.secondTerminalStatus : "N/A",
+        grade:
+          student.secondTerminalGrade !== "-"
+            ? student.secondTerminalGrade
+            : "N/A",
+        status:
+          student.secondTerminalStatus !== "-"
+            ? student.secondTerminalStatus
+            : "N/A",
       },
     },
   });
@@ -211,7 +278,7 @@ const Results = () => {
     final: student.final,
     overallPercentage: student.overallPercentage,
     overallGrade: student.overallGrade,
-    overallStatus: student.overallStatus
+    overallStatus: student.overallStatus,
   });
 
   // Handle View Single Student - Opens ResultPreviewModal
@@ -306,7 +373,7 @@ const Results = () => {
         <div className="w-full mt-6">
           <DataTable
             renderActions={(student) => (
-              <ActionButtons 
+              <ActionButtons
                 onView={() => handleViewSingleStudent(student)} // Opens ResultPreviewModal
               />
             )}
@@ -345,10 +412,18 @@ const Results = () => {
             renderMobileCard={(student) => (
               <div className="bg-white border flex justify-between items-center rounded-lg p-3 shadow-sm">
                 <div className="flex-1">
-                  <p className="font-semibold text-gray-900">{student.fullName}</p>
-                  <p className="text-sm text-gray-600">Roll No: {student.rollNumber}</p>
-                  <p className="text-sm text-gray-600">Overall: {student.final}</p>
-                  <p className="text-sm text-gray-600">Percentage: {student.overallPercentage}%</p>
+                  <p className="font-semibold text-gray-900">
+                    {student.fullName}
+                  </p>
+                  <p className="text-sm text-gray-600">
+                    Roll No: {student.rollNumber}
+                  </p>
+                  <p className="text-sm text-gray-600">
+                    Overall: {student.final}
+                  </p>
+                  <p className="text-sm text-gray-600">
+                    Percentage: {student.overallPercentage}%
+                  </p>
                 </div>
                 <div className="text-right mr-3">
                   <span
@@ -360,7 +435,9 @@ const Results = () => {
                   >
                     {student.overallStatus}
                   </span>
-                  <p className="text-sm text-gray-700 mt-1">Grade: {student.overallGrade}</p>
+                  <p className="text-sm text-gray-700 mt-1">
+                    Grade: {student.overallGrade}
+                  </p>
                 </div>
                 <Button
                   onClick={() => handleViewSingleStudent(student)}
@@ -377,42 +454,58 @@ const Results = () => {
 
       {/* ================= PREVIEW MODAL - ALL STUDENTS (Result Cards Button) ================= */}
       <PreviewModal
-  isOpen={showPreviewModal}
-  onClose={() => setShowPreviewModal(false)}
-  title="Student Result Cards"
-  data={studentsWithMarks?.map(student => formatForPreviewModal(student)) || []}
-  columns={[
-    { header: "Roll No", key: "rollNumber" },
-    { header: "Name", key: "fullName" },
-    { header: "Subject", key: "subject" },
-    { header: "1st Term", key: "firstTerminalMarks" },
-    { header: "2nd Term", key: "secondTerminalMarks" },
-    { header: "Overall", key: "final" },
-    { header: "Percentage", key: "overallPercentage" },
-    { header: "Grade", key: "overallGrade" },
-    { 
-      header: "Result", 
-      render: (row) => (
-        <span className={row?.overallStatus === "Pass" ? "text-green-600 font-semibold" : "text-red-600 font-semibold"}>
-          {row?.overallStatus || "-"}
-        </span>
-      )
-    },
-  ]}
-  headerInfo={selection?.class ? {
-    title: "School Name",
-    subtitle: "Student Results Summary",
-    details: [
-      { label: "Class", value: selection.class },
-      { label: "Section", value: selection.section },
-      { label: "Subject", value: selection.subject },
-      { label: "Class Teacher", value: teacher?.fullName },
-      { label: "Total Students", value: studentsWithMarks?.length || 0 },
-    ]
-  } : null}
-  footerText="This is a computer generated result summary."
-  onPrint={() => window.print()}
-/>
+        isOpen={showPreviewModal}
+        onClose={() => setShowPreviewModal(false)}
+        title="Student Result Cards"
+        data={
+          studentsWithMarks?.map((student) => formatForPreviewModal(student)) ||
+          []
+        }
+        columns={[
+          { header: "Roll No", key: "rollNumber" },
+          { header: "Name", key: "fullName" },
+          { header: "Subject", key: "subject" },
+          { header: "1st Term", key: "firstTerminalMarks" },
+          { header: "2nd Term", key: "secondTerminalMarks" },
+          { header: "Overall", key: "final" },
+          { header: "Percentage", key: "overallPercentage" },
+          { header: "Grade", key: "overallGrade" },
+          {
+            header: "Result",
+            render: (row) => (
+              <span
+                className={
+                  row?.overallStatus === "Pass"
+                    ? "text-green-600 font-semibold"
+                    : "text-red-600 font-semibold"
+                }
+              >
+                {row?.overallStatus || "-"}
+              </span>
+            ),
+          },
+        ]}
+        headerInfo={
+          selection?.class
+            ? {
+                title: "School Name",
+                subtitle: "Student Results Summary",
+                details: [
+                  { label: "Class", value: selection.class },
+                  { label: "Section", value: selection.section },
+                  { label: "Subject", value: selection.subject },
+                  { label: "Class Teacher", value: currentTeacher?.fullName },
+                  {
+                    label: "Total Students",
+                    value: studentsWithMarks?.length || 0,
+                  },
+                ],
+              }
+            : null
+        }
+        footerText="This is a computer generated result summary."
+        onPrint={() => window.print()}
+      />
 
       {/* ================= RESULT PREVIEW MODAL - SINGLE STUDENT (View Button) ================= */}
       <ResultPreviewModal

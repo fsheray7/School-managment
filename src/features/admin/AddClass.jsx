@@ -73,7 +73,7 @@ const AddClass = () => {
   };
 
   return (
-    <div className="flex justify-center  items-center">
+    <div className="flex justify-center  items-center mt-8 px-6">
       <DynamicForm
         title="Class Information"
         fields={classFields}
@@ -81,6 +81,8 @@ const AddClass = () => {
         setFormData={setClassData}
         onSubmit={handleSubmit}
         onClick={handleBack}
+        submitButtonClassName=""
+        buttonAreaClassName="col-span-2 flex justify-center items-center gap-4 "
       >
         Add Class
       </DynamicForm>

@@ -13,7 +13,7 @@ import StatusToggle from "../../components/ui/StatusToggle";
 import ConfirmationModal from "../../components/ui/ConfirmationModal";
 import DetailsModal from "../../components/ui/DetailsModal";
 import DeleteModal from "../../components/ui/DeleteModal";
-import { getAdmins, saveAdmins } from "../../utils/adminStorage";
+import { useAdmin } from "../../context/AdminContext";
 
 const Admins = () => {
   const navigate = useNavigate();
@@ -37,10 +37,7 @@ const Admins = () => {
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [itemToDelete, setItemToDelete] = useState(null);
 
-  const [admins, setAdmins] = useState(() => {
-    const storedAdmins = localStorage.getItem("admins");
-    return storedAdmins ? JSON.parse(storedAdmins) : adminsData;
-  });
+  const { admins, updateAdmin, deleteAdmin, toggleAdminStatus } = useAdmin();
 
   // Handlers
   const handleViewDetails = (admin) => {
@@ -62,9 +59,7 @@ const Admins = () => {
 
   const confirmDelete = () => {
     if (itemToDelete) {
-      const updatedAdmins = admins.filter((a) => a.id !== itemToDelete.id);
-      setAdmins(updatedAdmins);
-      localStorage.setItem("admins", JSON.stringify(updatedAdmins));
+      deleteAdmin(itemToDelete.id);
       showToast(`${itemToDelete.name} deleted successfully!`, "success");
       setIsDeleteModalOpen(false);
       setItemToDelete(null);
@@ -72,11 +67,7 @@ const Admins = () => {
   };
 
   const handleSaveEdit = () => {
-    const updatedAdmins = admins.map((a) =>
-      a.id === selectedAdmin.id ? selectedAdmin : a,
-    );
-    setAdmins(updatedAdmins);
-    localStorage.setItem("admins", JSON.stringify(updatedAdmins));
+    updateAdmin(selectedAdmin);
     showToast("Admin details updated successfully!", "success");
     closeModal();
   };
@@ -96,11 +87,7 @@ const Admins = () => {
     if (!adminToUpdate) return;
 
     const newStatus = adminToUpdate.status === "Active" ? "Inactive" : "Active";
-    const updatedAdmins = admins.map((a) =>
-      a.id === adminToUpdate.id ? { ...a, status: newStatus } : a,
-    );
-    setAdmins(updatedAdmins);
-    localStorage.setItem("admins", JSON.stringify(updatedAdmins));
+    toggleAdminStatus(adminToUpdate.id);
     showToast(
       `${adminToUpdate.name}'s status changed to ${newStatus}`,
       "success",
@@ -111,20 +98,20 @@ const Admins = () => {
 
   const nextStatus = adminToUpdate?.status === "Active" ? "Inactive" : "Active";
 
- const filteredAdmins = admins.filter((admin) => {
-  const lowerSearchTerm = searchTerm.toLowerCase();
-  const matchesSearch = (admin.name || "").toLowerCase().includes(lowerSearchTerm) ||
-    (admin.school || "").toLowerCase().includes(lowerSearchTerm) ||
-    (admin.email || "").toLowerCase().includes(lowerSearchTerm) ||
-    (admin.phone || "").toLowerCase().includes(lowerSearchTerm) ||
-    (admin.username || "").toLowerCase().includes(lowerSearchTerm);
+  const filteredAdmins = (admins || []).filter((admin) => {
+    const lowerSearchTerm = (searchTerm || "").toLowerCase();
+    const matchesSearch =
+      (admin.name || "").toLowerCase().includes(lowerSearchTerm) ||
+      (admin.school || "").toLowerCase().includes(lowerSearchTerm) ||
+      (admin.email || "").toLowerCase().includes(lowerSearchTerm) ||
+      (admin.phone || "").toLowerCase().includes(lowerSearchTerm) ||
+      (admin.username || "").toLowerCase().includes(lowerSearchTerm);
 
-  const matchesStatus =
-    statusFilter === "All Status" ? true : admin.status === statusFilter;
+    const matchesStatus =
+      statusFilter === "All Status" ? true : admin.status === statusFilter;
 
-  return matchesSearch && matchesStatus;
-});
-
+    return matchesSearch && matchesStatus;
+  });
 
   const totalPages = Math.ceil(filteredAdmins.length / itemsPerPage);
   const paginatedAdmins = filteredAdmins.slice(
@@ -138,9 +125,13 @@ const Admins = () => {
       key: "name",
       render: (admin) => (
         <div className="flex flex-col text-left">
-          <span className="font-bold text-gray-800 mb-0.5">{admin.name || "—"}</span>
+          <span className="font-bold text-gray-800 mb-0.5">
+            {admin.name || "—"}
+          </span>
           <span className="text-xs text-gray-500">{admin.email || "—"}</span>
-          <span className="text-[10px] text-gray-400 mt-1">{admin.phone || "—"}</span>
+          <span className="text-[10px] text-gray-400 mt-1">
+            {admin.phone || "—"}
+          </span>
         </div>
       ),
     },

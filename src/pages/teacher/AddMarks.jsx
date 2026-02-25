@@ -9,6 +9,7 @@ import studentsData from "../../data/admindata/students/students";
 import { getStudentMarks, saveStudentMarks } from "../../utils/marksManager";
 import { useToast } from "../../context/ToastContext";
 import ConfirmationModal from "../../components/ui/ConfirmationModal";
+import { useTeacher } from "../../context/TeacherContext";
 
 // Helper functions for grade and status calculation
 const calculatePercentage = (obtained, total) => {
@@ -46,6 +47,7 @@ const AddMarks = () => {
   const [totalMarks, setTotalMarks] = useState(50); // Standard total marks
   const [marksSaved, setMarksSaved] = useState(false);
   const [showConfirmModal, setShowConfirmModal] = useState(false);
+  const { currentTeacher } = useTeacher();
 
   useEffect(() => {
     if (location.state?.selection) {
@@ -57,12 +59,10 @@ const AddMarks = () => {
   }, [location.state]);
 
   useEffect(() => {
-    const storedTeacher = localStorage.getItem("currentTeacher");
-    if (storedTeacher) {
-      const teacherData = JSON.parse(storedTeacher);
-      setTeacherDept(teacherData.department || "General");
+    if (currentTeacher) {
+      setTeacherDept(currentTeacher.department || "General");
     }
-  }, []);
+  }, [currentTeacher]);
 
   useEffect(() => {
     if (selection.class && selection.section) {
@@ -120,9 +120,14 @@ const AddMarks = () => {
     }
 
     // Check if at least one mark is entered
-    const hasMarks = Object.values(studentMarks).some(mark => mark !== "" && mark !== null && mark !== undefined);
+    const hasMarks = Object.values(studentMarks).some(
+      (mark) => mark !== "" && mark !== null && mark !== undefined,
+    );
     if (!hasMarks) {
-      showToast("Please enter marks for at least one student before saving", "error");
+      showToast(
+        "Please enter marks for at least one student before saving",
+        "error",
+      );
       return;
     }
 
@@ -158,9 +163,15 @@ const AddMarks = () => {
       setMarksSaved(true);
 
       // Dispatch custom event to notify Results page to refresh data
-      window.dispatchEvent(new CustomEvent('marksUpdated', {
-        detail: { class: selection.class, section: selection.section, subject: selection.subject }
-      }));
+      window.dispatchEvent(
+        new CustomEvent("marksUpdated", {
+          detail: {
+            class: selection.class,
+            section: selection.section,
+            subject: selection.subject,
+          },
+        }),
+      );
     } else {
       showToast(result.message, "error");
     }
@@ -195,11 +206,11 @@ const AddMarks = () => {
           </div>
         </div>
       </div>
-        <div className=" w-full bg-white flex justify-between items-center items-center px-4">
-      <TeacherSelector
-        onSelectionChange={(newSelection) => setSelection(newSelection)}
-      />
-    </div>
+      <div className=" w-full bg-white flex justify-between items-center items-center px-4">
+        <TeacherSelector
+          onSelectionChange={(newSelection) => setSelection(newSelection)}
+        />
+      </div>
 
       {/* TABLE */}
       <div className="w-full mt-6 px-4">
@@ -224,8 +235,8 @@ const AddMarks = () => {
               render: (student) => (
                 <div className="flex items-center">
                   <span className="font-semibold">{totalMarks}</span>
-                  </div>
-              )
+                </div>
+              ),
             },
             {
               header: `Obtained Marks`,
@@ -242,7 +253,6 @@ const AddMarks = () => {
                     }
                     className="w-16 h-10 border border-gray-200 rounded-lg text-center outline-none transition-all focus:border-[var(--primary-color)] focus:ring-4 focus:ring-[var(--primary-color)]/10 font-bold text-gray-700"
                   />
-                  
                 </div>
               ),
             },
@@ -254,10 +264,12 @@ const AddMarks = () => {
                 const grade = getGrade(percentage);
                 return (
                   <div className="flex items-center gap-2">
-                    <span className="font-semibold text-gray-800">{obtained !== "" ? grade : "-"}</span>
+                    <span className="font-semibold text-gray-800">
+                      {obtained !== "" ? grade : "-"}
+                    </span>
                   </div>
                 );
-              }
+              },
             },
             {
               header: `Status`,
@@ -267,13 +279,15 @@ const AddMarks = () => {
                 const status = getStatus(percentage);
                 return (
                   <div className="flex items-center gap-2">
-                    <span className={`font-semibold ${status === "Pass" ? "text-green-600" : "text-red-600"}`}>
+                    <span
+                      className={`font-semibold ${status === "Pass" ? "text-green-600" : "text-red-600"}`}
+                    >
                       {obtained !== "" ? status : "-"}
                     </span>
                   </div>
                 );
-              }
-            }
+              },
+            },
           ]}
           data={filteredStudents}
           emptyMessage="Select a class and section to add marks."
@@ -312,7 +326,9 @@ const AddMarks = () => {
                   <span className="font-semibold text-gray-800">
                     Grade: {obtained !== "" ? grade : "-"}
                   </span>
-                  <span className={`font-semibold ${status === "Pass" ? "text-green-600" : "text-red-600"}`}>
+                  <span
+                    className={`font-semibold ${status === "Pass" ? "text-green-600" : "text-red-600"}`}
+                  >
                     Status: {obtained !== "" ? status : "-"}
                   </span>
                 </div>

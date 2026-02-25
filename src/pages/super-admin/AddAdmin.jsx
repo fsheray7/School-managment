@@ -4,11 +4,12 @@ import { useToast } from "../../context/ToastContext";
 import DynamicForm from "../../components/ui/DynamicForm";
 import { FaUserPlus, FaArrowLeft } from "react-icons/fa";
 import Button from "../../components/ui/Button";
-import { getAdmins, saveAdmins } from "../../utils/adminStorage";
+import { useAdmin } from "../../context/AdminContext";
 
 const AddAdmin = () => {
   const navigate = useNavigate();
   const { showToast } = useToast();
+  const { admins, addAdmin } = useAdmin();
 
   const [formData, setFormData] = useState({
     name: "",
@@ -20,14 +21,15 @@ const AddAdmin = () => {
     password: "",
     confirmPassword: "",
     status: "Active",
-    profileImage: null,
+    profilePhoto: null,
   });
 
   const fields = [
     {
-      name: "profileImage",
+      name: "profilePhoto",
       label: "Profile Photo",
-      type: "image",
+      type: "input",
+      inputType: "file",
       fullWidth: true,
     },
     {
@@ -105,14 +107,12 @@ const AddAdmin = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const currentAdmins = getAdmins();
 
-    // Validation for duplicate email or username
-    if (currentAdmins.some((admin) => admin.email === formData.email)) {
+    if ((admins || []).some((admin) => admin.email === formData.email)) {
       showToast("An admin with this email already exists.", "error");
       return;
     }
-    if (currentAdmins.some((admin) => admin.username === formData.username)) {
+    if ((admins || []).some((admin) => admin.username === formData.username)) {
       showToast("This username is already taken.", "error");
       return;
     }
@@ -139,16 +139,14 @@ const AddAdmin = () => {
       profileImage: profileImageBase64,
     };
 
-    const updatedAdmins = [...currentAdmins, newAdmin];
-
-    saveAdmins(updatedAdmins);
+    addAdmin(newAdmin);
 
     showToast("Administrator added successfully!", "success");
     navigate("/super-admin-admins");
   };
 
   return (
-    <div className="p-4 md:p-6 flex flex-col gap-1 max-w-7xl ">
+    <div className="p-4 md:px-6 flex flex-col gap-1 max-w-7xl ">
       {/* Header section with back button */}
       <div className="flex items-center justify-between bg-white px-1 md:px-6 py-1 md:py-3 rounded-lg shadow-sm border border-gray-100">
         <div className="flex items-center gap-4">
@@ -173,12 +171,14 @@ const AddAdmin = () => {
       </div>
 
       {/* Main form card */}
-      <div className="bg-white p-2 md:p-8 rounded-3xl  mb-6">
+      <div className="bg-white p-2  rounded-3xl  mb-6">
         <DynamicForm
           fields={fields}
           formData={formData}
           setFormData={setFormData}
           onSubmit={handleSubmit}
+          submitButtonClassName=""
+          
         >
           CREATE ADMIN
         </DynamicForm>

@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 const Quiz = () => {
   const navigate = useNavigate();
   return (
-    <section className="w-full  bg-white flex flex-col items-center justify-center px-4 overflow-x-hidden mt-10">
+    <section className="w-full  bg-white flex flex-col items-center justify-center px-4 mt-10">
 
       <div className="flex pt-6 items-center justify-center">
         <img
@@ -17,7 +17,7 @@ const Quiz = () => {
 
       <Button
         onClick={() => navigate("/quizoptions")}
-        className="mt-6 w-xs"
+        className="mt-6 max-w-xs"
         variant="primary"      >
         Start
       </Button>

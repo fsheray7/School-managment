@@ -8,7 +8,6 @@ import AddAttendance from "./pages/teacher/AddAttendance";
 import Attendance from "./pages/teacher/Attendance";
 import Results from "./pages/teacher/Results";
 import AddMarks from "./pages/teacher/AddMarks";
-import Notice from "./pages/teacher/Notice";
 import Solutions from "./pages/teacher/Solutions";
 import AttendanceStudent from "./pages/student/AttendanceStudent";
 import HomeWorkStudent from "./pages/student/HomeWork";
@@ -44,7 +43,7 @@ import AddClass from "./features/admin/AddClass";
 import StudentPromotion from "./pages/admin/StudentPromotion";
 import Login from "./components/login/Login";
 import SuperAdminDashboard from "./pages/super-admin/SuperAdminDashboard";
-import Admins from "./pages/super-admin/Admins";
+import Admins from "./pages/super-admin/Admins.jsx";
 import Revenue from "./pages/super-admin/Revenue";
 import SuperAdminSettings from "./pages/super-admin/Settings";
 
@@ -58,7 +57,10 @@ function App() {
         <Route path="/" element={<WelcomePage />} />
 
         {/* Super admin route */}
-        <Route path="/super-admin" element={<Login role="super-admin" />} />
+        <Route
+          path="/super-admin"
+          element={<ProfileSelection initialRole="super-admin" />}
+        />
 
         {/* Unified Layout for All Roles */}
         <Route element={<DashboardLayout />}>
