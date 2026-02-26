@@ -52,7 +52,7 @@ const ProfileSelection = ({ initialRole }) => {
   const ROLES = NORMAL_ROLES;
 
   const boxStyle =
-    "flex flex-col p-2 items-center justify-center md:w-16 md:h-16 lg:w-16 lg:h-16 w-10 h-10 rounded-xl text-white cursor-pointer hover:brightness-90 transition shadow-md";
+    " bg-[var(--primary-color))] flex flex-col p-2 items-center justify-center md:w-16 md:h-16 lg:w-16 lg:h-16 w-10 h-10 rounded-xl text-white cursor-pointer hover:brightness-90 transition shadow-md";
 
   return (
     <section className="relative w-full  bg-white flex flex-col items-center px-4 sm:px-6 md:px-8 py-8 md:justify-center overflow-hidden">
@@ -101,13 +101,11 @@ const ProfileSelection = ({ initialRole }) => {
                 >
                   <div
                     className={boxStyle}
-                    style={{ backgroundColor: "var(--primary-color)" }}
                   >
                     <Icon size={iconSize} />
                   </div>
                   <span
-                    className="mt-3 text-md font-semibold text-gray-700 transition-colors"
-                    style={{ color: "var(--text-primary-color)" }}
+                    className="mt-3 text-md font-semibold text-gray-700 transition-colors text-[var(--text-primary-color)]"
                   >
                     {label}
                   </span>
@@ -116,7 +114,7 @@ const ProfileSelection = ({ initialRole }) => {
             </div>
           </div>
         ) : (
-          <div className="bg-white rounded-2xl w-full max-w-[400px] mt-2 sm:mt-8 md:mt-4">
+          <div className="bg-white rounded-2xl w-full max-w-[400px] mt-15 sm:mt-8 md:mt-4">
             <Button
               onClick={handleBackToRoles}
               variant="ghost"

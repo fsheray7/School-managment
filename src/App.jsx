@@ -36,18 +36,19 @@ import AddStudent from "./features/admin/AddStudent";
 import AddCourse from "./features/admin/AddCourse";
 import GenerateFee from "./features/admin/GenerateFee";
 import Finance from "./pages/admin/Finance";
-import NoticeAdmin from "./pages/admin/Notice";
-import NoticeTeacher from "./pages/teacher/Notice";
+import NoticeAdmin from "./pages/admin/NoticeAdmin.jsx";
+import NoticeTeacher from "./pages/teacher/NoticeTeacher.jsx";
 import Classes from "./pages/admin/Classes";
 import AddClass from "./features/admin/AddClass";
 import StudentPromotion from "./pages/admin/StudentPromotion";
-import Login from "./components/login/Login";
+import FeeManagement from "./pages/admin/FeeManagement";
 import SuperAdminDashboard from "./pages/super-admin/SuperAdminDashboard";
 import Admins from "./pages/super-admin/Admins.jsx";
 import Revenue from "./pages/super-admin/Revenue";
 import SuperAdminSettings from "./pages/super-admin/Settings";
 
 import AddAdmin from "./pages/super-admin/AddAdmin";
+import NoticeForm from "./components/admin/NoticeForm.jsx";
 
 function App() {
   return (
@@ -76,7 +77,9 @@ function App() {
           <Route path="/add-course" element={<AddCourse />} />
           <Route path="/generate-fee" element={<GenerateFee />} />
           <Route path="/finance" element={<Finance />} />
+          <Route path="/fees" element={<FeeManagement />} />
           <Route path="/notice-admin" element={<NoticeAdmin />} />
+          <Route path="/add-notice-admin" element={<NoticeForm />} />
           <Route path="/classes" element={<Classes />} />
           <Route path="/add-class" element={<AddClass />} />
           <Route path="/student-promotion" element={<StudentPromotion />} />
@@ -91,6 +94,7 @@ function App() {
           <Route path="/solutions" element={<Solutions />} />
           <Route path="/exam-routine" element={<ExamRoutine />} />
           <Route path="/notice-teacher" element={<NoticeTeacher />} />
+          <Route path="/add-notice-teacher" element={<NoticeForm />} />
 
           {/* Student Routes */}
           <Route path="/student-dashboard" element={<StudentDashboard />} />

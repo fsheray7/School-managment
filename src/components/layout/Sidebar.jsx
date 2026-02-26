@@ -51,11 +51,11 @@ const Sidebar = ({ isOpen, setIsOpen, menuItems = [], role = "admin" }) => {
 
         {/* LOGO AREA - Always visible */}
         <div className="relative h-24 flex flex-col items-center justify-center p-4">
-          <div className="relative flex items-center justify-center mb-2">
+          <div className="relative flex items-center py-2 justify-center mt-2">
             <img
               src="/profileselection/Vector.png"
               alt="Vector Logo"
-              className="w-15 h-15 object-contain"
+              className="w-18 h-18 object-contain"
             />
             <img
               src={
@@ -64,24 +64,24 @@ const Sidebar = ({ isOpen, setIsOpen, menuItems = [], role = "admin" }) => {
                   : "/logo/superlogo.png"
               }
               alt="Logo"
-              className="absolute w-12 h-12 rounded-full object-contain"
+              className="absolute w-14 h-14  object-contain"
             />
           </div>
-          <span className="text-[var(--text-primary-color)] text-base font-bold text-center px-1 leading-tight drop-shadow-sm">
+          <span className= "text-[var(--text-primary-color)] text-base font-bold text-center px-1 mb-2  leading-tight drop-shadow-sm">
             {displayName}
           </span>
         </div>
 
-        <hr className=" border-gray-100/40 mx-3" />
+        <hr className=" border-2 border-gray-100 mt-5 mb-2  px-3" />
 
         {/* MENU */}
-        <ul className="flex flex-col p-1 px-3 text-white">
+        <ul className="flex flex-col pt-3 gap-2 px-3 text-white">
           {menuItems.map((item, index) => (
             <li
               key={index}
               onClick={() => handleNavigation(item.path)}
               className={`
-                relative flex items-center p-1 rounded-xl cursor-pointer text-[var(--text-primary-color)] text-[13px] font-medium transition-all duration-300
+                relative flex items-center p- 1 rounded-xl cursor-pointer text-[var(--text-primary-color)] text-[13px] font-medium transition-all duration-300
                 ${isActive(item.path) ? "bg-white/25" : "hover:bg-white/10"}
               `}
               title={item.label}

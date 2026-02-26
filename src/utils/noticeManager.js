@@ -144,6 +144,9 @@ export const getNoticesForUser = (role, className = null, section = null) => {
       return notice.section === section;
     }
 
+    // Role specific management: Include notices sent BY this user
+    if (className && notice.author === className) return true;
+
     return false;
   });
 };

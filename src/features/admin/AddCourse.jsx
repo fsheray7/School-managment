@@ -79,6 +79,14 @@ const AddCourse = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     console.log(courseData);
+
+    // Record Activity
+    recordActivity(
+      ACTIVITY_TYPES.COURSE_ADDED,
+      "New course added",
+      `${courseData.courseName} (${courseData.courseCode}) assigned to ${courseData.instructor}`,
+    );
+
     navigate("/courses");
   };
 
@@ -93,7 +101,7 @@ const AddCourse = () => {
         onClick={handleBack}
         submitButtonClassName=""
         buttonAreaClassName="col-span-2 flex justify-center items-center gap-4"
-        >
+      >
         Add Course
       </DynamicForm>
     </div>

@@ -11,6 +11,7 @@ const DetailsModal = ({
   onDataChange,
   onSave,
   fields,
+  readOnly,
 }) => {
   if (!isOpen || !data) return null;
 

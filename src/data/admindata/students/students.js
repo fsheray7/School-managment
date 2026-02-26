@@ -705,6 +705,10 @@ const studentsData = [
 const finalStudentsData = studentsData.map((s) => ({
   ...s,
   profileImage: `/assets/profiles/students/s_${(s.id % 35) + 1}.jpg`,
+  isTransportUser: s.id % 5 === 0, // Randomly assign transport users
+  previousDues: s.id % 7 === 0 ? 1500 : 0, // Randomly assign previous dues
+  scholarshipPercentage: s.id % 10 === 0 ? 50 : 0, // Randomly assign scholarships
+  scholarshipTag: s.id % 10 === 0 ? "Merit Based" : null,
 }));
 
 export default finalStudentsData;

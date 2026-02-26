@@ -82,7 +82,23 @@ export const getStudentNotifications = (student) => {
     });
   }
 
-  // 5. Check Notices
+  // 5. Check Fee Invoices
+  const feeInvoices = JSON.parse(localStorage.getItem("feeInvoices")) || [];
+  const myFees = feeInvoices.filter(
+    (f) => f.studentId === student.rollNumber || f.studentId === student.id,
+  );
+  myFees.forEach((fee) => {
+    notifications.push({
+      id: `fee-${fee.invoiceNo}`,
+      title: `Fee Generated: Rs. ${parseFloat(fee.totalPayable).toLocaleString()} (${fee.month}) - ${fee.paymentStatus}`,
+      time: new Date(fee.generatedAt).toLocaleDateString(),
+      type: fee.paymentStatus === "Paid" ? "success" : "info",
+      icon: <FaMoneyBillWave className="text-emerald-500" />,
+      link: "/student-profile",
+    });
+  });
+
+  // 6. Check Notices
   const myNotices = getNoticesForUser(
     "student",
     student.class,
@@ -134,7 +150,23 @@ export const getTeacherNotifications = (teacher) => {
     });
   }
 
-  // 2. Check Notices
+  // 2. Check Fee Invoices for assigned class/section
+  const feeInvoices = JSON.parse(localStorage.getItem("feeInvoices")) || [];
+  const classFees = feeInvoices.filter(
+    (f) => f.classGrade === teacher.class && f.section === teacher.section,
+  );
+  classFees.forEach((fee) => {
+    notifications.push({
+      id: `tfee-${fee.invoiceNo}`,
+      title: `Fee Generated for ${fee.fullName}: Rs. ${parseFloat(fee.totalPayable).toLocaleString()} - ${fee.paymentStatus}`,
+      time: new Date(fee.generatedAt).toLocaleDateString(),
+      type: "info",
+      icon: <FaMoneyBillWave className="text-emerald-600" />,
+      link: "/teacher-dashboard",
+    });
+  });
+
+  // 3. Check Notices
   const myNotices = getNoticesForUser("teacher");
   myNotices.forEach((notice) => {
     notifications.push({

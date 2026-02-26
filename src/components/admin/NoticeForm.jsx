@@ -1,18 +1,30 @@
-import React, { useState } from "react";
+import { useState } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
 import CustomDropdown from "../ui/CustomDropdown";
 import Button from "../ui/Button";
 import FileUpload from "../ui/FileUpload";
 import { useSettings } from "../../context/SettingsContext";
 import { useToast } from "../../context/ToastContext";
+import { useTeacher } from "../../context/TeacherContext";
 import { addNotice } from "../../utils/noticeManager";
 
 const NoticeForm = () => {
   const { showToast } = useToast();
+  const navigate = useNavigate();
+  const location = useLocation();
+  const teacherContext = useTeacher();
   const { classes, sections } = useSettings();
+
+  const isTeacherContext = location.pathname.includes("teacher");
+  const author = isTeacherContext
+    ? teacherContext.currentTeacher?.fullName
+    : "Admin";
+  const authorRole = isTeacherContext ? "Teacher" : "Admin";
+
   const [formData, setFormData] = useState({
     title: "",
     details: "",
-    audience: "",
+    audience: isTeacherContext ? "Students" : "",
     class: "",
     section: "",
     isImportant: false,
@@ -22,7 +34,9 @@ const NoticeForm = () => {
   });
   const [focusedField, setFocusedField] = useState(null);
 
-  const audienceOptions = ["All", "Teachers", "Students", "Parents"];
+  const audienceOptions = isTeacherContext
+    ? ["All", "Students", "Parents"]
+    : ["All", "Teachers", "Students", "Parents"];
 
   // Parse classes and sections from settings strings
   const classOptions = classes
@@ -110,28 +124,45 @@ const NoticeForm = () => {
     const result = addNotice({
       ...noticePayload,
       attachmentName: attachmentName,
+      author: author,
+      authorRole: authorRole,
     });
 
     if (result.success) {
       showToast(result.message, "success");
       handleClear();
+      navigate(isTeacherContext ? "/notice-teacher" : "/notice-admin");
     } else {
       showToast(result.message, "error");
     }
   };
 
+  const handleNavigate = () => {
+    navigate(isTeacherContext ? "/notice-teacher" : "/notice-admin");
+  };
+
   return (
-    <div className="w-full max-w-3xl bg-white overflow-hidden">
+    <div className="w-full max-w-5xl mx-auto p-6 bg-white overflow-hidden">
+      <div className="flex justify-between items-center mb-6">
+        <h1 className="text-2xl font-bold text-gray-800">Add New Notice</h1>
+        <Button
+          variant="ghost"
+          onClick={handleNavigate}
+          className="text-gray-500 hover:text-gray-700"
+        >
+          ← Back to List
+        </Button>
+      </div>
       <form onSubmit={handleSubmit} className="p-1 md:p-4 space-y-6">
-        
         {/* Notice Title */}
         <div className="flex flex-col">
           <div className="relative">
             <label
               className={`absolute left-3 transition-all duration-200 pointer-events-none
-                ${focusedField === "title" || hasValue("title")
-                  ? '-top-2.5 text-[10px] bg-white px-1 text-gray-500'
-                  : 'top-2.5 text-xs md:text-sm text-gray-400'
+                ${
+                  focusedField === "title" || hasValue("title")
+                    ? "-top-2.5 text-[10px] bg-white px-1 text-gray-500"
+                    : "top-2.5 text-xs md:text-sm text-gray-400"
                 }`}
               style={{ zIndex: 5 }}
             >
@@ -147,9 +178,10 @@ const NoticeForm = () => {
               onBlur={handleBlur}
               placeholder=""
               className={`w-full px-3 py-2.5 text-xs md:text-sm focus:outline-none transition-all bg-transparent
-                ${focusedField === "title"
-                  ? 'border border-[var(--primary-color)] rounded-md shadow-sm'
-                  : 'border-0 border-b-2 border-gray-200 rounded-none'
+                ${
+                  focusedField === "title"
+                    ? "border border-[var(--primary-color)] rounded-md shadow-sm"
+                    : "border-0 border-b-2 border-gray-200 rounded-none"
                 }`}
             />
           </div>
@@ -160,9 +192,10 @@ const NoticeForm = () => {
           <div className="relative">
             <label
               className={`absolute left-3 transition-all duration-200 pointer-events-none
-                ${focusedField === "details" || hasValue("details")
-                  ? '-top-2.5 text-[10px] bg-white px-1 text-gray-500'
-                  : 'top-2.5 text-xs md:text-sm text-gray-400'
+                ${
+                  focusedField === "details" || hasValue("details")
+                    ? "-top-2.5 text-[10px] bg-white px-1 text-gray-500"
+                    : "top-2.5 text-xs md:text-sm text-gray-400"
                 }`}
               style={{ zIndex: 5 }}
             >
@@ -178,9 +211,10 @@ const NoticeForm = () => {
               onBlur={handleBlur}
               placeholder=""
               className={`w-full p-2 pt-4 text-sm focus:outline-none min-h-[100px] bg-transparent transition-all resize-none
-                ${focusedField === "details"
-                  ? 'border border-[var(--primary-color)] rounded-md shadow-sm'
-                  : 'border-0 border-b-2 border-gray-200 rounded-none'
+                ${
+                  focusedField === "details"
+                    ? "border border-[var(--primary-color)] rounded-md shadow-sm"
+                    : "border-0 border-b-2 border-gray-200 rounded-none"
                 }`}
             ></textarea>
           </div>
@@ -195,16 +229,18 @@ const NoticeForm = () => {
               >
                 Send Notice To
               </label>
-              <div className={`transition-all ${
-                focusedField === "audience" 
-                  ? 'border border-[var(--primary-color)] rounded-md' 
-                  : 'border-0 border-b-2 border-gray-200 rounded-none'
-              }`}>
+              <div
+                className={`transition-all ${
+                  focusedField === "audience"
+                    ? "border border-[var(--primary-color)] rounded-md"
+                    : "border-0 border-b-2 border-gray-200 rounded-none"
+                }`}
+              >
                 <CustomDropdown
                   options={audienceOptions}
                   value={formData.audience}
                   onChange={(val) => handleDropdownChange("audience", val)}
-                  placeholder=""
+                  placeholder="Select Audience"
                   triggerClassName="pt-4 bg-transparent border-0"
                   onFocus={() => handleFocus("audience")}
                   onBlur={handleBlur}
@@ -218,9 +254,10 @@ const NoticeForm = () => {
             <div className="relative">
               <label
                 className={`absolute left-3 transition-all duration-200 pointer-events-none
-                  ${focusedField === "expiryDate" || hasValue("expiryDate")
-                    ? '-top-2.5 text-[10px] bg-white px-1 text-gray-500'
-                    : 'top-2.5 text-xs md:text-sm text-gray-400'
+                  ${
+                    focusedField === "expiryDate" || hasValue("expiryDate")
+                      ? "-top-2.5 text-[10px] bg-white px-1 text-gray-500"
+                      : "top-2.5 text-xs md:text-sm text-gray-400"
                   }`}
                 style={{ zIndex: 5 }}
               >
@@ -234,9 +271,10 @@ const NoticeForm = () => {
                 onFocus={() => handleFocus("expiryDate")}
                 onBlur={handleBlur}
                 className={`w-full py-2.5 px-3 text-xs md:text-sm focus:outline-none transition-all bg-transparent
-                  ${focusedField === "expiryDate" || hasValue("expiryDate")
-                    ? 'border border-[var(--primary-color)] rounded-md shadow-sm'
-                    : 'border-0 border-b-2 border-gray-200 rounded-none'
+                  ${
+                    focusedField === "expiryDate" || hasValue("expiryDate")
+                      ? "border border-[var(--primary-color)] rounded-md shadow-sm"
+                      : "border-0 border-b-2 border-gray-200 rounded-none"
                   }`}
               />
             </div>
@@ -253,11 +291,13 @@ const NoticeForm = () => {
                 >
                   Class
                 </label>
-                <div className={`transition-all ${
-                  focusedField === "class" 
-                    ? 'border border-[var(--primary-color)] rounded-md' 
-                    : 'border-0 border-b-2 border-gray-200 rounded-none'
-                }`}>
+                <div
+                  className={`transition-all ${
+                    focusedField === "class"
+                      ? "border border-[var(--primary-color)] rounded-md"
+                      : "border-0 border-b-2 border-gray-200 rounded-none"
+                  }`}
+                >
                   <CustomDropdown
                     options={classOptions}
                     value={formData.class}
@@ -281,11 +321,13 @@ const NoticeForm = () => {
                 >
                   Section
                 </label>
-                <div className={`transition-all ${
-                  focusedField === "section" 
-                    ? 'border border-[var(--primary-color)] rounded-md' 
-                    : 'border-0 border-b-2 border-gray-200 rounded-none'
-                }`}>
+                <div
+                  className={`transition-all ${
+                    focusedField === "section"
+                      ? "border border-[var(--primary-color)] rounded-md"
+                      : "border-0 border-b-2 border-gray-200 rounded-none"
+                  }`}
+                >
                   <CustomDropdown
                     options={sectionOptions}
                     value={formData.section}
@@ -334,11 +376,13 @@ const NoticeForm = () => {
             >
               Attachment
             </label>
-            <div className={`transition-all p-2 ${
-              focusedField === "attachment" 
-                ? 'border border-[var(--primary-color)] rounded-md' 
-                : 'border-0 rounded-none'
-            }`}>
+            <div
+              className={`transition-all p-2 ${
+                focusedField === "attachment"
+                  ? "border border-[var(--primary-color)] rounded-md"
+                  : "border-0 rounded-none"
+              }`}
+            >
               <FileUpload
                 file={formData.attachment}
                 onChange={handleFileChange}

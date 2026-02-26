@@ -39,8 +39,7 @@ const StudentProfile = () => {
     <section className="relative w-full  bg-[#FDFDFF] flex flex-col items-center pt-24 pb-12 px-4 overflow-x-hidden">
       {/* Top Decorative Header Background */}
       <div
-        className="absolute top-0 left-0 right-0 h-40 rounded-b-[40px] z-0 transition-all duration-300"
-        style={{ backgroundColor: "var(--primary-color)" }}
+        className="absolute bg-[var(--primary-color)] top-0 left-0 right-0 h-40 rounded-[40px] z-0 transition-all duration-300"
       ></div>
 
       {/* Profile Card Container */}

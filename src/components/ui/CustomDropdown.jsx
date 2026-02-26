@@ -124,7 +124,7 @@ const CustomDropdown = ({
       )}
       <div
         onClick={() => setIsOpen(!isOpen)}
-        className={`flex items-center justify-between w-full rounded-md px-3 py-2 text-sm cursor-pointer bg-white transition-all duration-200 shadow-sm
+        className={`flex items-center justify-between w-full rounded-md px-3 py-2 text-sm cursor-pointer bg-white transition-all duration-200 
                     ${triggerClassName || "border-gray-300"}
                 `}
       >

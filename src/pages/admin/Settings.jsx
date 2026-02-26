@@ -239,16 +239,16 @@ const Settings = () => {
         {/* Header */}
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 bg-white p-4 rounded-2xl shadow-sm border border-gray-100">
           <div className="flex flex-col gap-2">
-            <h1 className="text-xl font-bold  tracking-tight text-[var(--text-primary-color)]">
+            <h1 className="text-sm font-bold  tracking-tight text-[var(--text-primary-color)]">
               System Settings
             </h1>
-            <p className="text-gray-500 ">
+            <p className="text-gray-500 text-xs ">
               Configure your school's global identity and preferences.
             </p>
           </div>
           <Button
             onClick={handleSaveClick}
-            className="  text-sm shadow-lg shadow-blue-100 border border-[var(--primary-color)]"
+            className="  text-xs shadow-lg shadow-blue-100 border border-[var(--primary-color)]"
             variant="ghost"
           >
             Save Changes

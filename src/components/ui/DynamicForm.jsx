@@ -143,7 +143,7 @@ const DynamicForm = ({
                     field.render ? (
                       field.render(formData)
                     ) : (
-                      <div className="w-full max-w-3xl px-3 py-2.5 text-xs md:text-sm bg-gray-50/50 rounded-md border border-gray-100 text-gray-700 font-medium whitespace-pre-wrap min-h-[40px] flex items-center justify-between">
+                      <div className="w-full max-w-3xl px-3 py-2.5 text-xs md:text-sm bg-gray-50/50 rounded-md border border-gray-00 text-gray-700 font-medium whitespace-pre-wrap min-h-[40px] flex items-center justify-between">
                         <span>
                           {isPasswordField
                             ? isVisible
@@ -217,7 +217,7 @@ const DynamicForm = ({
                         className={`w-full px-3 py-2.5 text-xs md:text-sm focus:outline-none transition-all bg-transparent
                           ${isFocused 
                             ? 'border border-[var(--primary-color)] rounded-md shadow-sm' 
-                            : 'border-0 border-b-2 border-gray-200 rounded-none'
+                            : 'border-0 border-b-2 border-gray-500 rounded-none'
                           }`}
                       />
 
@@ -254,7 +254,7 @@ const DynamicForm = ({
               {field.type === "input" && field.inputType === "file" && (
                 <div className="relative">
                   {readOnly ? (
-                    <div className="w-full px-3 py-2.5 text-xs md:text-sm bg-gray-50/50 rounded-md border border-gray-100 text-gray-700 font-medium h-10 flex items-center">
+                    <div className="w-full px-3 py-2.5 text-xs md:text-sm bg-gray-50/50 rounded-md border border-gray-500 text-gray-700 font-medium h-10 flex items-center">
                       {formData[field.name] ? (
                         <span className="truncate">
                           {formData[field.name] instanceof File
@@ -266,7 +266,7 @@ const DynamicForm = ({
                       )}
                     </div>
                   ) : (
-                    <div className={`transition-all ${isFocused ? 'border border-[var(--primary-color)] rounded-md p-2' : 'border-0 border-b-2 border-gray-200 rounded-none'}`}>
+                    <div className={`transition-all ${isFocused ? 'border border-[var(--primary-color)] rounded-md p-3' : 'border-0 border-b-2 border-gray-500 rounded-none'}`}>
                       {/* Floating Label for File Upload */}
                       <label
                         className={`absolute -top-2.5 left-3 text-[10px] bg-white px-1 text-gray-500 transition-all duration-200 z-10`}
@@ -303,7 +303,7 @@ const DynamicForm = ({
                     field.render ? (
                       field.render(formData)
                     ) : (
-                      <div className="w-full p-3 text-xs md:text-sm bg-gray-50/50 rounded-md border border-gray-100 text-gray-700 font-medium whitespace-pre-wrap min-h-[100px]">
+                      <div className="w-full p-3 text-xs md:text-sm bg-gray-50/50 rounded-md border border-gray-500 text-gray-700 font-medium whitespace-pre-wrap min-h-[100px]">
                         {formData[field.name] || (
                           <span className="text-gray-300 italic">No content</span>
                         )}
@@ -327,14 +327,14 @@ const DynamicForm = ({
                         name={field.name}
                         value={formData[field.name] || ""}
                         onChange={(e) => handleChange(field.name, e.target.value)}
-                        placeholder=""
+                        placeholder={field.placeholder}
                         required={field.required}
                         onFocus={() => handleFocus(field.name)}
                         onBlur={handleBlur}
                         className={`w-full p-2 pt-4 text-sm focus:outline-none min-h-[100px] bg-transparent transition-all
                           ${isFocused 
                             ? 'border border-[var(--primary-color)] rounded-md shadow-sm' 
-                            : 'border-0 border-b-2 border-gray-200 rounded-none'
+                            : 'border-0 border-b-2 border-gray-500 rounded-none'
                           }`}
                       />
                     </>
@@ -381,9 +381,9 @@ const DynamicForm = ({
                           }
                           value={formData[field.name]}
                           onChange={(val) => handleChange(field.name, val)}
-                          placeholder=""
+                          placeholder={field.placeholder}
                           containerClassName="w-full"
-                          triggerClassName={`pt-4  bg-transparent transition-all ${isFocused ? 'border border-[var(--primary-color)] rounded-md' : 'border-0 border-b-2 border-gray-200 rounded-none'} ${
+                          triggerClassName={`pt-4  bg-transparent transition-all ${isFocused ? 'border border-[var(--primary-color)] rounded-md' : 'border-0 border-b-2 border-gray-500 rounded-none'} ${
                             field.inputClassName || ""
                           }`}
                           multiSelect={field.multiSelect}

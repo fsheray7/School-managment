@@ -33,6 +33,7 @@ const TeacherDashboard = () => {
   const [notices, setNotices] = useState([]);
   const [selectedNotice, setSelectedNotice] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [showWelcome, setShowWelcome] = useState(false);
 
   useEffect(() => {
     if (teacher) {
@@ -60,6 +61,13 @@ const TeacherDashboard = () => {
       // Load notices
       const teacherNotices = getNoticesForUser("teacher");
       setNotices(teacherNotices.slice(0, 5));
+
+      // Show welcome toast
+      setShowWelcome(true);
+      const timer = setTimeout(() => {
+        setShowWelcome(false);
+      }, 5000);
+      return () => clearTimeout(timer);
     } else {
       navigate("/");
     }
@@ -73,37 +81,58 @@ const TeacherDashboard = () => {
   if (!teacher) return null;
 
   return (
-    <section className="flex flex-col w-full bg-[#f8fafc] overflow-y-auto  pb-10 pt-4 gap-4">
+    <section className="flex flex-col w-full  overflow-y-auto  pb-10 pt-4 gap-4">
       {/* Welcome Banner */}
-      <div className="relative w-full bg-gradient-to-r from-[#e0f2fe] to-[#f0f9ff] rounded-3xl p-4 md:p-8  shadow-sm border border-blue-50 flex items-center justify-between overflow-hidden">
-        {/* Abstract Background Shapes */}
-        <div className="absolute top-[-20%] left-[-5%] w-64 h-64 bg-blue-100 rounded-full opacity-20 blur-3xl"></div>
-        <div className="absolute bottom-[-10%] right-[10%] w-48 h-48 bg-blue-200 rounded-full opacity-30 blur-2xl"></div>
-
-        <div className="z-10 max-w-2xl">
-          <h1 className="text-lg md:text-2xl font-bold text-[#1e293b] mb-4">
-            Welcome, {teacher.fullName}!
-          </h1>
-          <p className="text-[#64748b] text-xs md:text-base sm:text-lg leading-relaxed max-w-lg">
-            "Education is the most powerful weapon which you can use to change
-            the world." Manage your classes and stay updated with school
-            activities.
-          </p>
-        </div>
-
-        <div className="hidden lg:block z-10">
-          <div className="relative">
-            <div className="w-48 h-48 rounded-full border-8 border-white shadow-xl overflow-hidden bg-white">
-              <img
-                src={teacher.profileImage}
-                alt="Profile"
-                className="w-full h-full object-cover"
-              />
+      <div className="relative">
+        {showWelcome ? (
+          <div className="relative w-full bg-blue-600 rounded-3xl p-6 md:p-8 flex items-center justify-between text-white shadow-xl animate-fade-in-down transition-all duration-500 overflow-hidden">
+            <div className="flex flex-col gap-1 z-10">
+              <h2 className="text-xl sm:text-2xl font-black flex items-center gap-3">
+                Welcome back, {teacher.fullName.split(" ")[0]}!
+                <span className="animate-bounce">👋</span>
+              </h2>
+              <p className="text-blue-100 text-xs sm:text-sm font-medium tracking-wide">
+                Ready to inspire your students today?
+              </p>
             </div>
-            {/* Decorative element around image */}
-            <div className="absolute inset-[-10px] rounded-full border-2 border-blue-100 opacity-50"></div>
+            <div className="hidden sm:block opacity-20 transform rotate-12 -mr-8 text-white">
+              <FaTrophy size={120} />
+            </div>
+            {/* Dynamic background pulse */}
+            <div className="absolute top-0 right-0 -mr-16 -mt-16 w-64 h-64 bg-white/10 rounded-full blur-3xl animate-pulse"></div>
           </div>
-        </div>
+        ) : (
+          <div className="relative w-full bg-gradient-to-r from-[#e0f2fe] to-[#f0f9ff] rounded-3xl p-4 md:p-8 shadow-sm border border-blue-50 flex items-center justify-between overflow-hidden animate-fade-in transition-all duration-500">
+            {/* Abstract Background Shapes */}
+            <div className="absolute top-[-20%] left-[-5%] w-64 h-64 bg-blue-100 rounded-full opacity-20 blur-3xl"></div>
+            <div className="absolute bottom-[-10%] right-[10%] w-48 h-48 bg-blue-200 rounded-full opacity-30 blur-2xl"></div>
+
+            <div className="z-10 max-w-2xl">
+              <h1 className="text-lg md:text-2xl font-bold text-[#1e293b] mb-4">
+                Welcome, {teacher.fullName}!
+              </h1>
+              <p className="text-[#64748b] text-xs md:text-base sm:text-lg leading-relaxed max-w-lg">
+                "Education is the most powerful weapon which you can use to
+                change the world." Manage your classes and stay updated with
+                school activities.
+              </p>
+            </div>
+
+            <div className="hidden lg:block z-10">
+              <div className="relative">
+                <div className="w-48 h-48 rounded-full border-8 border-white shadow-xl overflow-hidden bg-white">
+                  <img
+                    src={teacher.profileImage}
+                    alt="Profile"
+                    className="w-full h-full object-cover"
+                  />
+                </div>
+                {/* Decorative element around image */}
+                <div className="absolute inset-[-10px] rounded-full border-2 border-blue-100 opacity-50"></div>
+              </div>
+            </div>
+          </div>
+        )}
       </div>
 
       <div className="grid grid-cols-1 xl:grid-cols-3 gap-2 w-full">

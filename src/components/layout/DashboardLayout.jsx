@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Outlet, useLocation } from "react-router-dom";
 import Sidebar from "./Sidebar";
 import Navbar from "./Navbar";
+import Breadcrumbs from "../ui/Breadcrumbs";
 import {
   FaSchool,
   FaCog,
@@ -47,15 +48,16 @@ const DashboardLayout = () => {
         "/courses",
         "/meetings",
         "/settings",
-        "/add-teacher",
         "/add-student",
         "/add-course",
         "/generate-fee",
         "/finance",
+        "/fees",
         "/notice-admin",
         "/classes",
         "/add-class",
         "/student-promotion",
+        "/add-notice-admin",
       ].includes(location.pathname)
     ) {
       return "admin";
@@ -73,6 +75,12 @@ const DashboardLayout = () => {
       ].includes(location.pathname)
     ) {
       return "student";
+    }
+    if (
+      location.pathname.includes("teacher") ||
+      ["/notice-teacher", "/add-notice-teacher"].includes(location.pathname)
+    ) {
+      return "teacher";
     }
     return "teacher";
   };
@@ -102,7 +110,7 @@ const DashboardLayout = () => {
       { label: "Meetings", path: "/meetings", icon: <IoPeople size={20} /> },
       {
         label: "Fees",
-        path: "/generate-fee",
+        path: "/fees",
         icon: <FaFileInvoice size={20} />,
       },
       {
@@ -233,7 +241,8 @@ const DashboardLayout = () => {
         isSidebarOpen={isSidebarOpen}
       />
       <main className="w-full flex lg:pl-56 pt-14 transition-all duration-300">
-        <div className="px-1 w-full">
+        <div className="px-6 py-4 w-full">
+          <Breadcrumbs role={role} />
           <Outlet />
         </div>
       </main>

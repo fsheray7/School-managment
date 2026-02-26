@@ -22,11 +22,11 @@ const Filters = ({
           onChange={(e) => setSearchQuery(e.target.value)}
           type="search"
           placeholder={searchPlaceholder}
-          className="w-full border border-gray-300 rounded-lg px-8 py-1.5 outline-none focus:border-[var(--primary-color)] transition-all shadow-sm"
+          className="w-full border border-gray-400 rounded-lg px-8 py-1.5 outline-none focus:border-[var(--primary-color)] transition-all shadow-sm"
         />
         <CiSearch
           size={22}
-          className="absolute text-gray-400 right-35 top-1/2 -translate-y-1/2 pointer-events-none"
+          className="absolute text-gray-400 right-45 top-1/2 -translate-y-1/2 pointer-events-none"
         />
 
         {/* Add Button */}

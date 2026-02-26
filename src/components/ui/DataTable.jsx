@@ -6,12 +6,11 @@ const DataTable = ({
   renderActions,
   renderMobileCard,
   emptyMessage = "No data found.",
-  tableClassName ="bg-[var(--primary-color)]/10 uppercase font-bold text-[var(--primary-color)]  ",
+  tableClassName = "bg-[var(--primary-color)]/10 uppercase font-bold text-[var(--primary-color)]  ",
 }) => {
-
   // Flatten columns (for tbody rendering)
   const flattenedColumns = columns.flatMap((col) =>
-    col.children ? col.children : col
+    col.children ? col.children : col,
   );
 
   const hasGroupedHeaders = columns.some((col) => col.children);
@@ -19,12 +18,9 @@ const DataTable = ({
   return (
     <div className="w-full">
       {/* ================= TABLE ================= */}
-      <div className="hidden md:block w-full bg-white rounded-xl shadow-sm border border-gray-200 mt-4 overflow-hidden">
-        <table className="w-full table-fixed text-left border-collapse">
-          
-          <thead
-            className={tableClassName}
-                      >
+      <div className="hidden md:block w-full bg-white rounded-xl shadow-sm border border-gray-200 mt-4 overflow-x-auto">
+        <table className="w-full table-auto text-left border-collapse">
+          <thead className={tableClassName}>
             {/* ===== FIRST HEADER ROW ===== */}
             <tr>
               {columns.map((col, index) => {
@@ -69,11 +65,14 @@ const DataTable = ({
                 {columns.map((col) =>
                   col.children
                     ? col.children.map((child, i) => (
-                        <th key={i} className="px-2 text-[var(--text-primary-color)] text-xs  text-center">
+                        <th
+                          key={i}
+                          className="px-2 text-[var(--text-primary-color)] text-xs  text-center"
+                        >
                           {child.header}
                         </th>
                       ))
-                    : null
+                    : null,
                 )}
               </tr>
             )}
@@ -87,10 +86,7 @@ const DataTable = ({
                 className="hover:bg-gray-50 transition-colors"
               >
                 {flattenedColumns.map((col, colIndex) => (
-                  <td
-                    key={colIndex}
-                    className="px-3 py-3 "
-                  >
+                  <td key={colIndex} className="px-2 py-2 ">
                     {col.render ? col.render(item) : item[col.key]}
                   </td>
                 ))}
@@ -106,9 +102,7 @@ const DataTable = ({
         </table>
 
         {data.length === 0 && (
-          <div className="p-8 text-center text-gray-500">
-            {emptyMessage}
-          </div>
+          <div className="p-8 text-center text-gray-500">{emptyMessage}</div>
         )}
       </div>
 
@@ -116,7 +110,25 @@ const DataTable = ({
       <div className="md:hidden w-full flex flex-col gap-3 mt-4">
         {data.map((item, index) => (
           <div key={item.id || index}>
-            {renderMobileCard(item)}
+            {renderMobileCard ? (
+              renderMobileCard(item)
+            ) : (
+              <div className="bg-white p-4 rounded-xl shadow-sm border border-gray-200">
+                {columns.map((col, i) => (
+                  <div
+                    key={i}
+                    className="flex justify-between py-1 border-b last:border-0 border-gray-100"
+                  >
+                    <span className="text-gray-500 font-medium">
+                      {col.header}
+                    </span>
+                    <span className="text-gray-800">
+                      {col.render ? col.render(item) : item[col.key]}
+                    </span>
+                  </div>
+                ))}
+              </div>
+            )}
           </div>
         ))}
 
@@ -125,7 +137,6 @@ const DataTable = ({
             {emptyMessage}
           </div>
         )}
-        
       </div>
     </div>
   );

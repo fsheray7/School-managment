@@ -9,6 +9,7 @@ import {
   TEACHERS,
   SESSION_OPTIONS,
 } from "../../constants/Store";
+import { recordActivity, ACTIVITY_TYPES } from "../../utils/activityManager";
 
 const AddClass = () => {
   const navigate = useNavigate();
@@ -69,6 +70,14 @@ const AddClass = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     console.log(classData);
+
+    // Record Activity
+    recordActivity(
+      ACTIVITY_TYPES.CLASS_ADDED,
+      "New class created",
+      `Class ${classData.className} (Section ${classData.section}) added to ${classData.department} department`,
+    );
+
     navigate("/classes");
   };
 

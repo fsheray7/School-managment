@@ -11,6 +11,7 @@ import { IoArrowBack } from "react-icons/io5";
 import DynamicForm from "../../components/ui/DynamicForm";
 import ProgressBar from "../../components/ui/ProgressBar";
 import { useToast } from "../../context/ToastContext";
+import { recordActivity, ACTIVITY_TYPES } from "../../utils/activityManager";
 
 const AddTeacher = () => {
   const { showToast } = useToast();
@@ -285,6 +286,14 @@ const AddTeacher = () => {
     } else {
       console.log("Teacher Data:", teacherData);
       showToast("Teacher added successfully!");
+
+      // Record Activity
+      recordActivity(
+        ACTIVITY_TYPES.TEACHER_ADDED,
+        "New teacher registration",
+        `${teacherData.fullname} joined as ${teacherData.role} in ${teacherData.department} department`,
+      );
+
       navigate("/teachers");
     }
   };

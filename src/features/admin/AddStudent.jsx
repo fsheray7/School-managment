@@ -10,6 +10,7 @@ import { IoArrowBack } from "react-icons/io5";
 import DynamicForm from "../../components/ui/DynamicForm";
 import ProgressBar from "../../components/ui/ProgressBar";
 import { useToast } from "../../context/ToastContext";
+import { recordActivity, ACTIVITY_TYPES } from "../../utils/activityManager";
 
 const AddStudent = () => {
   const { showToast } = useToast();
@@ -200,6 +201,14 @@ const AddStudent = () => {
     } else {
       console.log("Final submission data:", studentData);
       showToast("Student added successfully!");
+
+      // Record Activity
+      recordActivity(
+        ACTIVITY_TYPES.STUDENT_ADDED,
+        "New student registration",
+        `${studentData.fullName} enrolled in ${studentData.classGrade} (Section ${studentData.section})`,
+      );
+
       navigate("/students");
     }
   };

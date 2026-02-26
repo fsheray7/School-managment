@@ -15,13 +15,13 @@ const Button = ({
 
   const variants = {
     primary:
-      "bg-[var(--primary-color)] text-xs md: text-base hover:brightness-90 cursor-pointer hover:scale-102 transition-all duration-300 text-white rounded-md px-4 py-1.5 ",
+      "bg-[var(--primary-color)] text-xs md: text-base hover:brightness-90 cursor-pointer hover:scale-102 transition-all duration-300 text-white rounded-md px-4  py-1 md:py-1.5 ",
 
     outline:
       "border border-[var(--primary-color)]text-sm ",
 
     ghost:
-      "text-[var(--primary-color)] hover:text-[var(--primary-color)] cursor-pointer px-2 py-2 rounded-full hover:scale-102 transition-all duration-300 ",
+      "text-[var(--primary-color)] hover:text-[var(--primary-color)] cursor-pointer px-2 py-1 md:py-2 rounded-full hover:scale-102 transition-all duration-300 ",
 
     danger:
       "bg-red-600 hover:bg-red-700 text-white rounded-md px-6 py-1.5 cursor-pointer hover:scale-105 transition-all duration-300 ",
@@ -32,7 +32,7 @@ const Button = ({
     add: "border border-[var(--primary-color)] text-[var(--primary-color)] hover:bg-[var(--primary-color)] hover:text-white px-6 py-1.5 rounded-lg shadow-md font-medium text-sm gap-2 whitespace-nowrap hover:scale-105 transition-all duration-300 cursor-pointer ",
 
     reset:
-      " border border-gray-300 rounded-lg px-6 py-1 md:py-2 text-sm outline-none focus:border-[var(--primary-color)] cursor-pointer bg-white shadow-sm hover:text-red-500 font-medium transition-all duration-300 hover:scale-105 ",
+      " border border-gray-300 rounded-lg px-6 py-1.5 md:py-2 text-sm outline-none focus:border-[var(--primary-color)] cursor-pointer bg-white shadow-sm hover:text-red-500 font-medium transition-all duration-300 hover:scale-105 ",
   };
 
   return (
