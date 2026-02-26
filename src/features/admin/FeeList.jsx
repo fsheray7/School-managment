@@ -181,12 +181,30 @@ const FeeList = () => {
         { label: "Status", value: s.status },
       ]}
       actions={
-        <button
-          onClick={() => navigate("/admin/generate-fee")}
-          className="p-2 bg-primary/10 text-primary rounded-lg hover:bg-primary/20 transition-all text-sm font-bold flex items-center gap-1"
-        >
-          <IoWallet /> BILL
-        </button>
+        <div className="flex items-center gap-2">
+          <Button
+            onClick={() =>
+              navigate("/generate-fee", {
+                state: { rollNumber: s.rollNumber },
+              })
+            }
+            variant="ghost"
+            className="p-2 bg-primary/10 text-primary rounded-lg hover:bg-primary/20 transition-all text-sm font-bold flex items-center gap-1"
+          >
+            <IoWallet /> Fee
+          </Button>
+          <Button
+            onClick={() => {
+              setPrintingStudent(s);
+              setTimeout(() => window.print(), 100);
+            }}
+            variant="ghost"
+            className="p-2 bg-gray-100 text-gray-600 rounded-lg hover:bg-gray-200 transition-all no-print flex items-center gap-1"
+            title="Print Receipt"
+          >
+            <IoPrint size={14} /> Print
+          </Button>
+        </div>
       }
     />
   );
