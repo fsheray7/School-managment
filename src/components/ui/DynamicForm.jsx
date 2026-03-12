@@ -143,7 +143,7 @@ const DynamicForm = ({
                     field.render ? (
                       field.render(formData)
                     ) : (
-                      <div className="w-full max-w-3xl px-3 py-2.5 text-xs md:text-sm bg-gray-50/50 rounded-md border border-gray-00 text-gray-700 font-medium whitespace-pre-wrap min-h-[40px] flex items-center justify-between">
+                      <div className="w-full max-w-3xl px-3 py-2.5 text-[18px] md:text-[18px] bg-gray-50/50 rounded-md border border-gray-00 text-gray-700 font-medium whitespace-pre-wrap min-h-[40px] flex items-center justify-between">
                         <span>
                           {isPasswordField
                             ? isVisible
@@ -181,7 +181,7 @@ const DynamicForm = ({
                         className={`absolute left-3 transition-all duration-200 pointer-events-none
                           ${isFocused || fieldHasValue
                             ? '-top-2.5 text-[12px] bg-white px-1 text-gray-500'
-                            : 'top-2.5 text-xs md:text-md text-gray-400'
+                            : 'top-2.5 text-[18px] md:text-md text-gray-400'
                           }`}
                         style={{
                           transform: isFocused || fieldHasValue ? 'translateY(0)' : 'translateY(0)',
@@ -214,7 +214,7 @@ const DynamicForm = ({
                         required={field.required}
                         onFocus={() => handleFocus(field.name)}
                         onBlur={handleBlur}
-                        className={`w-full px-3 py-2.5 text-xs md:text-sm focus:outline-none transition-all bg-transparent
+                        className={`w-full px-3 py-2.5 text-[18px] md:text-[18px] focus:outline-none transition-all bg-transparent
                           ${isFocused 
                             ? 'border border-[var(--primary-color)] rounded-md shadow-sm' 
                             : 'border-0 border-b-2 border-gray-500 rounded-none'
@@ -254,7 +254,7 @@ const DynamicForm = ({
               {field.type === "input" && field.inputType === "file" && (
                 <div className="relative">
                   {readOnly ? (
-                    <div className="w-full px-3 py-2.5 text-xs md:text-sm bg-gray-50/50 rounded-md border border-gray-500 text-gray-700 font-medium h-10 flex items-center">
+                    <div className="w-full px-3 py-2.5 text-[18px] md:text-[18px] bg-gray-50/50 rounded-md border border-gray-500 text-gray-700 font-medium h-10 flex items-center">
                       {formData[field.name] ? (
                         <span className="truncate">
                           {formData[field.name] instanceof File
@@ -303,7 +303,7 @@ const DynamicForm = ({
                     field.render ? (
                       field.render(formData)
                     ) : (
-                      <div className="w-full p-3 text-xs md:text-sm bg-gray-50/50 rounded-md border border-gray-500 text-gray-700 font-medium whitespace-pre-wrap min-h-[100px]">
+                      <div className="w-full p-3 text-[18px] md:text-[18px] bg-gray-50/50 rounded-md border border-gray-500 text-gray-700 font-medium whitespace-pre-wrap min-h-[100px]">
                         {formData[field.name] || (
                           <span className="text-gray-300 italic">No content</span>
                         )}
@@ -316,7 +316,7 @@ const DynamicForm = ({
                         className={`absolute left-3 transition-all duration-200 pointer-events-none
                           ${isFocused || fieldHasValue
                             ? '-top-2.5 text-[10px] bg-white px-1 text-gray-500'
-                            : 'top-2.5 text-xs md:text-sm text-gray-400'
+                            : 'top-2.5 text-[18px] md:text-[18px] text-gray-400'
                           }`}
                         style={{ zIndex: 5 }}
                       >
@@ -331,7 +331,7 @@ const DynamicForm = ({
                         required={field.required}
                         onFocus={() => handleFocus(field.name)}
                         onBlur={handleBlur}
-                        className={`w-full p-2 pt-4 text-sm focus:outline-none min-h-[100px] bg-transparent transition-all
+                        className={`w-full p-2 pt-4 text-[18px] focus:outline-none min-h-[100px] bg-transparent transition-all
                           ${isFocused 
                             ? 'border border-[var(--primary-color)] rounded-md shadow-sm' 
                             : 'border-0 border-b-2 border-gray-500 rounded-none'
@@ -349,7 +349,7 @@ const DynamicForm = ({
                     field.render ? (
                       field.render(formData)
                     ) : (
-                      <div className="w-full px-3 py-2.5 text-xs md:text-sm bg-gray-50/50 rounded-md border border-gray-100 text-gray-700 font-medium h-10 flex items-center">
+                      <div className="w-full px-3 py-2.5 text-[18px] md:text-[18px] bg-gray-50/50 rounded-md border border-gray-100 text-gray-700 font-medium h-10 flex items-center">
                         {formData[field.name] ? (
                           Array.isArray(formData[field.name]) ? (
                             formData[field.name].join(", ")
