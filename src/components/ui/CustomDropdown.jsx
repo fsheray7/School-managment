@@ -118,13 +118,13 @@ const CustomDropdown = ({
   return (
     <div className={`relative ${containerClassName}`} ref={dropdownRef}>
       {title && (
-        <label className="block text-[18px] font-medium text-gray-700 mb-1">
+        <label className="block text-[16px] font-medium text-gray-700 mb-1">
           {title}
         </label>
       )}
       <div
         onClick={() => setIsOpen(!isOpen)}
-        className={`flex items-center justify-between w-full rounded-md px-3 py-2 text-[18px] cursor-pointer bg-white transition-all duration-200 
+        className={`flex items-center justify-between w-full rounded-md px-3 py-2 text-[16px] cursor-pointer bg-white transition-all duration-200 
                     ${triggerClassName || "border-gray-300"}
                 `}
       >
@@ -153,7 +153,7 @@ const CustomDropdown = ({
                   placeholder={
                     creatable ? "Type or select..." : "Type to search..."
                   }
-                  className="w-full pl-9 pr-3 py-2 text-[18px] border border-gray-200 rounded-lg focus:outline-none focus:border-[var(--primary-color)] transition-colors"
+                  className="w-full pl-9 pr-3 py-2 text-[16px] border border-gray-200 rounded-lg focus:outline-none focus:border-[var(--primary-color)] transition-colors"
                   onClick={(e) => e.stopPropagation()}
                 />
               </div>
@@ -164,7 +164,7 @@ const CustomDropdown = ({
             {!multiSelect && (
               <li
                 onClick={() => handleSelect("")}
-                className="px-4 py-2 text-[18px] text-gray-400 hover:bg-gray-50 cursor-pointer"
+                className="px-4 py-2 text-[16px] text-gray-400 hover:bg-gray-50 cursor-pointer"
               >
                 {placeholder}
               </li>
@@ -173,7 +173,7 @@ const CustomDropdown = ({
             {showCreatableOption && (
               <li
                 onClick={() => handleSelect(searchQuery.trim())}
-                className="px-4 py-2 text-[18px] cursor-pointer transition-colors duration-150 bg-blue-50 text-blue-600 hover:bg-blue-100 border-b border-gray-100"
+                className="px-4 py-2 text-[16px] cursor-pointer transition-colors duration-150 bg-blue-50 text-blue-600 hover:bg-blue-100 border-b border-gray-100"
               >
                 <div className="flex items-center gap-2">
                   <span className="font-medium">Create:</span> "{searchQuery}"
@@ -190,7 +190,7 @@ const CustomDropdown = ({
                   <li
                     key={index}
                     onClick={() => handleSelect(option)}
-                    className={`px-4 py-2 text-[18px] cursor-pointer transition-colors duration-150 border-b border-gray-50 last:border-0
+                    className={`px-4 py-2 text-[16px] cursor-pointer transition-colors duration-150 border-b border-gray-50 last:border-0
                                           isSelected
                                             ? "bg-[var(--primary-color)]/10 font-medium"
                                             : "text-gray-700 hover:bg-gray-100"
@@ -212,7 +212,7 @@ const CustomDropdown = ({
                 );
               })
             ) : (
-              <li className="px-4 py-3 text-[18px] text-gray-400 text-center">
+              <li className="px-4 py-3 text-[16px] text-gray-400 text-center">
                 No results found
               </li>
             )}

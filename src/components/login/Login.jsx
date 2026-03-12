@@ -110,8 +110,8 @@ const Login = ({ onLoginSuccess, role }) => {
       fullWidth: true,
       rightIcon: <FaUser size={20} />,
       inputClassName:
-        "pb-2 md:pb-3 border-b-2 border-gray-300 transition-all text-[18px] text-gray-600 placeholder-gray-400 focus:border-[var(--primary-color)]",
-      labelClassName: "text-[18px] font-semibold text-black",
+        "pb-2 md:pb-3 border-b-2 border-gray-300 transition-all text-[16px] text-gray-600 placeholder-gray-400 focus:border-[var(--primary-color)]",
+      labelClassName: "text-[16px] font-semibold text-black",
       containerClassName: "gap-1 sm:gap-1.5",
     },
     {
@@ -123,8 +123,8 @@ const Login = ({ onLoginSuccess, role }) => {
       required: true,
       fullWidth: true,
       inputClassName:
-        "pb-2 md:pb-3 border-b-2 border-gray-300 transition-all text-[18px] text-gray-600 tracking-widest placeholder-gray-400 focus:border-[var(--primary-color)]",
-      labelClassName: "text-[18px] font-semibold text-black",
+        "pb-2 md:pb-3 border-b-2 border-gray-300 transition-all text-[16px] text-gray-600 tracking-widest placeholder-gray-400 focus:border-[var(--primary-color)]",
+      labelClassName: "text-[16px] font-semibold text-black",
       containerClassName: "gap-1 sm:gap-1.5",
     },
   ];
@@ -139,7 +139,7 @@ const Login = ({ onLoginSuccess, role }) => {
         showDefaultHeader={false}
         className="max-w-md flex flex-col gap-6 px-4"
         buttonAreaClassName="w-full flex mt-4 flex-col items-center"
-        submitButtonClassName="hover:brightness-90 active:brightness-75 text-white py-3 rounded-xl text-[18px] font-bold w-full max-w-[200px] shadow-lg transition-all active:scale-95 flex items-center justify-center bg-[var(--primary-color)]"
+        submitButtonClassName="hover:brightness-90 active:brightness-75 text-white py-3 rounded-xl text-[16px] font-bold w-full max-w-[200px] shadow-lg transition-all active:scale-95 flex items-center justify-center bg-[var(--primary-color)]"
         submitButtonVariant="primary"
       >
         Login

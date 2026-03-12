@@ -143,7 +143,7 @@ const DynamicForm = ({
                     field.render ? (
                       field.render(formData)
                     ) : (
-                      <div className="w-full max-w-3xl px-3 py-2.5 text-[18px] md:text-[18px] bg-gray-50/50 rounded-md border border-gray-00 text-gray-700 font-medium whitespace-pre-wrap min-h-[40px] flex items-center justify-between">
+                      <div className="w-full max-w-3xl px-3 py-2.5 text-[16px] md:text-[16px] bg-gray-50/50 rounded-md border border-gray-00 text-gray-700 font-medium whitespace-pre-wrap min-h-[40px] flex items-center justify-between">
                         <span>
                           {isPasswordField
                             ? isVisible
@@ -261,7 +261,7 @@ const DynamicForm = ({
               {field.type === "input" && field.inputType === "file" && (
                 <div className="relative">
                   {readOnly ? (
-                    <div className="w-full px-3 py-2.5 text-[18px] md:text-[18px] bg-gray-50/50 rounded-md border border-gray-500 text-gray-700 font-medium h-10 flex items-center">
+                    <div className="w-full px-3 py-2.5 text-[16px] md:text-[16px] bg-gray-50/50 rounded-md border border-gray-500 text-gray-700 font-medium h-10 flex items-center">
                       {formData[field.name] ? (
                         <span className="truncate">
                           {formData[field.name] instanceof File
@@ -317,7 +317,7 @@ const DynamicForm = ({
                     field.render ? (
                       field.render(formData)
                     ) : (
-                      <div className="w-full p-3 text-[18px] md:text-[18px] bg-gray-50/50 rounded-md border border-gray-500 text-gray-700 font-medium whitespace-pre-wrap min-h-[100px]">
+                      <div className="w-full p-3 text-[16px] md:text-[16px] bg-gray-50/50 rounded-md border border-gray-500 text-gray-700 font-medium whitespace-pre-wrap min-h-[100px]">
                         {formData[field.name] || (
                           <span className="text-gray-300 italic">
                             No content
