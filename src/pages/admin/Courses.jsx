@@ -1,6 +1,10 @@
-import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
-import coursesData from "../../data/admindata/courses";
+import { useAppDispatch, useAppSelector } from "../../store/hooks";
+import {
+  updateCourse,
+  deleteCourse,
+  toggleCourseStatus,
+} from "../../store/slices/coursesSlice";
+import { addToast } from "../../store/slices/toastSlice";
 import Filters from "../../components/ui/Filters";
 import DeleteModal from "../../components/ui/DeleteModal";
 import DetailsModal from "../../components/ui/DetailsModal";
@@ -8,15 +12,18 @@ import DataTable from "../../components/ui/DataTable";
 import ActionButtons from "../../components/ui/ActionButtons";
 import DataCard from "../../components/ui/DataCard";
 import Pagination from "../../components/ui/Pagination";
-import { useToast } from "../../context/ToastContext";
+
 import { CLASS_OPTIONS, getSectionsByClass } from "../../constants/Store";
 import StatusToggle from "../../components/ui/StatusToggle";
 import ConfirmationModal from "../../components/ui/ConfirmationModal";
+import { useState } from "react";
+import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 
 const Courses = () => {
-  const { showToast } = useToast();
+  const dispatch = useAppDispatch();
+  const courses = useAppSelector((state) => state.courses.courses);
   const navigate = useNavigate();
-  const [courses, setCourses] = useState(coursesData);
   const [selectedCourse, setSelectedCourse] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isEditMode, setIsEditMode] = useState(false);
@@ -24,6 +31,8 @@ const Courses = () => {
   const [itemToDelete, setItemToDelete] = useState(null);
   const [isConfirmOpen, setIsConfirmOpen] = useState(false);
   const [courseToUpdate, setCourseToUpdate] = useState(null);
+  const nextStatus =
+    courseToUpdate?.status === "Active" ? "Inactive" : "Active";
 
   // Filter State
   const [searchQuery, setSearchQuery] = useState("");
@@ -48,16 +57,12 @@ const Courses = () => {
   const confirmStatusUpdate = () => {
     if (!courseToUpdate) return;
 
-    const newStatus =
-      courseToUpdate.status === "Active" ? "Inactive" : "Active";
-    setCourses((prev) =>
-      prev.map((c) =>
-        c.id === courseToUpdate.id ? { ...c, status: newStatus } : c,
-      ),
-    );
-    showToast(
-      `${courseToUpdate.courseName}'s status changed to ${newStatus}`,
-      "success",
+    dispatch(toggleCourseStatus(courseToUpdate.id));
+    dispatch(
+      addToast({
+        message: `${courseToUpdate.courseName}'s status changed to ${nextStatus}`,
+        type: "success",
+      }),
     );
     setIsConfirmOpen(false);
     setCourseToUpdate(null);
@@ -82,17 +87,15 @@ const Courses = () => {
 
   const confirmDelete = () => {
     if (itemToDelete) {
-      setCourses(courses.filter((c) => c.id !== itemToDelete.id));
+      dispatch(deleteCourse(itemToDelete.id));
       setIsDeleteModalOpen(false);
       setItemToDelete(null);
     }
   };
 
   const handleSaveEdit = () => {
-    setCourses(
-      courses.map((c) => (c.id === selectedCourse.id ? selectedCourse : c)),
-    );
-    showToast("Course details updated successfully!");
+    dispatch(updateCourse(selectedCourse));
+    dispatch(addToast({ message: "Course details updated successfully!" }));
     closeModal();
   };
 
@@ -140,9 +143,6 @@ const Courses = () => {
     (currentPage - 1) * itemsPerPage,
     currentPage * itemsPerPage,
   );
-
-  const nextStatus =
-    courseToUpdate?.status === "Active" ? "Inactive" : "Active";
 
   const columns = [
     { header: "Course Name", key: "courseName", fontBold: true },

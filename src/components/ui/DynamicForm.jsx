@@ -217,7 +217,7 @@ const DynamicForm = ({
                           )
                         }
                         placeholder=""
-                        required={field.required}
+                        required={!!field.required}
                         onFocus={() => handleFocus(field.name)}
                         onBlur={handleBlur}
                         className={`w-full px-3 py-3 text-base focus:outline-none transition-all bg-transparent
@@ -349,7 +349,7 @@ const DynamicForm = ({
                           handleChange(field.name, e.target.value)
                         }
                         placeholder={field.placeholder}
-                        required={field.required}
+                        required={!!field.required}
                         onFocus={() => handleFocus(field.name)}
                         onBlur={handleBlur}
                         className={`w-full p-2 pt-4 text-base focus:outline-none min-h-[100px] bg-transparent transition-all

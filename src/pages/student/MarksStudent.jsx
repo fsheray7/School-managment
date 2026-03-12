@@ -5,11 +5,13 @@ import Button from "../../components/ui/Button";
 import DataTable from "../../components/ui/DataTable";
 import DataCard from "../../components/ui/DataCard";
 import ActionButtons from "../../components/ui/ActionButtons";
+import { useAppSelector } from "../../store/hooks";
 
 const MarksStudent = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const { terminal } = location.state || { terminal: "First Terminal" };
+  const currentStudent = useAppSelector((state) => state.auth.user);
 
   const [student, setStudent] = useState(null);
   const [resultData, setResultData] = useState([]);
@@ -21,19 +23,17 @@ const MarksStudent = () => {
   });
 
   useEffect(() => {
-    const storedStudent = localStorage.getItem("currentStudent");
-    if (storedStudent) {
-      const studentData = JSON.parse(storedStudent);
-      setStudent(studentData);
+    if (currentStudent) {
+      setStudent(currentStudent);
 
       const allMarks = JSON.parse(localStorage.getItem("studentMarks")) || [];
 
       const relevantMarks = allMarks.filter(
         (record) =>
-          record.studentId === studentData.id &&
+          record.studentId === currentStudent.id &&
           record.terminal === terminal &&
-          record.class === studentData.class &&
-          record.section === studentData.section,
+          record.class === currentStudent.class &&
+          record.section === currentStudent.section,
       );
 
       let totalObtained = 0;

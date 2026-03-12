@@ -2,16 +2,17 @@ import React, { useState, useEffect } from "react";
 import { FaArrowLeft, FaSpinner } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import { askQuestion } from "../../utils/doubtsManager";
-import { useToast } from "../../context/ToastContext";
+import { useAppDispatch, useAppSelector } from "../../store/hooks";
+import { addToast } from "../../store/slices/toastSlice";
 import Button from "../../components/ui/Button";
 import CustomDropdown from "../../components/ui/CustomDropdown";
 import FileUpload from "../../components/ui/FileUpload";
 import coursesData from "../../data/admindata/courses";
 
 const AskQuestion = () => {
+  const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  const { showToast } = useToast();
-  const [student, setStudent] = useState(null);
+  const student = useAppSelector((state) => state.auth.user);
   const [subjects, setSubjects] = useState([]);
 
   const [formData, setFormData] = useState({
@@ -23,17 +24,13 @@ const AskQuestion = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   useEffect(() => {
-    const storedStudent = localStorage.getItem("currentStudent");
-    if (storedStudent) {
-      const studentObj = JSON.parse(storedStudent);
-      setStudent(studentObj);
-
+    if (student) {
       // Filter subjects based on student class and section
       const filteredSubjects = coursesData
         .filter(
           (course) =>
-            course.class === studentObj.class &&
-            course.section === studentObj.section,
+            course.class === student.class &&
+            course.section === student.section,
         )
         .map((course) => course.courseName);
 
@@ -42,13 +39,18 @@ const AskQuestion = () => {
     } else {
       navigate("/");
     }
-  }, [navigate]);
+  }, [student, navigate]);
 
   const handleFileChange = (e) => {
     const file = e.target.files[0];
     if (file) {
       if (file.size > 2 * 1024 * 1024) {
-        showToast("File size should be less than 2MB", "error");
+        dispatch(
+          addToast({
+            message: "File size should be less than 2MB",
+            type: "error",
+          }),
+        );
         return;
       }
       const reader = new FileReader();
@@ -74,7 +76,12 @@ const AskQuestion = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!formData.subject || !formData.question) {
-      showToast("Please fill in all required fields", "warning");
+      dispatch(
+        addToast({
+          message: "Please fill in all required fields",
+          type: "warning",
+        }),
+      );
       return;
     }
 
@@ -90,10 +97,10 @@ const AskQuestion = () => {
     });
 
     if (result.success) {
-      showToast(result.message, "success");
+      dispatch(addToast({ message: result.message, type: "success" }));
       navigate("/questions");
     } else {
-      showToast(result.message, "error");
+      dispatch(addToast({ message: result.message, type: "error" }));
     }
     setIsSubmitting(false);
   };

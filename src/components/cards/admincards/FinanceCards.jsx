@@ -70,7 +70,7 @@ const FinanceCards = () => {
         return (
           <div
             key={item.id}
-            className={`bg-white p-5 rounded-xl shadow-sm border-l-4 ${item.color} flex items-center justify-between hover:scale-105 transition-transform duration-300`}
+            className={`bg-white p-1 md:p-5 rounded-xl shadow-sm border-l-4 ${item.color} flex items-center justify-between hover:scale-105 transition-transform duration-300`}
           >
             <div className="flex flex-col gap-1">
               <span className="text-xs font-bold text-gray-400 uppercase tracking-wider">

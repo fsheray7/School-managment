@@ -3,7 +3,7 @@ import { FaEye, FaPrint, FaCheck } from "react-icons/fa";
 import Button from "../../components/ui/Button";
 import TeacherSelector from "../../components/teacher/TeacherSelector";
 import DataTable from "../../components/ui/DataTable";
-import studentsData from "../../data/admindata/students/students";
+
 import {
   getClassMarks,
   submitResultsForPromotion,
@@ -11,20 +11,21 @@ import {
 import ResultPreviewModal from "../../components/ui/ResultPreviewModal";
 import ActionButtons from "../../components/ui/ActionButtons";
 import PreviewModal from "../../components/ui/PreviewModal";
-import { useToast } from "../../context/ToastContext";
-import { useTeacher } from "../../context/TeacherContext";
+import { useAppDispatch, useAppSelector } from "../../store/hooks";
+import { addToast } from "../../store/slices/toastSlice";
 
 const Results = () => {
+  const dispatch = useAppDispatch();
   const [selection, setSelection] = useState({
     class: "",
     section: "",
     subject: "",
   });
 
-  const { showToast } = useToast();
   const [selectedStudent, setSelectedStudent] = useState(null);
   const [studentsWithMarks, setStudentsWithMarks] = useState([]);
-  const { currentTeacher } = useTeacher();
+  const currentTeacher = useAppSelector((state) => state.auth.user);
+  const studentsData = useAppSelector((state) => state.students.students);
 
   // useEffect(() => {
   //   // Teacher is now available via context
@@ -294,7 +295,7 @@ const Results = () => {
 
   const handleSubmitForPromotion = () => {
     if (studentsWithMarks.length === 0) {
-      showToast("No results to submit.", "error");
+      dispatch(addToast({ message: "No results to submit.", type: "error" }));
       return;
     }
 
@@ -306,9 +307,9 @@ const Results = () => {
     });
 
     if (result.success) {
-      showToast(result.message, "success");
+      dispatch(addToast({ message: result.message, type: "success" }));
     } else {
-      showToast(result.message, "error");
+      dispatch(addToast({ message: result.message, type: "error" }));
     }
   };
 
@@ -324,7 +325,7 @@ const Results = () => {
     } else {
       setStudentsWithMarks([]);
     }
-  }, [selection]);
+  }, [selection, studentsData]);
 
   /* ================= UPDATE LISTENER ================= */
   useEffect(() => {
@@ -343,7 +344,7 @@ const Results = () => {
 
     window.addEventListener("marksUpdated", handleMarksUpdate);
     return () => window.removeEventListener("marksUpdated", handleMarksUpdate);
-  }, [selection]);
+  }, [selection, studentsData]);
 
   return (
     <>

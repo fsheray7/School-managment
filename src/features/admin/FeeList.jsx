@@ -1,21 +1,20 @@
-import React, { useState } from "react";
+import { useAppSelector } from "../../store/hooks";
+import Button from "../../components/ui/Button";
 import { useNavigate } from "react-router-dom";
-import studentsData from "../../data/admindata/students/students";
+import { useState } from "react";
 import { getFeeStructureByClass } from "../../data/finance/FeeStructures";
 import { CLASS_OPTIONS, getSectionsByClass } from "../../constants/Store";
-import DataTable from "../../components/ui/DataTable";
-import ActionButtons from "../../components/ui/ActionButtons";
-import DataCard from "../../components/ui/DataCard";
-import Pagination from "../../components/ui/Pagination";
 import Filters from "../../components/ui/Filters";
-import { IoAddCircle, IoWallet, IoAlertCircle, IoPrint } from "react-icons/io5";
+import DataTable from "../../components/ui/DataTable";
+import Pagination from "../../components/ui/Pagination";
+import DataCard from "../../components/ui/DataCard";
 import FeeReceipt from "./FeeReceipt";
-import { useSettings } from "../../context/SettingsContext";
-import Button from "../../components/ui/Button";
+import { IoWallet, IoPrint } from "react-icons/io5";
 
 const FeeList = () => {
   const navigate = useNavigate();
-  const { schoolLogo, schoolName } = useSettings();
+  const { schoolLogo, schoolName } = useAppSelector((state) => state.settings);
+  const studentsData = useAppSelector((state) => state.students.students);
   const [searchQuery, setSearchQuery] = useState("");
   const [classFilter, setClassFilter] = useState("");
   const [sectionFilter, setSectionFilter] = useState("");

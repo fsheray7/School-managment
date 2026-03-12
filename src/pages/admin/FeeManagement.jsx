@@ -3,7 +3,7 @@ import FeeList from "../../features/admin/FeeList";
 
 const FeeManagement = () => {
   return (
-    <div className="flex px-6 pt-4 flex-col gap-6 w-full pb-20">
+    <div className="flex px-1 md:p-6 pt-4 flex-col gap-6 w-full pb-20">
       <FeeList />
     </div>
   );

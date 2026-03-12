@@ -1,6 +1,10 @@
-import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import teachersData from "../../data/teachers/teacher";
+import { useAppDispatch, useAppSelector } from "../../store/hooks";
+import {
+  updateTeacher,
+  deleteTeacher,
+  toggleTeacherStatus,
+} from "../../store/slices/teachersSlice";
+import { addToast } from "../../store/slices/toastSlice";
 import Filters from "../../components/ui/Filters";
 import DeleteModal from "../../components/ui/DeleteModal";
 import DetailsModal from "../../components/ui/DetailsModal";
@@ -8,7 +12,7 @@ import DataTable from "../../components/ui/DataTable";
 import ActionButtons from "../../components/ui/ActionButtons";
 import DataCard from "../../components/ui/DataCard";
 import Pagination from "../../components/ui/Pagination";
-import { useToast } from "../../context/ToastContext";
+
 import {
   CLASS_OPTIONS,
   getSectionsByClass,
@@ -19,18 +23,13 @@ import {
 } from "../../constants/Store";
 import StatusToggle from "../../components/ui/StatusToggle";
 import ConfirmationModal from "../../components/ui/ConfirmationModal";
+import { useNavigate } from "react-router-dom";
+import { useState } from "react";
 
 const Teachers = () => {
-  const { showToast } = useToast();
+  const dispatch = useAppDispatch();
+  const teachers = useAppSelector((state) => state.teachers.teachers);
   const navigate = useNavigate();
-  const [teachers, setTeachers] = useState(
-    teachersData.map((teacher) => ({
-      ...teacher,
-      profilePhoto: teacher.profileImage,
-      password: teacher.password || "password123",
-      status: teacher.status || "Active",
-    })),
-  );
 
   const [selectedTeacher, setSelectedTeacher] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -39,6 +38,8 @@ const Teachers = () => {
   const [itemToDelete, setItemToDelete] = useState(null);
   const [isConfirmOpen, setIsConfirmOpen] = useState(false);
   const [teacherToUpdate, setTeacherToUpdate] = useState(null);
+  const nextStatus =
+    teacherToUpdate?.status === "Active" ? "Inactive" : "Active";
 
   // Filter State
   const [searchQuery, setSearchQuery] = useState("");
@@ -59,16 +60,12 @@ const Teachers = () => {
   const confirmStatusUpdate = () => {
     if (!teacherToUpdate) return;
 
-    const newStatus =
-      teacherToUpdate.status === "Active" ? "Inactive" : "Active";
-    setTeachers((prev) =>
-      prev.map((t) =>
-        t.id === teacherToUpdate.id ? { ...t, status: newStatus } : t,
-      ),
-    );
-    showToast(
-      `${teacherToUpdate.fullName}'s status changed to ${newStatus}`,
-      "success",
+    dispatch(toggleTeacherStatus(teacherToUpdate.id));
+    dispatch(
+      addToast({
+        message: `${teacherToUpdate.fullName}'s status changed to ${nextStatus}`,
+        type: "success",
+      }),
     );
     setIsConfirmOpen(false);
     setTeacherToUpdate(null);
@@ -93,17 +90,15 @@ const Teachers = () => {
 
   const confirmDelete = () => {
     if (itemToDelete) {
-      setTeachers(teachers.filter((t) => t.id !== itemToDelete.id));
+      dispatch(deleteTeacher(itemToDelete.id));
       setIsDeleteModalOpen(false);
       setItemToDelete(null);
     }
   };
 
   const handleSaveEdit = () => {
-    setTeachers(
-      teachers.map((t) => (t.id === selectedTeacher.id ? selectedTeacher : t)),
-    );
-    showToast("Teacher details updated successfully!");
+    dispatch(updateTeacher(selectedTeacher));
+    dispatch(addToast({ message: "Teacher details updated successfully!" }));
     closeModal();
   };
 
@@ -120,9 +115,6 @@ const Teachers = () => {
 
     setCurrentPage(1);
   };
-
-  const nextStatus =
-    teacherToUpdate?.status === "Active" ? "Inactive" : "Active";
 
   // Derive unique options
   const uniqueSubjects = [

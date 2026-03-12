@@ -1,11 +1,12 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
-import { useToast } from "../../context/ToastContext";
+import { useAppDispatch, useAppSelector } from "../../store/hooks";
+
+import { addToast } from "../../store/slices/toastSlice";
 import { CLASS_OPTIONS, getSectionsByClass } from "../../constants/Store";
 import Button from "../../components/ui/Button";
 import { IoArrowBack, IoSearch, IoDownload, IoPrint } from "react-icons/io5";
 import DynamicForm from "../../components/ui/DynamicForm";
-import studentsData from "../../data/admindata/students/students";
 import { getFeeStructureByClass } from "../../data/finance/FeeStructures";
 import FeeReceipt from "./FeeReceipt";
 import { recordActivity, ACTIVITY_TYPES } from "../../utils/activityManager";
@@ -13,10 +14,11 @@ import { recordActivity, ACTIVITY_TYPES } from "../../utils/activityManager";
 const DISCOUNT_OPTIONS = ["0%", "10%", "25%", "50%", "75%", "100%"];
 
 const GenerateFee = () => {
-  const { showToast } = useToast();
+  const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const location = useLocation();
   const receiptRef = useRef();
+  const studentsData = useAppSelector((state) => state.students.students);
 
   const [feeData, setFeeData] = useState({
     studentId: "",
@@ -300,8 +302,11 @@ const GenerateFee = () => {
     );
 
     console.log("Generating Fee Invoice:", invoiceRecord);
-    showToast(
-      `Fee Invoice of Rs. ${totalPayable} generated for ${feeData.fullName}!`,
+    dispatch(
+      addToast({
+        message: `Fee Invoice of Rs. ${totalPayable} generated for ${feeData.fullName}!`,
+        type: "success",
+      }),
     );
 
     // Record Activity

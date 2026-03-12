@@ -12,7 +12,7 @@ import {
 } from "react-icons/hi";
 import { IoSearchOutline, IoChevronDown } from "react-icons/io5";
 import { useNavigate } from "react-router-dom";
-import { useTeacher } from "../../context/TeacherContext";
+import { useAppSelector } from "../../store/hooks";
 
 // Helper to generate mock attendance data for a month
 // Helper to get real attendance data from localStorage
@@ -104,7 +104,7 @@ const Attendance = () => {
   const [currentYear, setCurrentYear] = useState(new Date().getFullYear());
   const [weeks, setWeeks] = useState([]);
   const [selectedWeekIndex, setSelectedWeekIndex] = useState(0);
-  const { currentTeacher } = useTeacher();
+  const currentTeacher = useAppSelector((state) => state.auth.user);
 
   // New States for Redesign
   const [searchTerm, setSearchTerm] = useState("");
@@ -133,7 +133,8 @@ const Attendance = () => {
       if (currentTeacher.class && currentTeacher.section) {
         const filtered = studentsData.filter(
           (s) =>
-            s.class === currentTeacher.class && s.section === currentTeacher.section,
+            s.class === currentTeacher.class &&
+            s.section === currentTeacher.section,
         );
         setFilteredStudents(filtered);
 
@@ -472,9 +473,7 @@ const Attendance = () => {
                     key={i}
                     className="flex flex-col items-center bg-gray-50 p-2 rounded"
                   >
-                    <span className=" text-gray-400 mb-1">
-                      {day.getDate()}
-                    </span>
+                    <span className=" text-gray-400 mb-1">{day.getDate()}</span>
                     {record ? (
                       getStatusIcon(record.status)
                     ) : (

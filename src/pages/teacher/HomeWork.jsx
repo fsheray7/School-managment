@@ -3,18 +3,18 @@ import Button from "../../components/ui/Button";
 import FileUpload from "../../components/ui/FileUpload";
 import CustomDropdown from "../../components/ui/CustomDropdown";
 import coursesData from "../../data/admindata/courses";
-import { useToast } from "../../context/ToastContext";
-import { useTeacher } from "../../context/TeacherContext";
+import { useAppDispatch, useAppSelector } from "../../store/hooks";
+import { addToast } from "../../store/slices/toastSlice";
 import DataTable from "../../components/ui/DataTable";
 import Pagination from "../../components/ui/Pagination";
 import DataCard from "../../components/ui/DataCard";
 import ActionButtons from "../../components/ui/ActionButtons";
 
 const HomeWork = () => {
-  const { showToast } = useToast();
+  const dispatch = useAppDispatch();
   const [homeworkFile, setHomeworkFile] = useState(null);
   const [description, setDescription] = useState("");
-  const { currentTeacher: teacher } = useTeacher();
+  const teacher = useAppSelector((state) => state.auth.user);
   const [assignedCourses, setAssignedCourses] = useState([]);
   const [selection, setSelection] = useState({
     class: "",
@@ -81,10 +81,16 @@ const HomeWork = () => {
     const selectedFile = e.target.files[0];
     if (selectedFile) {
       if (selectedFile.size > 2 * 1024 * 1024) {
-        showToast(
-          "File size varies large. Please upload strict under 2MB.",
-          "error",
-        );
+        if (selectedFile.size > 2 * 1024 * 1024) {
+          dispatch(
+            addToast({
+              message:
+                "File size varies large. Please upload strict under 2MB.",
+              type: "error",
+            }),
+          );
+          return;
+        }
         return;
       }
       setHomeworkFile(selectedFile);
@@ -108,12 +114,22 @@ const HomeWork = () => {
     e.preventDefault();
 
     if (!selection.class || !selection.section || !selection.subject) {
-      showToast("Please select Class, Section, and Subject.", "error");
+      dispatch(
+        addToast({
+          message: "Please select Class, Section, and Subject.",
+          type: "error",
+        }),
+      );
       return;
     }
 
     if (!description && !homeworkFile) {
-      showToast("Please provide a description or attach a file.", "error");
+      dispatch(
+        addToast({
+          message: "Please provide a description or attach a file.",
+          type: "error",
+        }),
+      );
       return;
     }
 
@@ -146,13 +162,23 @@ const HomeWork = () => {
       localStorage.setItem("homeworkData", JSON.stringify(updatedHomework));
       setHomeworkList(updatedHomework);
 
-      showToast("Homework assigned successfully!", "success");
+      dispatch(
+        addToast({
+          message: "Homework assigned successfully!",
+          type: "success",
+        }),
+      );
 
       setDescription("");
       setHomeworkFile(null);
     } catch (error) {
       console.error("Error saving homework:", error);
-      showToast("Failed to save homework. Please try again.", "error");
+      dispatch(
+        addToast({
+          message: "Failed to save homework. Please try again.",
+          type: "error",
+        }),
+      );
     } finally {
       setIsSubmitting(false);
     }

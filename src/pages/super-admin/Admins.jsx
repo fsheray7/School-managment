@@ -1,7 +1,12 @@
-import React, { useState } from "react";
+import React, {useState} from "react";
 import { useNavigate } from "react-router-dom";
-import { useSettings } from "../../context/SettingsContext";
-import { useToast } from "../../context/ToastContext";
+import { useAppDispatch, useAppSelector } from "../../store/hooks";
+import {
+  updateAdmin,
+  deleteAdmin,
+  toggleAdminStatus,
+} from "../../store/slices/adminsSlice";
+import { addToast } from "../../store/slices/toastSlice";
 import { FaUserPlus, FaSearch } from "react-icons/fa";
 import DataTable from "../../components/ui/DataTable";
 import Pagination from "../../components/ui/Pagination";
@@ -13,12 +18,12 @@ import StatusToggle from "../../components/ui/StatusToggle";
 import ConfirmationModal from "../../components/ui/ConfirmationModal";
 import DetailsModal from "../../components/ui/DetailsModal";
 import DeleteModal from "../../components/ui/DeleteModal";
-import { useAdmin } from "../../context/AdminContext";
 
 const Admins = () => {
+  const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  const { primaryColor } = useSettings();
-  const { showToast } = useToast();
+  const settings = useAppSelector((state) => state.settings);
+  const { primaryColor } = settings;
   const [searchTerm, setSearchTerm] = useState("");
   const [statusFilter, setStatusFilter] = useState("All Status");
   const [currentPage, setCurrentPage] = useState(1);
@@ -37,7 +42,7 @@ const Admins = () => {
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [itemToDelete, setItemToDelete] = useState(null);
 
-  const { admins, updateAdmin, deleteAdmin, toggleAdminStatus } = useAdmin();
+  const admins = useAppSelector((state) => state.admins.admins);
 
   // Handlers
   const handleViewDetails = (admin) => {
@@ -59,16 +64,26 @@ const Admins = () => {
 
   const confirmDelete = () => {
     if (itemToDelete) {
-      deleteAdmin(itemToDelete.id);
-      showToast(`${itemToDelete.name} deleted successfully!`, "success");
+      dispatch(deleteAdmin(itemToDelete.id));
+      dispatch(
+        addToast({
+          message: `${itemToDelete.name} deleted successfully!`,
+          type: "success",
+        }),
+      );
       setIsDeleteModalOpen(false);
       setItemToDelete(null);
     }
   };
 
   const handleSaveEdit = () => {
-    updateAdmin(selectedAdmin);
-    showToast("Admin details updated successfully!", "success");
+    dispatch(updateAdmin(selectedAdmin));
+    dispatch(
+      addToast({
+        message: "Admin details updated successfully!",
+        type: "success",
+      }),
+    );
     closeModal();
   };
 
@@ -87,10 +102,12 @@ const Admins = () => {
     if (!adminToUpdate) return;
 
     const newStatus = adminToUpdate.status === "Active" ? "Inactive" : "Active";
-    toggleAdminStatus(adminToUpdate.id);
-    showToast(
-      `${adminToUpdate.name}'s status changed to ${newStatus}`,
-      "success",
+    dispatch(toggleAdminStatus(adminToUpdate.id));
+    dispatch(
+      addToast({
+        message: `${adminToUpdate.name}'s status changed to ${newStatus}`,
+        type: "success",
+      }),
     );
     setIsConfirmOpen(false);
     setAdminToUpdate(null);

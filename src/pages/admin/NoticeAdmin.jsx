@@ -1,6 +1,12 @@
-import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { getActiveNotices, deleteNotice } from "../../utils/noticeManager";
+import React, { useState } from "react";
+import { useAppDispatch, useAppSelector } from "../../store/hooks";
+import { deleteNotice as deleteNoticeAction } from "../../store/slices/noticesSlice";
+import { addToast } from "../../store/slices/toastSlice";
+import {
+  getActiveNotices,
+  deleteNotice as deleteNoticeUtil,
+} from "../../utils/noticeManager";
 import Filters from "../../components/ui/Filters";
 import DataTable from "../../components/ui/DataTable";
 import ActionButtons from "../../components/ui/ActionButtons";
@@ -8,12 +14,11 @@ import DataCard from "../../components/ui/DataCard";
 import Pagination from "../../components/ui/Pagination";
 import DeleteModal from "../../components/ui/DeleteModal";
 import NoticePreviewModal from "../../components/common/NoticePreviewModal";
-import { useToast } from "../../context/ToastContext";
 
 const NoticeAdmin = () => {
+  const dispatch = useAppDispatch();
+  const notices = useAppSelector((state) => state.notices.notices);
   const navigate = useNavigate();
-  const { showToast } = useToast();
-  const [notices, setNotices] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [audienceFilter, setAudienceFilter] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
@@ -24,15 +29,6 @@ const NoticeAdmin = () => {
   const [isDetailsOpen, setIsDetailsOpen] = useState(false);
   const [isDeleteOpen, setIsDeleteOpen] = useState(false);
   const [noticeToDelete, setNoticeToDelete] = useState(null);
-
-  useEffect(() => {
-    loadNotices();
-  }, []);
-
-  const loadNotices = () => {
-    const data = getActiveNotices();
-    setNotices(data);
-  };
 
   const handleReset = () => {
     setSearchQuery("");
@@ -47,12 +43,16 @@ const NoticeAdmin = () => {
 
   const confirmDelete = () => {
     if (noticeToDelete) {
-      const result = deleteNotice(noticeToDelete.id);
+      const result = deleteNoticeUtil(noticeToDelete.id);
       if (result.success) {
-        showToast("Notice deleted successfully", "success");
-        loadNotices();
+        dispatch(deleteNoticeAction(noticeToDelete.id));
+        dispatch(
+          addToast({ message: "Notice deleted successfully", type: "success" }),
+        );
       } else {
-        showToast("Failed to delete notice", "error");
+        dispatch(
+          addToast({ message: "Failed to delete notice", type: "error" }),
+        );
       }
       setIsDeleteOpen(false);
       setNoticeToDelete(null);
@@ -138,7 +138,7 @@ const NoticeAdmin = () => {
   );
 
   return (
-    <section className="flex flex-col px-6 items-center mt-5 justify-start w-full bg-white gap-4">
+    <section className="flex flex-col px-1 md:px-6 items-center mt-5 justify-start w-full bg-white gap-4">
       <div className="w-full">
         <Filters
           searchQuery={searchQuery}

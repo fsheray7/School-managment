@@ -5,11 +5,11 @@ import Button from "../../components/ui/Button";
 import TeacherSelector from "../../components/teacher/TeacherSelector";
 import CustomDropdown from "../../components/ui/CustomDropdown";
 import DataTable from "../../components/ui/DataTable";
-import studentsData from "../../data/admindata/students/students";
+
 import { getStudentMarks, saveStudentMarks } from "../../utils/marksManager";
-import { useToast } from "../../context/ToastContext";
+import { useAppDispatch, useAppSelector } from "../../store/hooks";
+import { addToast } from "../../store/slices/toastSlice";
 import ConfirmationModal from "../../components/ui/ConfirmationModal";
-import { useTeacher } from "../../context/TeacherContext";
 
 // Helper functions for grade and status calculation
 const calculatePercentage = (obtained, total) => {
@@ -30,8 +30,8 @@ const getStatus = (percentage) => {
 };
 
 const AddMarks = () => {
+  const dispatch = useAppDispatch();
   const location = useLocation();
-  const { showToast } = useToast();
   const [selection, setSelection] = useState({
     terminal: "",
     class: "",
@@ -47,7 +47,8 @@ const AddMarks = () => {
   const [totalMarks, setTotalMarks] = useState(50); // Standard total marks
   const [marksSaved, setMarksSaved] = useState(false);
   const [showConfirmModal, setShowConfirmModal] = useState(false);
-  const { currentTeacher } = useTeacher();
+  const currentTeacher = useAppSelector((state) => state.auth.user);
+  const studentsData = useAppSelector((state) => state.students.students);
 
   useEffect(() => {
     if (location.state?.selection) {
@@ -89,7 +90,7 @@ const AddMarks = () => {
       });
       setStudentMarks(initialMarks);
     }
-  }, [selection]);
+  }, [selection, studentsData]);
 
   const handleMarkChange = (studentId, value) => {
     // Validate input
@@ -110,12 +111,19 @@ const AddMarks = () => {
   const handleSaveMarksClick = () => {
     // Validation
     if (!selection.class || !selection.section || !selection.subject) {
-      showToast("Please select class, section, and subject", "error");
+      dispatch(
+        addToast({
+          message: "Please select class, section, and subject",
+          type: "error",
+        }),
+      );
       return;
     }
 
     if (!selection.terminal) {
-      showToast("Terminal information is missing", "error");
+      dispatch(
+        addToast({ message: "Terminal information is missing", type: "error" }),
+      );
       return;
     }
 
@@ -124,9 +132,11 @@ const AddMarks = () => {
       (mark) => mark !== "" && mark !== null && mark !== undefined,
     );
     if (!hasMarks) {
-      showToast(
-        "Please enter marks for at least one student before saving",
-        "error",
+      dispatch(
+        addToast({
+          message: "Please enter marks for at least one student before saving",
+          type: "error",
+        }),
       );
       return;
     }
@@ -159,7 +169,7 @@ const AddMarks = () => {
 
     if (result.success) {
       const dynamicMessage = `${result.message} for ${selection.subject} subject in ${selection.terminal} terminal`;
-      showToast(dynamicMessage, "success");
+      dispatch(addToast({ message: dynamicMessage, type: "success" }));
       setMarksSaved(true);
 
       // Dispatch custom event to notify Results page to refresh data
@@ -173,7 +183,7 @@ const AddMarks = () => {
         }),
       );
     } else {
-      showToast(result.message, "error");
+      dispatch(addToast({ message: result.message, type: "error" }));
     }
   };
 

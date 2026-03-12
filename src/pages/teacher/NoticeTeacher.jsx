@@ -1,21 +1,26 @@
-import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { getActiveNotices, deleteNotice } from "../../utils/noticeManager";
-import Filters from "../../components/ui/Filters";
+import { useAppDispatch, useAppSelector } from "../../store/hooks";
+import { deleteNotice as deleteNoticeAction } from "../../store/slices/noticesSlice";
+import { addToast } from "../../store/slices/toastSlice";
+import {
+  getNoticesForUser,
+  deleteNotice as deleteNoticeUtil,
+} from "../../utils/noticeManager";
+import { useState } from "react";
+import Filters from "../../components/ui/Filters"
 import DataTable from "../../components/ui/DataTable";
+import Pagination from "../../components/ui/Pagination";
+import NoticePreviewModal from "../../components/common/NoticePreviewModal";
+import DeleteModal from "../../components/ui/DeleteModal";
 import ActionButtons from "../../components/ui/ActionButtons";
 import DataCard from "../../components/ui/DataCard";
-import Pagination from "../../components/ui/Pagination";
-import DeleteModal from "../../components/ui/DeleteModal";
-import NoticePreviewModal from "../../components/common/NoticePreviewModal";
-import { useToast } from "../../context/ToastContext";
-import { useTeacher } from "../../context/TeacherContext";
-import { getNoticesForUser } from "../../utils/noticeManager";
 
 const NoticeTeacher = () => {
+  const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  const { showToast } = useToast();
-  const [notices, setNotices] = useState([]);
+  const allNotices = useAppSelector((state) => state.notices.notices);
+  const currentTeacher = useAppSelector((state) => state.auth.user);
+
   const [searchQuery, setSearchQuery] = useState("");
   const [audienceFilter, setAudienceFilter] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
@@ -27,17 +32,13 @@ const NoticeTeacher = () => {
   const [isDeleteOpen, setIsDeleteOpen] = useState(false);
   const [noticeToDelete, setNoticeToDelete] = useState(null);
 
-  const { currentTeacher } = useTeacher();
-
-  useEffect(() => {
-    loadNotices();
-  }, [currentTeacher]);
-
-  const loadNotices = () => {
-    // For teacher management, we pass role 'teacher' and the teacher's name as className (for current implementation of getNoticesForUser)
-    const data = getNoticesForUser("teacher", currentTeacher?.fullName);
-    setNotices(data);
-  };
+  // Filter notices for the teacher
+  const notices = getNoticesForUser(
+    "teacher",
+    currentTeacher?.fullName,
+    null,
+    allNotices,
+  );
 
   const handleReset = () => {
     setSearchQuery("");
@@ -52,12 +53,16 @@ const NoticeTeacher = () => {
 
   const confirmDelete = () => {
     if (noticeToDelete) {
-      const result = deleteNotice(noticeToDelete.id);
+      const result = deleteNoticeUtil(noticeToDelete.id);
       if (result.success) {
-        showToast("Notice deleted successfully", "success");
-        loadNotices();
+        dispatch(deleteNoticeAction(noticeToDelete.id));
+        dispatch(
+          addToast({ message: "Notice deleted successfully", type: "success" }),
+        );
       } else {
-        showToast("Failed to delete notice", "error");
+        dispatch(
+          addToast({ message: "Failed to delete notice", type: "error" }),
+        );
       }
       setIsDeleteOpen(false);
       setNoticeToDelete(null);

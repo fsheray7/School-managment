@@ -1,5 +1,7 @@
-import React, { useState, useEffect } from "react";
-import { useSettings } from "../../context/SettingsContext";
+import { useState,useEffect } from "react";
+import { useAppDispatch, useAppSelector } from "../../store/hooks";
+import { updateSettings } from "../../store/slices/settingsSlice";
+import { addToast } from "../../store/slices/toastSlice";
 import Button from "../../components/ui/Button";
 import FileUpload from "../../components/ui/FileUpload";
 import {
@@ -13,7 +15,6 @@ import {
   FaLock,
 } from "react-icons/fa";
 
-import { useToast } from "../../context/ToastContext";
 import { admins as defaultAdmins } from "../../data/admindata/superadmin/admins";
 
 const SettingCard = ({ title, children }) => (
@@ -75,7 +76,8 @@ const SelectField = ({ label, value, onChange, options }) => (
 );
 
 const Settings = () => {
-  const { showToast } = useToast();
+  const dispatch = useAppDispatch();
+  const settings = useAppSelector((state) => state.settings);
   const {
     schoolName,
     schoolLogo,
@@ -92,8 +94,7 @@ const Settings = () => {
     currency,
     secondaryColor,
     textPrimaryColor,
-    updateSettings,
-  } = useSettings();
+  } = settings;
 
   const [localSettings, setLocalSettings] = useState({
     schoolName,
@@ -179,7 +180,9 @@ const Settings = () => {
     const passwordChanged = !!passwordFields.newPassword;
     if (passwordChanged) {
       if (passwordFields.newPassword !== passwordFields.confirmPassword) {
-        showToast("New passwords do not match!", "error");
+        dispatch(
+          addToast({ message: "New passwords do not match!", type: "error" }),
+        );
         return;
       }
     }
@@ -223,8 +226,10 @@ const Settings = () => {
       }
     }
 
-    updateSettings(settingsToUpdate);
-    showToast("Settings saved successfully!", "success");
+    dispatch(updateSettings(settingsToUpdate));
+    dispatch(
+      addToast({ message: "Settings saved successfully!", type: "success" }),
+    );
 
     // Clear password fields after save
     setPasswordFields({ newPassword: "", confirmPassword: "" });
@@ -234,7 +239,7 @@ const Settings = () => {
   };
 
   return (
-    <section className="flex flex-col items-center mt-3 w-full bg-gray-50/50 min-h-screen px-4 ">
+    <section className="flex flex-col items-center mt-3 w-full bg-gray-50/50 min-h-screen px-1 md:px-6 ">
       <div className="w-full max-w-5xl flex flex-col gap-8">
         {/* Header */}
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 bg-white p-4 rounded-2xl shadow-sm border border-gray-100">

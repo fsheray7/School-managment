@@ -1,12 +1,14 @@
 import React, { useState } from "react";
 import { FaTimes } from "react-icons/fa";
 import { useLocation, useNavigate } from "react-router-dom";
-import { useSettings } from "../../context/SettingsContext";
+import { useAppSelector } from "../../store/hooks";
 
 const Sidebar = ({ isOpen, setIsOpen, menuItems = [], role = "admin" }) => {
   const location = useLocation();
   const navigate = useNavigate();
-  const { schoolLogo, schoolName, systemLogo, systemName } = useSettings();
+  const { schoolLogo, schoolName, systemLogo, systemName } = useAppSelector(
+    (state) => state.settings,
+  );
 
   const isSuperAdmin = role === "super-admin";
   const displayLogo = isSuperAdmin ? systemLogo : schoolLogo;
@@ -67,7 +69,7 @@ const Sidebar = ({ isOpen, setIsOpen, menuItems = [], role = "admin" }) => {
               className="absolute w-14 h-14  object-contain"
             />
           </div>
-          <span className= "text-[var(--text-primary-color)] text-base font-bold text-center px-1 mb-2  leading-tight drop-shadow-sm">
+          <span className="text-[var(--text-primary-color)] text-base font-bold text-center px-1 mb-2  leading-tight drop-shadow-sm">
             {displayName}
           </span>
         </div>

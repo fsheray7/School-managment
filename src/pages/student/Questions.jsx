@@ -9,23 +9,23 @@ import Button from "../../components/ui/Button";
 import DataCard from "../../components/ui/DataCard";
 import { useNavigate } from "react-router-dom";
 import { getStudentDoubts } from "../../utils/doubtsManager";
+import { useAppSelector } from "../../store/hooks";
 
 const Questions = () => {
   const navigate = useNavigate();
+  const currentStudent = useAppSelector((state) => state.auth.user);
   const [myQuestions, setMyQuestions] = useState([]);
   const [student, setStudent] = useState(null);
 
   useEffect(() => {
-    const storedStudent = localStorage.getItem("currentStudent");
-    if (storedStudent) {
-      const studentData = JSON.parse(storedStudent);
-      setStudent(studentData);
-      const data = getStudentDoubts(studentData.id);
+    if (currentStudent) {
+      setStudent(currentStudent);
+      const data = getStudentDoubts(currentStudent.id);
       setMyQuestions(data);
     } else {
       navigate("/");
     }
-  }, [navigate]);
+  }, [currentStudent, navigate]);
 
   if (!student) return null;
 

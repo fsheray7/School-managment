@@ -1,15 +1,11 @@
-import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { useToast } from "../../context/ToastContext";
-import DynamicForm from "../../components/ui/DynamicForm";
-import { FaUserPlus, FaArrowLeft } from "react-icons/fa";
-import Button from "../../components/ui/Button";
-import { useAdmin } from "../../context/AdminContext";
+import { useAppDispatch, useAppSelector } from "../../store/hooks";
+import { addAdmin as addAdminAction } from "../../store/slices/adminsSlice";
+import { addToast } from "../../store/slices/toastSlice";
 
 const AddAdmin = () => {
+  const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  const { showToast } = useToast();
-  const { admins, addAdmin } = useAdmin();
+  const admins = useAppSelector((state) => state.admins.admins);
 
   const [formData, setFormData] = useState({
     name: "",
@@ -109,16 +105,23 @@ const AddAdmin = () => {
     e.preventDefault();
 
     if ((admins || []).some((admin) => admin.email === formData.email)) {
-      showToast("An admin with this email already exists.", "error");
+      dispatch(
+        addToast({
+          message: "An admin with this email already exists.",
+          type: "error",
+        }),
+      );
       return;
     }
     if ((admins || []).some((admin) => admin.username === formData.username)) {
-      showToast("This username is already taken.", "error");
+      dispatch(
+        addToast({ message: "This username is already taken.", type: "error" }),
+      );
       return;
     }
 
     if (formData.password !== formData.confirmPassword) {
-      showToast("Passwords do not match!", "error");
+      dispatch(addToast({ message: "Passwords do not match!", type: "error" }));
       return;
     }
 
@@ -139,9 +142,14 @@ const AddAdmin = () => {
       profileImage: profileImageBase64,
     };
 
-    addAdmin(newAdmin);
+    dispatch(addAdminAction(newAdmin));
 
-    showToast("Administrator added successfully!", "success");
+    dispatch(
+      addToast({
+        message: "Administrator added successfully!",
+        type: "success",
+      }),
+    );
     navigate("/super-admin-admins");
   };
 

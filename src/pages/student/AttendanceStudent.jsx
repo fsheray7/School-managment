@@ -6,6 +6,7 @@ import {
   FaUserClock,
 } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
+import { useAppSelector } from "../../store/hooks";
 import {
   PieChart,
   Pie,
@@ -17,6 +18,7 @@ import {
 
 const AttendanceStudent = () => {
   const navigate = useNavigate();
+  const currentStudent = useAppSelector((state) => state.auth.user);
   const [student, setStudent] = useState(null);
   const [attendanceRecords, setAttendanceRecords] = useState([]);
   const [stats, setStats] = useState({
@@ -27,10 +29,8 @@ const AttendanceStudent = () => {
   });
 
   useEffect(() => {
-    const storedStudent = localStorage.getItem("currentStudent");
-    if (storedStudent) {
-      const studentData = JSON.parse(storedStudent);
-      setStudent(studentData);
+    if (currentStudent) {
+      setStudent(currentStudent);
 
       // Fetch Attendance Data
       // attendanceData structure expected: { "YYYY-MM-DD": { "studentId": "status" }, ... }
@@ -46,8 +46,8 @@ const AttendanceStudent = () => {
       Object.keys(allAttendance).forEach((date) => {
         const dayRecord = allAttendance[date];
         // Check if this student has a record for this date
-        if (dayRecord && dayRecord[studentData.id]) {
-          const status = dayRecord[studentData.id];
+        if (dayRecord && dayRecord[currentStudent.id]) {
+          const status = dayRecord[currentStudent.id];
           records.push({ date, status });
 
           if (status === "Present") presentCount++;
@@ -69,7 +69,7 @@ const AttendanceStudent = () => {
     } else {
       navigate("/");
     }
-  }, [navigate]);
+  }, [currentStudent, navigate]);
 
   if (!student) return null;
 

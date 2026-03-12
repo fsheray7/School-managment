@@ -1,19 +1,20 @@
 import React, { useState, useEffect } from "react";
-import studentsData from "../../data/admindata/students/students";
+
 import Button from "../../components/ui/Button";
-import Toast from "../../components/ui/Toast";
-import { useTeacher } from "../../context/TeacherContext";
+import { useAppDispatch, useAppSelector } from "../../store/hooks";
+import { addToast } from "../../store/slices/toastSlice";
 
 const AddAttendance = () => {
+  const dispatch = useAppDispatch();
   const [teacherInfo, setTeacherInfo] = useState({ class: "", section: "" });
   const [attendanceDate, setAttendanceDate] = useState(
     new Date().toISOString().split("T")[0],
   );
   const [filteredStudents, setFilteredStudents] = useState([]);
   const [attendanceRecords, setAttendanceRecords] = useState({});
-  const [showToast, setShowToast] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
-  const { currentTeacher } = useTeacher();
+  const currentTeacher = useAppSelector((state) => state.auth.user);
+  const studentsData = useAppSelector((state) => state.students.students);
 
   useEffect(() => {
     if (currentTeacher) {
@@ -38,7 +39,7 @@ const AddAttendance = () => {
         setAttendanceRecords(initialRecords);
       }
     }
-  }, [currentTeacher]);
+  }, [currentTeacher, studentsData]);
 
   const handleAttendanceChange = (studentId, status) => {
     setAttendanceRecords((prev) => ({
@@ -68,7 +69,9 @@ const AddAttendance = () => {
     localStorage.setItem("attendanceData", JSON.stringify(existingData));
 
     // Show feedback
-    setShowToast(true);
+    dispatch(
+      addToast({ message: "Attendance saved successfully!", type: "success" }),
+    );
     setIsSubmitted(true);
   };
 
@@ -177,16 +180,6 @@ const AddAttendance = () => {
       {isSubmitted && (
         <div className="mt-4 text-green-600 font-bold text-lg animate-pulse">
           Today's attendance is submitted!
-        </div>
-      )}
-
-      {showToast && (
-        <div className="fixed bottom-4 right-4 z-50">
-          <Toast
-            message="Attendance saved successfully!"
-            type="success"
-            onClose={() => setShowToast(false)}
-          />
         </div>
       )}
     </section>

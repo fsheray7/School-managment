@@ -1,5 +1,6 @@
-import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useAppDispatch } from "../../store/hooks";
+import { addStudent } from "../../store/slices/studentsSlice";
+import { addToast } from "../../store/slices/toastSlice";
 import {
   GENDER_OPTIONS,
   CLASS_OPTIONS,
@@ -9,11 +10,13 @@ import Button from "../../components/ui/Button";
 import { IoArrowBack } from "react-icons/io5";
 import DynamicForm from "../../components/ui/DynamicForm";
 import ProgressBar from "../../components/ui/ProgressBar";
-import { useToast } from "../../context/ToastContext";
+
 import { recordActivity, ACTIVITY_TYPES } from "../../utils/activityManager";
+import { useNavigate } from "react-router-dom";
+import { useState } from "react";
 
 const AddStudent = () => {
-  const { showToast } = useToast();
+  const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState(1);
   const [studentData, setStudentData] = useState({
@@ -22,7 +25,7 @@ const AddStudent = () => {
     gender: "",
     dob: "",
     profilePhoto: null,
-    classGrade: "",
+    class: "",
     section: "",
     academicYear: "",
     rollNumber: "",
@@ -106,7 +109,7 @@ const AddStudent = () => {
       title: "Academic Info",
       fields: [
         {
-          name: "classGrade",
+          name: "class",
           type: "dropdown",
           label: "Class/Grade",
           options: CLASS_OPTIONS,
@@ -117,7 +120,7 @@ const AddStudent = () => {
           name: "section",
           type: "dropdown",
           label: "Section",
-          options: (data) => getSectionsByClass(data.classGrade),
+          options: (data) => getSectionsByClass(data.class),
           placeholder: "Select Section",
           // required: true,
         },
@@ -199,14 +202,21 @@ const AddStudent = () => {
     if (activeTab < 3) {
       handleNext();
     } else {
-      console.log("Final submission data:", studentData);
-      showToast("Student added successfully!");
+      const newStudent = {
+        ...studentData,
+        id: Date.now(),
+        profileImage: studentData.profilePhoto,
+      };
+      dispatch(addStudent(newStudent));
+      dispatch(
+        addToast({ message: "Student added successfully!", type: "success" }),
+      );
 
       // Record Activity
       recordActivity(
         ACTIVITY_TYPES.STUDENT_ADDED,
         "New student registration",
-        `${studentData.fullName} enrolled in ${studentData.classGrade} (Section ${studentData.section})`,
+        `${studentData.fullName} enrolled in ${studentData.class} (Section ${studentData.section})`,
       );
 
       navigate("/students");

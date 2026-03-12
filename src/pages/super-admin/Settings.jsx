@@ -1,5 +1,7 @@
-import React, { useState } from "react";
-import { useSettings } from "../../context/SettingsContext";
+import { useState } from "react";
+import { useAppDispatch, useAppSelector } from "../../store/hooks";
+import { updateSettings } from "../../store/slices/settingsSlice";
+import { addToast } from "../../store/slices/toastSlice";
 import Button from "../../components/ui/Button";
 import DynamicForm from "../../components/ui/DynamicForm";
 import {
@@ -11,18 +13,17 @@ import {
   FaTimes,
   FaLock,
 } from "react-icons/fa";
-import { useToast } from "../../context/ToastContext";
 
 const Settings = () => {
-  const { showToast } = useToast();
+  const dispatch = useAppDispatch();
+  const settings = useAppSelector((state) => state.settings);
   const {
     systemName,
     systemLogo,
     superAdminUsername,
     superAdminPassword,
-    updateSettings,
     primaryColor,
-  } = useSettings();
+  } = settings;
 
   const [localSettings, setLocalSettings] = useState({
     systemName,
@@ -80,7 +81,9 @@ const Settings = () => {
     const passwordChanged = !!passwordFields.newPassword;
     if (passwordChanged) {
       if (passwordFields.newPassword !== passwordFields.confirmPassword) {
-        showToast("New passwords do not match!", "error");
+        dispatch(
+          addToast({ message: "New passwords do not match!", type: "error" }),
+        );
         return;
       }
     }
@@ -122,8 +125,10 @@ const Settings = () => {
       updates.superAdminPassword = passwordFields.newPassword;
     }
 
-    updateSettings(updates);
-    showToast("Settings updated successfully!", "success");
+    dispatch(updateSettings(updates));
+    dispatch(
+      addToast({ message: "Settings updated successfully!", type: "success" }),
+    );
 
     setPasswordFields({ newPassword: "", confirmPassword: "" });
     setConfirmPassword("");

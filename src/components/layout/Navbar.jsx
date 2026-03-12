@@ -2,19 +2,20 @@ import React, { useState, useEffect, useRef } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { FaBell } from "react-icons/fa";
 import { IoPersonSharp, IoLogOutOutline } from "react-icons/io5";
-import { useSettings } from "../../context/SettingsContext";
-import teachersData from "../../data/teachers/teacher";
-import finalStudentsData from "../../data/admindata/students/students";
+import { useAppDispatch, useAppSelector } from "../../store/hooks";
+import { logout } from "../../store/slices/authSlice";
 import {
   getStudentNotifications,
   getTeacherNotifications,
   getAdminNotifications,
-} from "../../utils/notificationsManager.jsx";
-import { useTeacher } from "../../context/TeacherContext";
-import { useStudent } from "../../context/StudentContext";
+} from "../../utils/notificationsManager";
 
 const Navbar = ({ onToggleSidebar, isSidebarOpen, role = "admin" }) => {
-  const { schoolLogo, systemLogo, superAdminUsername } = useSettings();
+  const dispatch = useAppDispatch();
+  const settings = useAppSelector((state) => state.settings);
+  const { schoolLogo, systemLogo, superAdminUsername } = settings;
+  const { user: currentUser } = useAppSelector((state) => state.auth);
+
   const location = useLocation();
   const navigate = useNavigate();
   const [isNotificationOpen, setIsNotificationOpen] = useState(false);
@@ -23,8 +24,6 @@ const Navbar = ({ onToggleSidebar, isSidebarOpen, role = "admin" }) => {
   const profileRef = useRef(null);
   const [notifications, setNotifications] = useState([]);
   const [readIds, setReadIds] = useState([]);
-  const { currentTeacher, logoutTeacher } = useTeacher();
-  const { currentStudent, logoutStudent } = useStudent();
 
   // Load readIds from localStorage on mount
   useEffect(() => {
@@ -133,18 +132,18 @@ const Navbar = ({ onToggleSidebar, isSidebarOpen, role = "admin" }) => {
 
   useEffect(() => {
     if (role === "student") {
-      if (currentStudent) {
-        setCurrentUserName(currentStudent.fullName || "Student");
-        setProfileImage(currentStudent.profileImage || "");
+      if (currentUser) {
+        setCurrentUserName(currentUser.fullName || "Student");
+        setProfileImage(currentUser.profileImage || "");
         // Load student notifications
-        setNotifications(getStudentNotifications(currentStudent));
+        setNotifications(getStudentNotifications(currentUser));
       }
     } else if (role === "teacher") {
-      if (currentTeacher) {
-        setCurrentUserName(currentTeacher.fullName || "Teacher");
-        setProfileImage(currentTeacher.profileImage || "");
+      if (currentUser) {
+        setCurrentUserName(currentUser.fullName || "Teacher");
+        setProfileImage(currentUser.profileImage || "");
         // Load teacher notifications
-        setNotifications(getTeacherNotifications(currentTeacher));
+        setNotifications(getTeacherNotifications(currentUser));
       }
     } else if (role === "super-admin") {
       setCurrentUserName(superAdminUsername || "Super Admin");
@@ -156,24 +155,10 @@ const Navbar = ({ onToggleSidebar, isSidebarOpen, role = "admin" }) => {
       // Load admin notifications
       setNotifications(getAdminNotifications());
     }
-  }, [
-    role,
-    location.pathname,
-    currentTeacher,
-    currentStudent,
-    superAdminUsername,
-  ]); // Update on route change too
-
-  const { setIsSuperAdmin } = useSettings();
+  }, [role, location.pathname, currentUser, superAdminUsername]); // Update on route change too
 
   const handleLogout = () => {
-    if (role === "teacher") {
-      logoutTeacher();
-    } else if (role === "student") {
-      logoutStudent();
-    } else if (role === "super-admin") {
-      setIsSuperAdmin(false);
-    }
+    dispatch(logout());
     navigate("/select-profile");
     setIsProfileOpen(false);
   };

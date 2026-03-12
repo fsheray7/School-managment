@@ -1,6 +1,6 @@
-import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import studentsData from "../../data/admindata/students/students";
+import { useAppDispatch, useAppSelector } from "../../store/hooks";
+import { updateStudent, deleteStudent } from "../../store/slices/studentsSlice";
+import { addToast } from "../../store/slices/toastSlice";
 import {
   CLASS_OPTIONS,
   GENDER_OPTIONS,
@@ -13,17 +13,13 @@ import DataTable from "../../components/ui/DataTable";
 import ActionButtons from "../../components/ui/ActionButtons";
 import DataCard from "../../components/ui/DataCard";
 import Pagination from "../../components/ui/Pagination";
-import { useToast } from "../../context/ToastContext";
+import { useNavigate } from "react-router-dom";
+import { useState } from "react";
 
 const StudentsAdmin = () => {
-  const { showToast } = useToast();
+  const dispatch = useAppDispatch();
+  const students = useAppSelector((state) => state.students.students);
   const navigate = useNavigate();
-  const [students, setStudents] = useState(
-    studentsData.map((student) => ({
-      ...student,
-      profilePhoto: student.profileImage,
-    })),
-  );
   const [selectedStudent, setSelectedStudent] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isEditMode, setIsEditMode] = useState(false);
@@ -58,17 +54,15 @@ const StudentsAdmin = () => {
 
   const confirmDelete = () => {
     if (itemToDelete) {
-      setStudents(students.filter((s) => s.id !== itemToDelete.id));
+      dispatch(deleteStudent(itemToDelete.id));
       setIsDeleteModalOpen(false);
       setItemToDelete(null);
     }
   };
 
   const handleSaveEdit = () => {
-    setStudents(
-      students.map((s) => (s.id === selectedStudent.id ? selectedStudent : s)),
-    );
-    showToast("Student details updated successfully!");
+    dispatch(updateStudent(selectedStudent));
+    dispatch(addToast({ message: "Student details updated successfully!" }));
     closeModal();
   };
 

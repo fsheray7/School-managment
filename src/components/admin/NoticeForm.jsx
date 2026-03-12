@@ -1,24 +1,24 @@
+import { useAppDispatch, useAppSelector } from "../../store/hooks";
+import { addNotice as addNoticeAction } from "../../store/slices/noticesSlice";
+import { addToast } from "../../store/slices/toastSlice";
+import { addNotice as addNoticeUtil } from "../../utils/noticeManager";
+import { useNavigate } from "react-router-dom";
 import { useState } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
-import CustomDropdown from "../ui/CustomDropdown";
+import { useLocation } from "react-router-dom";
 import Button from "../ui/Button";
+import CustomDropdown from "../ui/CustomDropdown";
 import FileUpload from "../ui/FileUpload";
-import { useSettings } from "../../context/SettingsContext";
-import { useToast } from "../../context/ToastContext";
-import { useTeacher } from "../../context/TeacherContext";
-import { addNotice } from "../../utils/noticeManager";
 
 const NoticeForm = () => {
-  const { showToast } = useToast();
+  const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const location = useLocation();
-  const teacherContext = useTeacher();
-  const { classes, sections } = useSettings();
+  const settings = useAppSelector((state) => state.settings);
+  const { classes, sections } = settings;
+  const currentTeacher = useAppSelector((state) => state.auth.user); // Assuming user is teacher if in teacher context
 
   const isTeacherContext = location.pathname.includes("teacher");
-  const author = isTeacherContext
-    ? teacherContext.currentTeacher?.fullName
-    : "Admin";
+  const author = isTeacherContext ? currentTeacher?.fullName : "Admin";
   const authorRole = isTeacherContext ? "Teacher" : "Admin";
 
   const [formData, setFormData] = useState({
@@ -71,7 +71,12 @@ const NoticeForm = () => {
     const file = e.target.files[0];
     if (file) {
       if (file.size > 2 * 1024 * 1024) {
-        showToast("File size should be less than 2MB", "error");
+        dispatch(
+          addToast({
+            message: "File size should be less than 2MB",
+            type: "error",
+          }),
+        );
         return;
       }
       const reader = new FileReader();
@@ -116,24 +121,32 @@ const NoticeForm = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!formData.title || !formData.details || !formData.audience) {
-      showToast("Please fill in required fields", "warning");
+      dispatch(
+        addToast({
+          message: "Please fill in required fields",
+          type: "warning",
+        }),
+      );
       return;
     }
 
     const { attachmentName, ...noticePayload } = formData;
-    const result = addNotice({
+    const finalNotice = {
       ...noticePayload,
       attachmentName: attachmentName,
       author: author,
       authorRole: authorRole,
-    });
+    };
+
+    const result = addNoticeUtil(finalNotice);
 
     if (result.success) {
-      showToast(result.message, "success");
+      dispatch(addNoticeAction(result.notice)); // Use the notice returned from util with ID
+      dispatch(addToast({ message: result.message, type: "success" }));
       handleClear();
       navigate(isTeacherContext ? "/notice-teacher" : "/notice-admin");
     } else {
-      showToast(result.message, "error");
+      dispatch(addToast({ message: result.message, type: "error" }));
     }
   };
 

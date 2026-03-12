@@ -1,10 +1,12 @@
-import React, { forwardRef } from "react";
+import React, {useState, forwardRef } from "react";
 import { IoPrint, IoDownload, IoCheckmarkCircle } from "react-icons/io5";
-import { useSettings } from "../../context/SettingsContext";
+import { useAppSelector } from "../../store/hooks";
 
 const FeeReceipt = forwardRef(
   ({ feeData, totalPayable, invoiceNo, copyType }, ref) => {
-    const { schoolLogo, schoolName } = useSettings();
+    const { schoolLogo, schoolName } = useAppSelector(
+      (state) => state.settings,
+    );
     const today = new Date().toLocaleDateString("en-GB", {
       day: "2-digit",
       month: "long",

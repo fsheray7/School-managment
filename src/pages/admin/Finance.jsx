@@ -143,7 +143,7 @@ const Finance = () => {
   );
 
   return (
-    <div className="flex px-6 pt-4 flex-col gap-6 w-full">
+    <div className="flex px-1 md:px-6 pt-4 flex-col gap-6 w-full">
       {/* Header */}
       <div className="flex  sm:flex-row items-start sm:items-center justify-end gap-4">
         <Button variant="primary">

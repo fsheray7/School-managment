@@ -5,22 +5,24 @@ import { IoShareSocialOutline, IoLogOutOutline } from "react-icons/io5";
 import { FaUser, FaUsers } from "react-icons/fa";
 import Button from "../../components/ui/Button";
 import finalStudentsData from "../../data/admindata/students/students";
+import { useAppSelector, useAppDispatch } from "../../store/hooks";
+import { logout } from "../../store/slices/authSlice";
 
 const StudentProfile = () => {
   const navigate = useNavigate();
+  const dispatch = useAppDispatch();
+  const currentStudent = useAppSelector((state) => state.auth.user);
   const [student, setStudent] = useState(null);
 
   useEffect(() => {
-    const storedStudent = localStorage.getItem("currentStudent");
-    if (storedStudent) {
-      const sessionData = JSON.parse(storedStudent);
+    if (currentStudent) {
       const updatedStudent =
-        finalStudentsData.find((s) => s.id === sessionData.id) || sessionData;
+        finalStudentsData.find((s) => s.id === currentStudent.id) || currentStudent;
       setStudent(updatedStudent);
     } else {
       navigate("/");
     }
-  }, [navigate]);
+  }, [currentStudent, navigate]);
 
   if (!student) return null;
 
@@ -124,7 +126,7 @@ const StudentProfile = () => {
         <div className="flex gap-4">
           <Button
             onClick={() => {
-              localStorage.removeItem("currentStudent");
+              dispatch(logout());
               navigate("/");
             }}
             variant="reset"

@@ -9,7 +9,6 @@ import {
 import { FaUserGraduate } from "react-icons/fa6";
 import Login from "../components/login/Login";
 import Button from "../components/ui/Button";
-import { useSettings } from "../context/SettingsContext";
 
 const ProfileSelection = ({ initialRole }) => {
   const [selectedRole, setSelectedRole] = useState(initialRole || null);
@@ -99,14 +98,10 @@ const ProfileSelection = ({ initialRole }) => {
                   className="flex flex-col items-center hover:scale-105 transition duration-300 cursor-pointer group"
                   onClick={() => handleRoleSelect(id)}
                 >
-                  <div
-                    className={boxStyle}
-                  >
+                  <div className={boxStyle}>
                     <Icon size={iconSize} />
                   </div>
-                  <span
-                    className="mt-3 text-md font-semibold text-gray-700 transition-colors text-[var(--text-primary-color)]"
-                  >
+                  <span className="mt-3 text-md font-semibold text-gray-700 transition-colors text-[var(--text-primary-color)]">
                     {label}
                   </span>
                 </div>

@@ -16,13 +16,14 @@ import classesData from "../../data/admindata/classes";
 import coursesData from "../../data/admindata/courses";
 import { UPCOMING_EVENTS, CIRCULARS } from "../../data/admindata/dashboardData";
 
-import { useTeacher } from "../../context/TeacherContext";
+import { useAppSelector } from "../../store/hooks";
 import { getNoticesForUser } from "../../utils/noticeManager";
 import NoticePreviewModal from "../../components/common/NoticePreviewModal";
 
 const TeacherDashboard = () => {
   const navigate = useNavigate();
-  const { currentTeacher: teacher } = useTeacher();
+  const teacher = useAppSelector((state) => state.auth.user);
+  const allNotices = useAppSelector((state) => state.notices.notices);
   const [myClass, setMyClass] = useState(null);
   const [stats, setStats] = useState({
     present: 0,
@@ -59,7 +60,12 @@ const TeacherDashboard = () => {
       }
 
       // Load notices
-      const teacherNotices = getNoticesForUser("teacher");
+      const teacherNotices = getNoticesForUser(
+        "teacher",
+        updatedTeacher.fullName,
+        null,
+        allNotices,
+      );
       setNotices(teacherNotices.slice(0, 5));
 
       // Show welcome toast

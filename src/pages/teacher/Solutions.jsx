@@ -9,13 +9,14 @@ import {
 } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import { getPendingDoubts, answerDoubt } from "../../utils/doubtsManager";
-import { useToast } from "../../context/ToastContext";
+import { useAppDispatch } from "../../store/hooks";
+import { addToast } from "../../store/slices/toastSlice";
 import Button from "../../components/ui/Button";
 import FileUpload from "../../components/ui/FileUpload";
 
 const Solutions = () => {
+  const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  const { showToast } = useToast();
   const [pendingDoubts, setPendingDoubts] = useState([]);
   const [selectedDoubt, setSelectedDoubt] = useState(null);
 
@@ -39,7 +40,12 @@ const Solutions = () => {
     const file = e.target.files[0];
     if (file) {
       if (file.size > 2 * 1024 * 1024) {
-        showToast("File size should be less than 2MB", "error");
+        dispatch(
+          addToast({
+            message: "File size should be less than 2MB",
+            type: "error",
+          }),
+        );
         return;
       }
       const reader = new FileReader();
@@ -64,7 +70,9 @@ const Solutions = () => {
 
   const handleSendReply = async () => {
     if (!replyData.answer) {
-      showToast("Please write an answer", "warning");
+      dispatch(
+        addToast({ message: "Please write an answer", type: "warning" }),
+      );
       return;
     }
 
@@ -76,18 +84,18 @@ const Solutions = () => {
     );
 
     if (result.success) {
-      showToast(result.message, "success");
+      dispatch(addToast({ message: result.message, type: "success" }));
       setSelectedDoubt(null);
       setReplyData({ answer: "", file: null, fileName: "" });
       fetchDoubts();
     } else {
-      showToast(result.message, "error");
+      dispatch(addToast({ message: result.message, type: "error" }));
     }
     setIsSubmitting(false);
   };
 
   return (
-    <section className="w-full min-h-screen bg-[#f3f4f6] py-8 px-1 md:px-6 flex flex-col items-center">
+    <section className="w-full min-h-screen  py-8 px-1 md:px-6 flex flex-col items-center">
       <div className="w-full max-w-6xl">
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {/* LIST OF QUESTIONS */}

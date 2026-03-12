@@ -14,7 +14,8 @@ import {
 } from "../../constants/Store";
 import CustomDropdown from "../../components/ui/CustomDropdown";
 import DataTable from "../../components/ui/DataTable";
-import { useToast } from "../../context/ToastContext";
+import { useAppDispatch } from "../../store/hooks";
+import { addToast } from "../../store/slices/toastSlice";
 import {
   getSubmittedPromotionData,
   getAvailablePromotionSubmissions,
@@ -23,7 +24,7 @@ import {
 import ConfirmationModal from "../../components/ui/ConfirmationModal";
 
 const StudentPromotion = ({
-  label="uppercase text-xs font-semibold text-[var(--primary-color)]"
+  label = "uppercase text-xs font-semibold text-[var(--primary-color)]",
 }) => {
   // Filter States
   const [filters, setFilters] = useState({
@@ -61,7 +62,7 @@ const StudentPromotion = ({
     ),
   ];
 
-  const { showToast } = useToast();
+  const dispatch = useAppDispatch();
 
   // Handlers
   const handleFilterChange = (name, value) => {
@@ -101,7 +102,12 @@ const StudentPromotion = ({
 
   const handleLoadStudents = () => {
     if (!filters.fromClass || !filters.fromSection) {
-      showToast("Please select From Class and Section", "error");
+      dispatch(
+        addToast({
+          message: "Please select From Class and Section",
+          type: "error",
+        }),
+      );
       return;
     }
 
@@ -117,14 +123,19 @@ const StudentPromotion = ({
     }));
 
     if (studentsWithPromotionStatus.length === 0) {
-      showToast(
-        "No submitted results found for the selected class and section.",
-        "error",
+      dispatch(
+        addToast({
+          message:
+            "No submitted results found for the selected class and section.",
+          type: "error",
+        }),
       );
     } else {
-      showToast(
-        `Loaded ${studentsWithPromotionStatus.length} students successfully.`,
-        "success",
+      dispatch(
+        addToast({
+          message: `Loaded ${studentsWithPromotionStatus.length} students successfully.`,
+          type: "success",
+        }),
       );
     }
 
@@ -159,7 +170,12 @@ const StudentPromotion = ({
 
   const handlePromote = () => {
     if (selectedCount === 0) {
-      showToast("No students selected for promotion.", "error");
+      dispatch(
+        addToast({
+          message: "No students selected for promotion.",
+          type: "error",
+        }),
+      );
       return;
     }
     setShowConfirmModal(true);
@@ -167,21 +183,21 @@ const StudentPromotion = ({
 
   const handleConfirmPromotion = () => {
     setShowConfirmModal(false);
-    
+
     const studentsToPromote = students.filter((s) => s.isChecked);
-    
+
     const result = promoteStudents(
       studentsToPromote,
       filters.toClass,
-      filters.toSection
+      filters.toSection,
     );
 
     if (result.success) {
-      showToast(result.message, "success");
+      dispatch(addToast({ message: result.message, type: "success" }));
       // Optionally refresh the list or clear selection
-      setStudents((prev) => prev.filter(s => !s.isChecked)); // Remove promoted students from list or just uncheck
+      setStudents((prev) => prev.filter((s) => !s.isChecked)); // Remove promoted students from list or just uncheck
     } else {
-      showToast(result.message, "error");
+      dispatch(addToast({ message: result.message, type: "error" }));
     }
   };
 
@@ -375,15 +391,13 @@ const StudentPromotion = ({
   );
 
   return (
-    <div className="flex flex-col px-6 gap-6 w-full mt-5 ">
+    <div className="flex flex-col px-1 md:px-6 gap-6 w-full mt-5 ">
       {/* FILTER CARD */}
       <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100 grid grid-cols-1 lg:grid-cols-12 gap-4 items-end">
         {/* From */}
         <div className="lg:col-span-4 grid grid-cols-2 gap-4">
           <div className="flex flex-col gap-2 relative">
-            <label className={label}>
-              From Class
-            </label>
+            <label className={label}>From Class</label>
             <CustomDropdown
               value={filters.fromClass}
               onChange={(val) => handleFilterChange("fromClass", val)}
@@ -393,9 +407,7 @@ const StudentPromotion = ({
             />
           </div>
           <div className="flex flex-col gap-2 relative">
-            <label className={label}>
-              Section
-            </label>
+            <label className={label}>Section</label>
             <CustomDropdown
               value={filters.fromSection}
               onChange={(val) => handleFilterChange("fromSection", val)}
@@ -414,9 +426,7 @@ const StudentPromotion = ({
         {/* To */}
         <div className="lg:col-span-4 grid grid-cols-2 gap-4">
           <div className="flex flex-col gap-2 relative">
-            <label className={label}>
-              To Class
-            </label>
+            <label className={label}>To Class</label>
             <div className="w-full px-3 py-2 bg-gray-50 border border-gray-200 rounded-lg text-sm flex items-center min-h-[42px]">
               {filters.toClass ? (
                 <span className="text-green-700 font-semibold">
@@ -428,9 +438,7 @@ const StudentPromotion = ({
             </div>
           </div>
           <div className="flex flex-col gap-2 relative">
-            <label className={label}>
-              To Section
-            </label>
+            <label className={label}>To Section</label>
             <div className="w-full px-3 py-2 bg-gray-50 border border-gray-200 rounded-lg text-sm flex items-center min-h-[42px]">
               {filters.toSection ? (
                 <span className="text-green-700 font-semibold">
@@ -445,9 +453,7 @@ const StudentPromotion = ({
 
         {/* Year */}
         <div className="lg:col-span-2 flex flex-col gap-2 relative">
-          <label className={label}>
-            Year
-          </label>
+          <label className={label}>Year</label>
           <CustomDropdown
             value={filters.year}
             onChange={(val) => handleFilterChange("year", val)}

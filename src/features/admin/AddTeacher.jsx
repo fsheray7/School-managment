@@ -1,5 +1,6 @@
-import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useAppDispatch } from "../../store/hooks";
+import { addTeacher } from "../../store/slices/teachersSlice";
+import { addToast } from "../../store/slices/toastSlice";
 import {
   TEACHER_TYPE,
   CLASS_OPTIONS,
@@ -10,16 +11,18 @@ import Button from "../../components/ui/Button";
 import { IoArrowBack } from "react-icons/io5";
 import DynamicForm from "../../components/ui/DynamicForm";
 import ProgressBar from "../../components/ui/ProgressBar";
-import { useToast } from "../../context/ToastContext";
+
 import { recordActivity, ACTIVITY_TYPES } from "../../utils/activityManager";
+import { useNavigate } from "react-router-dom";
+import { useState } from "react";
 
 const AddTeacher = () => {
-  const { showToast } = useToast();
+  const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState(1);
   const [teacherData, setTeacherData] = useState({
     // Basic Info
-    fullname: "",
+    fullName: "",
     email: "",
     contact: "",
     gender: "",
@@ -85,7 +88,7 @@ const AddTeacher = () => {
           // required: true,
         },
         {
-          name: "fullname",
+          name: "fullName",
           type: "input",
           inputType: "text",
           label: "F.Name",
@@ -284,14 +287,21 @@ const AddTeacher = () => {
     if (activeTab < 5) {
       handleNext();
     } else {
-      console.log("Teacher Data:", teacherData);
-      showToast("Teacher added successfully!");
+      const newTeacher = {
+        ...teacherData,
+        id: Date.now(),
+        profileImage: teacherData.profilePhoto,
+      };
+      dispatch(addTeacher(newTeacher));
+      dispatch(
+        addToast({ message: "Teacher added successfully!", type: "success" }),
+      );
 
       // Record Activity
       recordActivity(
         ACTIVITY_TYPES.TEACHER_ADDED,
         "New teacher registration",
-        `${teacherData.fullname} joined as ${teacherData.role} in ${teacherData.department} department`,
+        `${teacherData.fullName} joined as ${teacherData.role} in ${teacherData.department} department`,
       );
 
       navigate("/teachers");

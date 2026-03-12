@@ -15,6 +15,8 @@ const TeacherSelector = ({ onSelectionChange }) => {
 
   useEffect(() => {
     const storedTeacher = localStorage.getItem("currentTeacher");
+    let initialCourses = coursesData;
+
     if (storedTeacher) {
       const teacherData = JSON.parse(storedTeacher);
       setTeacher(teacherData);
@@ -23,16 +25,23 @@ const TeacherSelector = ({ onSelectionChange }) => {
       const filtered = coursesData.filter(
         (course) => course.instructor === teacherData.fullName,
       );
-      setAssignedCourses(filtered);
-
-      // Set initial defaults if courses exist
+      
+      // If teacher has assigned courses, show those; otherwise, show all courses
       if (filtered.length > 0) {
-        setSelection({
-          class: filtered[0].class,
-          section: filtered[0].section,
-          subject: filtered[0].courseName,
-        });
+        initialCourses = filtered;
       }
+    }
+
+    setAssignedCourses(initialCourses);
+
+    // Set initial defaults if courses exist
+    if (initialCourses.length > 0) {
+      setSelection({
+        class: initialCourses[0].class,
+        section: initialCourses[0].section,
+        subject: initialCourses[0].courseName,
+        terminal: "First Terminal",
+      });
     }
   }, []);
 
@@ -41,7 +50,8 @@ const TeacherSelector = ({ onSelectionChange }) => {
       onSelectionChange &&
       selection.class &&
       selection.section &&
-      selection.subject
+      selection.subject &&
+      selection.terminal
     ) {
       onSelectionChange(selection);
     }
@@ -78,7 +88,7 @@ const TeacherSelector = ({ onSelectionChange }) => {
     setSelection((prev) => ({ ...prev, subject: newSubject }));
   };
 
-  if (!teacher || assignedCourses.length === 0) return null;
+  if (assignedCourses.length === 0) return null;
 
   // Derive unique options
   const classes = [...new Set(assignedCourses.map((c) => c.class))];

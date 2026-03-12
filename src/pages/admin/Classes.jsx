@@ -1,6 +1,11 @@
-import React, { useState, useEffect } from "react";
+import { useAppDispatch, useAppSelector } from "../../store/hooks";
 import { useNavigate } from "react-router-dom";
-import classesData from "../../data/admindata/classes";
+import { useState } from "react";
+import {
+  updateClass,
+  deleteClassesByName,
+} from "../../store/slices/classesSlice";
+import { addToast } from "../../store/slices/toastSlice";
 import Filters from "../../components/ui/Filters";
 import DeleteModal from "../../components/ui/DeleteModal";
 import DetailsModal from "../../components/ui/DetailsModal";
@@ -8,7 +13,7 @@ import DataTable from "../../components/ui/DataTable";
 import ActionButtons from "../../components/ui/ActionButtons";
 import DataCard from "../../components/ui/DataCard";
 import Pagination from "../../components/ui/Pagination";
-import { useToast } from "../../context/ToastContext";
+
 import {
   CLASS_OPTIONS,
   getSectionsByClass,
@@ -16,9 +21,9 @@ import {
 } from "../../constants/Store";
 
 const Classes = () => {
-  const { showToast } = useToast();
+  const dispatch = useAppDispatch();
+  const classes = useAppSelector((state) => state.classes.classes);
   const navigate = useNavigate();
-  const [classes, setClasses] = useState(classesData);
   const [selectedClass, setSelectedClass] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isEditMode, setIsEditMode] = useState(false);
@@ -53,19 +58,23 @@ const Classes = () => {
 
   const confirmDelete = () => {
     if (itemToDelete) {
-      // Delete all rows belonging to this grouped class
-      setClasses(classes.filter((c) => c.className !== itemToDelete.className));
+      dispatch(deleteClassesByName(itemToDelete.className));
       setIsDeleteModalOpen(false);
       setItemToDelete(null);
-      showToast("Class deleted successfully!");
+      dispatch(
+        addToast({ message: "Class deleted successfully!", type: "success" }),
+      );
     }
   };
 
   const handleSaveEdit = () => {
-    setClasses(
-      classes.map((c) => (c.id === selectedClass.id ? selectedClass : c)),
+    dispatch(updateClass(selectedClass));
+    dispatch(
+      addToast({
+        message: "Class details updated successfully!",
+        type: "success",
+      }),
     );
-    showToast("Class details updated successfully!");
     closeModal();
   };
 
@@ -224,7 +233,7 @@ const Classes = () => {
   );
 
   return (
-    <section className="flex flex-col items-center mt-5 justify-start w-full bg-white px-6 gap-4">
+    <section className="flex flex-col items-center mt-5 justify-start w-full bg-white px-1 md:px-6 gap-4">
       <div className="w-full">
         <Filters
           searchQuery={searchQuery}

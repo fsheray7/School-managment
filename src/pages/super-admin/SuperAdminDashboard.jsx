@@ -1,8 +1,8 @@
-import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useAppDispatch, useAppSelector } from "../../store/hooks";
 import { FaUserShield, FaWallet, FaChartLine } from "react-icons/fa";
-import { useSettings } from "../../context/SettingsContext";
-import { useToast } from "../../context/ToastContext";
+import { useState } from "react";
+import { toggleAdminStatus } from "../../store/slices/adminsSlice";
+import { addToast } from "../../store/slices/toastSlice";
 import DataTable from "../../components/ui/DataTable";
 import Pagination from "../../components/ui/Pagination";
 import DataCard from "../../components/ui/DataCard";
@@ -10,19 +10,18 @@ import ActionButtons from "../../components/ui/ActionButtons";
 import Button from "../../components/ui/Button";
 import StatusToggle from "../../components/ui/StatusToggle";
 import ConfirmationModal from "../../components/ui/ConfirmationModal";
-import { useAdmin } from "../../context/AdminContext.jsx";
+import { useNavigate } from "react-router-dom";
 import { trendChartData } from "../../data/finance/TrendChartData";
 
 const SuperAdminDashboard = () => {
+  const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  const { showToast } = useToast();
+  const admins = useAppSelector((state) => state.admins.admins);
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 10;
 
   const [isConfirmOpen, setIsConfirmOpen] = useState(false);
   const [adminToUpdate, setAdminToUpdate] = useState(null);
-
-  const { admins, toggleAdminStatus } = useAdmin();
 
   const totalRevenue = trendChartData.reduce(
     (acc, item) => acc + item.collection,
@@ -74,10 +73,12 @@ const SuperAdminDashboard = () => {
     if (!adminToUpdate) return;
 
     const newStatus = adminToUpdate.status === "Active" ? "Inactive" : "Active";
-    toggleAdminStatus(adminToUpdate.id);
-    showToast(
-      `${adminToUpdate.name}'s status changed to ${newStatus}`,
-      "success",
+    dispatch(toggleAdminStatus(adminToUpdate.id));
+    dispatch(
+      addToast({
+        message: `${adminToUpdate.name}'s status changed to ${newStatus}`,
+        type: "success",
+      }),
     );
     setIsConfirmOpen(false);
     setAdminToUpdate(null);

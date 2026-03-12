@@ -125,8 +125,13 @@ export const deleteNotice = (id) => {
 /**
  * Filter notices for a specific role and optionally class/section
  */
-export const getNoticesForUser = (role, className = null, section = null) => {
-  const notices = getActiveNotices();
+export const getNoticesForUser = (
+  role,
+  className = null,
+  section = null,
+  noticesArray = null,
+) => {
+  const notices = noticesArray || getActiveNotices();
 
   return notices.filter((notice) => {
     // 1. Check audience

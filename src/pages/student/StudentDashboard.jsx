@@ -11,12 +11,15 @@ import {
 import { Link, useNavigate } from "react-router-dom";
 import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip } from "recharts";
 
+import { useAppSelector } from "../../store/hooks";
 import { getNoticesForUser } from "../../utils/noticeManager";
 import NoticePreviewModal from "../../components/common/NoticePreviewModal";
 
 const StudentDashboard = () => {
   const navigate = useNavigate();
-  const [student, setStudent] = useState(null);
+  const student = useAppSelector((state) => state.auth.user);
+  const allNotices = useAppSelector((state) => state.notices.notices);
+
   const [resultsData, setResultsData] = useState([]);
   const [averagePercentage, setAveragePercentage] = useState(0);
   const [recentHomework, setRecentHomework] = useState([]);
@@ -26,10 +29,8 @@ const StudentDashboard = () => {
   const [showWelcome, setShowWelcome] = useState(false);
 
   useEffect(() => {
-    const storedStudent = localStorage.getItem("currentStudent");
-    if (storedStudent) {
-      const studentData = JSON.parse(storedStudent);
-      setStudent(studentData);
+    if (student) {
+      const studentData = student;
 
       // --- HOMEWORK LOGIC ---
       const allHomework =
@@ -107,6 +108,7 @@ const StudentDashboard = () => {
         "student",
         studentData.class,
         studentData.section,
+        allNotices,
       );
       setNotices(activeNotices.slice(0, 5));
 

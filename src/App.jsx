@@ -46,13 +46,24 @@ import SuperAdminDashboard from "./pages/super-admin/SuperAdminDashboard";
 import Admins from "./pages/super-admin/Admins.jsx";
 import Revenue from "./pages/super-admin/Revenue";
 import SuperAdminSettings from "./pages/super-admin/Settings";
+import NoticeForm from "./components/admin/NoticeForm";
 
 import AddAdmin from "./pages/super-admin/AddAdmin";
-import NoticeForm from "./components/admin/NoticeForm.jsx";
+import React, { useEffect } from "react";
+import { useAppDispatch } from "./store/hooks";
+import { loadStoredSettings } from "./store/slices/settingsSlice";
+import ToastContainer from "./components/ui/ToastContainer";
 
 function App() {
+  const dispatch = useAppDispatch();
+
+  useEffect(() => {
+    dispatch(loadStoredSettings());
+  }, [dispatch]);
+
   return (
     <Router>
+      <ToastContainer />
       <Routes>
         <Route path="/select-profile" element={<ProfileSelection />} />
         <Route path="/" element={<WelcomePage />} />

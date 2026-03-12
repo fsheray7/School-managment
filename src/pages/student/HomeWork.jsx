@@ -9,9 +9,11 @@ import {
 import Button from "../../components/ui/Button";
 import HomeworkPreviewModal from "../../components/ui/HomeworkPreviewModal";
 import Pagination from "../../components/ui/Pagination";
+import { useAppSelector } from "../../store/hooks";
 
 const HomeWorkStudent = () => {
   const [homeworkList, setHomeworkList] = useState([]);
+  const currentStudent = useAppSelector((state) => state.auth.user);
   const [student, setStudent] = useState(null);
   const [selectedHomework, setSelectedHomework] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -21,24 +23,21 @@ const HomeWorkStudent = () => {
   const itemsPerPage = 4;
 
   useEffect(() => {
-    const storedStudent = localStorage.getItem("currentStudent");
-
-    if (storedStudent) {
-      const studentData = JSON.parse(storedStudent);
-      setStudent(studentData);
+    if (currentStudent) {
+      setStudent(currentStudent);
 
       const allHomework =
         JSON.parse(localStorage.getItem("homeworkData")) || [];
 
       const relevantHomework = allHomework.filter(
         (hw) =>
-          hw.class === studentData.class && hw.section === studentData.section,
+          hw.class === currentStudent.class && hw.section === currentStudent.section,
       );
 
       relevantHomework.sort((a, b) => new Date(b.date) - new Date(a.date));
       setHomeworkList(relevantHomework);
     }
-  }, []);
+  }, [currentStudent]);
 
   const handleDownload = (hw) => {
     if (!hw.file) return;

@@ -6,8 +6,19 @@ import {
   FaTimes,
 } from "react-icons/fa";
 
-const Toast = ({ message, type = "success", onClose }) => {
+const Toast = ({ message, type = "success", onClose, duration = 5000 }) => {
   const [isExiting, setIsExiting] = useState(false);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setIsExiting(true);
+      setTimeout(onClose, 300);
+    }, duration);
+
+    return () => {
+      clearTimeout(timer);
+    };
+  }, [duration, onClose]);
 
   const handleClose = () => {
     setIsExiting(true);

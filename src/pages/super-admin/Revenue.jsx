@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { useSettings } from "../../context/SettingsContext";
+import { useState } from "react";
+import { useAppSelector } from "../../store/hooks";
 import {
   FaArrowUp,
   FaArrowDown,
@@ -14,7 +14,7 @@ import Button from "../../components/ui/Button";
 import CustomDropdown from "../../components/ui/CustomDropdown";
 
 const Revenue = () => {
-  const { primaryColor } = useSettings();
+  const { primaryColor } = useAppSelector((state) => state.settings);
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 5;
   const [timeRange, setTimeRange] = useState("Last 30 Days");
@@ -164,9 +164,7 @@ const Revenue = () => {
   return (
     <div className="p-4 md:p-6 flex flex-col gap-8">
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
-        <div>
-        
-        </div>
+        <div></div>
         <div className="flex items-center gap-3">
           <CustomDropdown
             options={[

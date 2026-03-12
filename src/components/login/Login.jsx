@@ -1,24 +1,22 @@
+import { useNavigate } from "react-router-dom";
+import { useAppDispatch, useAppSelector } from "../../store/hooks";
+import { login } from "../../store/slices/authSlice";
+import { addToast } from "../../store/slices/toastSlice";
 import { useState } from "react";
 import { FaUser } from "react-icons/fa";
 import DynamicForm from "../ui/DynamicForm";
-import studentsData from "../../data/admindata/students/students";
-import teachersData from "../../data/teachers/teacher";
-import { useNavigate } from "react-router-dom";
-import { useToast } from "../../context/ToastContext";
-import { useSettings } from "../../context/SettingsContext";
-import { admins as defaultAdmins } from "../../data/admindata/superadmin/admins";
-import { useTeacher } from "../../context/TeacherContext";
-import { useStudent } from "../../context/StudentContext";
-import { useAdmin } from "../../context/AdminContext";
 
 const Login = ({ onLoginSuccess, role }) => {
-  const { showToast } = useToast();
+  const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  const { superAdminUsername, superAdminPassword, setIsSuperAdmin } =
-    useSettings();
-  const { loginTeacher } = useTeacher();
-  const { loginStudent } = useStudent();
-  const { admins, loginAdmin } = useAdmin();
+
+  const settings = useAppSelector((state) => state.settings);
+  const students = useAppSelector((state) => state.students.students);
+  const teachers = useAppSelector((state) => state.teachers.teachers);
+  const admins = useAppSelector((state) => state.admins.admins);
+
+  const { superAdminUsername, superAdminPassword } = settings;
+
   const [loginData, setLoginData] = useState({
     username: "",
     password: "",
@@ -28,36 +26,50 @@ const Login = ({ onLoginSuccess, role }) => {
     e.preventDefault();
 
     if (role === "student") {
-      const student = studentsData.find(
+      const student = students.find(
         (s) =>
           s.userName === loginData.username &&
           s.password === loginData.password,
       );
 
       if (student) {
-        showToast(`Welcome back, ${student.fullName}!`, "success");
-        loginStudent(student);
+        dispatch(
+          addToast({
+            message: `Welcome back, ${student.fullName}!`,
+            type: "success",
+          }),
+        );
+        dispatch(login({ user: student, role: "student" }));
         if (onLoginSuccess) {
           onLoginSuccess(student);
         }
       } else {
-        showToast("Invalid username or password!", "error");
+        dispatch(
+          addToast({ message: "Invalid username or password!", type: "error" }),
+        );
       }
     } else if (role === "teacher") {
-      const teacher = teachersData.find(
+      const teacher = teachers.find(
         (t) =>
           t.userName === loginData.username &&
           t.password === loginData.password,
       );
 
       if (teacher) {
-        showToast(`Welcome back, ${teacher.fullName}!`, "success");
-        loginTeacher(teacher);
+        dispatch(
+          addToast({
+            message: `Welcome back, ${teacher.fullName}!`,
+            type: "success",
+          }),
+        );
+        dispatch(login({ user: teacher, role: "teacher" }));
         if (onLoginSuccess) {
           onLoginSuccess(teacher);
         }
       } else {
-        showToast("Invalid username or password!", "error");
+        dispatch(
+          addToast({ message: "Invalid username or password!", type: "error" }),
+        );
       }
     } else if (role === "admin") {
       const admin = admins.find(
@@ -67,32 +79,49 @@ const Login = ({ onLoginSuccess, role }) => {
       );
 
       if (admin && admin.status === "Active") {
-        loginAdmin(admin);
-        showToast("Logged in as Administrator!", "success");
+        dispatch(login({ user: admin, role: "admin" }));
+        dispatch(
+          addToast({ message: "Logged in as Administrator!", type: "success" }),
+        );
         if (onLoginSuccess) {
           onLoginSuccess({ role: "admin", fullName: admin.name });
         }
       } else {
-        showToast("Invalid admin credentials!", "error");
+        dispatch(
+          addToast({ message: "Invalid admin credentials!", type: "error" }),
+        );
       }
     } else if (role === "super-admin") {
       if (
         loginData.username.trim() === superAdminUsername &&
         loginData.password.trim() === superAdminPassword
       ) {
-        showToast("Logged in as Super Administrator!", "success");
-        setIsSuperAdmin(true);
+        dispatch(
+          addToast({
+            message: "Logged in as Super Administrator!",
+            type: "success",
+          }),
+        );
+        dispatch(
+          login({ user: { fullName: "Super Admin" }, role: "super-admin" }),
+        );
         if (onLoginSuccess) {
           onLoginSuccess({ role: "super-admin" });
         } else {
           navigate("/super-admin-dashboard");
         }
       } else {
-        showToast("Invalid super admin credentials!", "error");
+        dispatch(
+          addToast({
+            message: "Invalid super admin credentials!",
+            type: "error",
+          }),
+        );
       }
     } else {
-      // Default success for other roles for now
-      showToast("Logged in successfully!", "success");
+      dispatch(
+        addToast({ message: "Logged in successfully!", type: "success" }),
+      );
       if (onLoginSuccess) {
         onLoginSuccess();
       }
