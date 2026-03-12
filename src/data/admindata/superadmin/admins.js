@@ -1,13 +1,13 @@
 export const admins = [
   {
     id: 1,
-    name: "Sara Malik",
+    name: "Admin User",
     school: "City School",
-    email: "sara@city.edu",
+    email: "admin@school.edu",
     phone: "+92 333 4445556",
     status: "Active",
-    username: "sara_admin",
-    password: "password123",
-    profileImage: null,
+    username: "admin",
+    password: "admin-123",
+    profileImage: "/assets/profiles/admins/default.jpg",
   },
 ];

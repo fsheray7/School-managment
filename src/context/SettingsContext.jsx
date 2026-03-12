@@ -40,7 +40,7 @@ export const SettingsProvider = ({ children }) => {
 
       // Super Admin
       superAdminUsername: "super-admin",
-      superAdminPassword: "super-admin12",
+      superAdminPassword: "super-admin123",
     };
 
     const saved = localStorage.getItem("school_settings");
@@ -49,8 +49,11 @@ export const SettingsProvider = ({ children }) => {
     const parsed = JSON.parse(saved);
 
     // Migration: fix old passwords
-    if (parsed.superAdminPassword === "password123")
-      parsed.superAdminPassword = "super-admin12";
+    if (
+      parsed.superAdminPassword === "password123" ||
+      parsed.superAdminPassword === "super-admin12"
+    )
+      parsed.superAdminPassword = "super-admin123";
 
     // Logos are stored in IndexedDB — strip any accidentally saved base64 from localStorage
     // (they'll be loaded async below via useEffect)

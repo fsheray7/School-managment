@@ -418,7 +418,7 @@ const FeeList = () => {
           </div>
         ) : (
           filteredStudents.map((student) => (
-            <div key={student.rollNumber} className="receipt-break mb-8">
+            <div key={student.id} className="receipt-break mb-8">
               <FeeReceipt
                 copyType="School Copy"
                 feeData={{

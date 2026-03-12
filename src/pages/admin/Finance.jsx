@@ -17,8 +17,29 @@ const Finance = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 10;
 
+  // Calculate dynamic transactions from localStorage invoices
+  const feeInvoices = JSON.parse(localStorage.getItem("feeInvoices")) || [];
+
+  // Combine localStorage invoices with static student data for a full view
+  const transactions = feeInvoices.map((inv, index) => ({
+    id: inv.invoiceNo || `TXN-${index}`,
+    studentName: inv.fullName,
+    class: `${inv.classGrade}-${inv.section}`,
+    amount: `PKR ${parseFloat(inv.totalPayable || 0).toLocaleString()}`,
+    date: new Date(inv.generatedAt).toLocaleDateString("en-GB", {
+      day: "2-digit",
+      month: "short",
+      year: "numeric",
+    }),
+    method: inv.paymentStatus === "Paid" ? "Cash" : "-", // Defaulting to Cash if paid for now
+    status: inv.paymentStatus,
+    rawAmount: parseFloat(inv.totalPayable || 0),
+    amountPaid: parseFloat(inv.amountPaid || 0),
+    discount: parseFloat(inv.discountAmount || 0),
+  }));
+
   // Filter transactions
-  const filteredTransactions = transactionData.filter(
+  const filteredTransactions = transactions.filter(
     (txn) =>
       txn.studentName.toLowerCase().includes(searchTerm.toLowerCase()) ||
       txn.id.toLowerCase().includes(searchTerm.toLowerCase()),
@@ -49,11 +70,8 @@ const Finance = () => {
     setSelectedTransaction(null);
   };
 
-  // Get recent activity (e.g., last 3 paid transactions)
-  const recentActivity = transactionData
-    .slice(0, 10)
-    .filter((txn) => txn.status === "Paid")
-    .slice(0, 3);
+  // Get recent activity (e.g., last 3 latest transactions)
+  const recentActivity = transactions.slice(0, 3);
 
   // DataTable Configuration
   const columns = [
@@ -128,9 +146,7 @@ const Finance = () => {
     <div className="flex px-6 pt-4 flex-col gap-6 w-full">
       {/* Header */}
       <div className="flex  sm:flex-row items-start sm:items-center justify-end gap-4">
-        <Button
-        variant="primary"
-        >
+        <Button variant="primary">
           <FaDownload /> Export Report
         </Button>
       </div>

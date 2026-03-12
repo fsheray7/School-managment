@@ -48,6 +48,7 @@ const DashboardLayout = () => {
         "/courses",
         "/meetings",
         "/settings",
+        "/add-teacher",
         "/add-student",
         "/add-course",
         "/generate-fee",

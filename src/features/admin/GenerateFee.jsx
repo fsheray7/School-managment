@@ -376,7 +376,7 @@ const GenerateFee = () => {
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 w-full max-w-6xl items-start no-print">
         {/* Form Section */}
-        <div className="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm mt-8">
+        <div className="bg-white p-3 rounded-2xl border border-gray-100 shadow-sm mt-8">
           <div className="w-full mb-8 p-4 bg-primary/10 rounded-xl border border-primary/20 flex justify-between items-center">
             <div>
               <p className="text-xs text-gray-500 font-bold uppercase tracking-wider">
