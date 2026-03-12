@@ -347,7 +347,7 @@ const Results = () => {
 
   return (
     <>
-      <section className="w-full bg-white flex flex-col px-4 items-center">
+      <section className="w-full bg-white flex flex-col px-1 md:px-6 items-center">
         <TeacherSelector
           onSelectionChange={(newSelection) => setSelection(newSelection)}
         />

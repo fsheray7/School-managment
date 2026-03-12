@@ -81,7 +81,7 @@ const TeacherDashboard = () => {
   if (!teacher) return null;
 
   return (
-    <section className="flex flex-col w-full  overflow-y-auto  pb-10 pt-4 gap-4">
+    <section className="flex flex-col w-full px-1 md:px-6 overflow-y-auto pb-10 pt-4 gap-4">
       {/* Welcome Banner */}
       <div className="relative">
         {showWelcome ? (

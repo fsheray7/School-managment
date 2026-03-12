@@ -31,7 +31,7 @@ const HomeWork = () => {
   useEffect(() => {
     if (teacher) {
       const filtered = coursesData.filter(
-        course => course.instructor === teacher.fullName
+        (course) => course.instructor === teacher.fullName,
       );
       setAssignedCourses(filtered);
 
@@ -39,7 +39,7 @@ const HomeWork = () => {
         setSelection({
           class: filtered[0].class,
           section: filtered[0].section,
-          subject: filtered[0].courseName
+          subject: filtered[0].courseName,
         });
       }
     }
@@ -219,7 +219,7 @@ const HomeWork = () => {
 
   return (
     <section className="w-full bg-white flex flex-col items-center gap-10 pb-10">
-      <div className="w-full px-4">
+      <div className="w-full px-1 md:px-6">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 w-full pt-4 bg-white mb-6">
           <div className="flex-1 flex flex-col gap-1">
             <label className="text-xs font-bold text-gray-500 uppercase tracking-wider ml-1">
@@ -264,7 +264,7 @@ const HomeWork = () => {
 
       <form
         onSubmit={handleSubmit}
-        className="w-full px-4 bg-white rounded-3xl shadow-xl border border-gray-100 p-6 flex flex-col gap-8 transition-all hover:shadow-2xl"
+        className="w-full px-1 md:px-6 bg-white rounded-3xl shadow-xl border border-gray-100 p-6 flex flex-col gap-8 transition-all hover:shadow-2xl"
       >
         <div className="flex flex-col md:flex-row justify-between gap-6 items-start">
           <div className="flex flex-col w-full gap-2">
@@ -307,7 +307,7 @@ const HomeWork = () => {
       </form>
 
       {/* Previous Assignments List */}
-      <div className="w-full px-4 flex flex-col gap-6">
+      <div className="w-full px-1 md:px-6 flex flex-col gap-6">
         <div className="flex items-center gap-2">
           <div className="h-6 w-1 rounded-full bg-blue-700"></div>
           <h2 className="text-xl font-bold text-gray-800">

@@ -87,7 +87,7 @@ const Solutions = () => {
   };
 
   return (
-    <section className="w-full min-h-screen bg-[#f3f4f6] py-8 px-4 flex flex-col items-center">
+    <section className="w-full min-h-screen bg-[#f3f4f6] py-8 px-1 md:px-6 flex flex-col items-center">
       <div className="w-full max-w-6xl">
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {/* LIST OF QUESTIONS */}

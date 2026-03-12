@@ -43,7 +43,7 @@ const AddStudent = () => {
           inputType: "text",
           label: "Student ID",
           placeholder: "Enter Student ID...",
-          required: true,
+          // required: true,
         },
         {
           name: "fullName",
@@ -51,7 +51,7 @@ const AddStudent = () => {
           inputType: "text",
           label: "Full Name",
           placeholder: "Enter Full Name...",
-          required: true,
+          // required: true,
         },
         {
           name: "userName",
@@ -59,7 +59,7 @@ const AddStudent = () => {
           inputType: "text",
           label: "User Name",
           placeholder: "Enter User Name...",
-          required: true,
+          // required: true,
         },
         {
           name: "gender",
@@ -67,14 +67,14 @@ const AddStudent = () => {
           label: "Gender",
           options: GENDER_OPTIONS,
           placeholder: "Select Gender",
-          required: true,
+          // required: true,
         },
         {
           name: "dob",
           type: "input",
           inputType: "date",
           label: "Date of Birth",
-          required: true,
+          // required: true,
         },
         {
           name: "profilePhoto",
@@ -82,7 +82,7 @@ const AddStudent = () => {
           inputType: "file",
           label: "Profile Photo",
           fullWidth: false,
-          required: true,
+          // required: true,
         },
         {
           name: "password",
@@ -90,7 +90,7 @@ const AddStudent = () => {
           inputType: "password",
           label: "Password",
           placeholder: "Enter Password...",
-          required: true,
+          // required: true,
         },
         {
           name: "confirmPassword",
@@ -98,7 +98,7 @@ const AddStudent = () => {
           inputType: "password",
           label: "Confirm Password",
           placeholder: "Enter Confirm Password...",
-          required: true,
+          // required: true,
         },
       ],
     },
@@ -111,7 +111,7 @@ const AddStudent = () => {
           label: "Class/Grade",
           options: CLASS_OPTIONS,
           placeholder: "Select Class",
-          required: true,
+          // required: true,
         },
         {
           name: "section",
@@ -119,7 +119,7 @@ const AddStudent = () => {
           label: "Section",
           options: (data) => getSectionsByClass(data.classGrade),
           placeholder: "Select Section",
-          required: true,
+          // required: true,
         },
         {
           name: "academicYear",
@@ -127,7 +127,7 @@ const AddStudent = () => {
           inputType: "text",
           label: "Academic Year",
           placeholder: "Enter Academic Year...",
-          required: true,
+          // required: true,
         },
         {
           name: "rollNumber",
@@ -135,7 +135,7 @@ const AddStudent = () => {
           inputType: "text",
           label: "Roll Number",
           placeholder: "Enter Roll Number...",
-          required: true,
+          // required: true,
         },
       ],
     },
@@ -155,7 +155,7 @@ const AddStudent = () => {
           inputType: "text",
           label: "Parent Name",
           placeholder: "Enter Parent Name...",
-          required: true,
+          // required: true,
         },
         {
           name: "parentPhone",
@@ -163,7 +163,7 @@ const AddStudent = () => {
           inputType: "text",
           label: "Parent Phone",
           placeholder: "Enter Parent Phone...",
-          required: true,
+          // required: true,
         },
         {
           name: "parentEmail",
@@ -171,7 +171,7 @@ const AddStudent = () => {
           inputType: "email",
           label: "Parent Email",
           placeholder: "Enter Parent Email...",
-          required: true,
+          // required: true,
         },
         {
           name: "address",
@@ -179,7 +179,7 @@ const AddStudent = () => {
           label: "Address",
           placeholder: "Enter Address...",
           fullWidth: true,
-          required: true,
+          // required: true,
         },
       ],
     },
@@ -217,7 +217,7 @@ const AddStudent = () => {
   const steps = Object.values(tabConfigs);
 
   return (
-    <div className="flex flex-col justify-center items-center px-6 w-full">
+    <div className="flex flex-col justify-center items-center px-1 md:px-6 w-full">
       <ProgressBar currentStep={activeTab} steps={steps} />
       <DynamicForm
         title={currentConfig.title}

@@ -132,7 +132,7 @@ const Settings = () => {
 
   return (
     <>
-      <div className="w-full flex px-4 mt-5 mb-5 flex-col lg:flex-row gap-8 items-start">
+      <div className="w-full flex px-1 md:px-6 mt-5 mb-5 flex-col lg:flex-row gap-8 items-start">
         {/* Settings Forms */}
         <div className="flex-1 flex flex-col gap-8 w-full">
           {/* System Identity Section */}
@@ -297,9 +297,7 @@ const Settings = () => {
 
             {/* Icon + Title */}
             <div className="flex flex-col items-center gap-3 text-center">
-              <div
-                className="w-14 h-14 rounded-2xl flex items-center justify-center text-white shadow-lg bg-[var(--primary-color)]"
-              >
+              <div className="w-14 h-14 rounded-2xl flex items-center justify-center text-white shadow-lg bg-[var(--primary-color)]">
                 <FaLock size={22} />
               </div>
               <h2 className="text-xl font-extrabold text-gray-800">

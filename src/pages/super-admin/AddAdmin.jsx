@@ -146,7 +146,7 @@ const AddAdmin = () => {
   };
 
   return (
-    <div className="p-4 md:px-6 flex flex-col gap-1 max-w-7xl ">
+    <div className="px-1 md:px-6 py-4 flex flex-col gap-1 max-w-7xl ">
       {/* Header section with back button */}
       <div className="flex items-center justify-between bg-white px-1 md:px-6 py-1 md:py-3 rounded-lg shadow-sm border border-gray-100">
         <div className="flex items-center gap-4">
@@ -178,7 +178,6 @@ const AddAdmin = () => {
           setFormData={setFormData}
           onSubmit={handleSubmit}
           submitButtonClassName=""
-          
         >
           CREATE ADMIN
         </DynamicForm>

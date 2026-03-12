@@ -19,7 +19,7 @@ const DetailsModal = ({
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4 backdrop-blur-sm animate-in fade-in duration-200">
       <div className="bg-white rounded-2xl shadow-2xl w-full max-w-3xl relative overflow-hidden animate-in zoom-in-95 duration-200">
         {/* Header */}
-        <div className="bg-[var(--primary-color)]/10 px-6 py-4 flex justify-between items-center border-b border-[var(--primary-color)]/20">
+        <div className="bg-[var(--primary-color)]/10 px-1 md:px-6 py-4 flex justify-between items-center border-b border-[var(--primary-color)]/20">
           <h3
             className="text-lg font-bold"
             style={{ color: "var(--primary-color)" }}
@@ -43,12 +43,12 @@ const DetailsModal = ({
             setFormData={onDataChange}
             readOnly={!isEditMode}
             showDefaultHeader={false}
-            className="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-4"
+            className="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-6 px-1 md:px-6"
           />
         </div>
 
         {/* Footer */}
-        <div className="bg-gray-50 px-6 py-4 flex justify-end gap-3 border-t border-gray-100">
+        <div className="bg-gray-50 px-1 md:px-6 py-4 flex justify-end gap-3 border-t border-gray-100">
           {isEditMode ? (
             <>
               <Button

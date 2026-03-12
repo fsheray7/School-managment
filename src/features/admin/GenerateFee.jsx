@@ -319,7 +319,7 @@ const GenerateFee = () => {
   };
 
   return (
-    <div className="flex px-4 flex-col justify-start items-center pb-20 overflow-x-hidden">
+    <div className="flex px-1 md:px-6 flex-col justify-start items-center pb-20 overflow-x-hidden">
       {/* Print Styles */}
       <style>
         {`

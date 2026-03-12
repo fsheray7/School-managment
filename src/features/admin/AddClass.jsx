@@ -33,7 +33,7 @@ const AddClass = () => {
       placeholder: "Select or type class...",
       searchable: true,
       creatable: true,
-      required: true,
+      // required: true,
     },
     {
       type: "dropdown",
@@ -43,7 +43,7 @@ const AddClass = () => {
       placeholder: "Select or type section...",
       searchable: true,
       creatable: true,
-      required: true,
+      // required: true,
     },
 
     {
@@ -52,7 +52,7 @@ const AddClass = () => {
       name: "department",
       options: ["Primary", "Middle", "Secondary", "Higher Secondary"],
       placeholder: "Select Department",
-      required: true,
+      // required: true,
     },
     {
       type: "input",
@@ -82,7 +82,7 @@ const AddClass = () => {
   };
 
   return (
-    <div className="flex justify-center  items-center mt-8 px-6">
+    <div className="flex justify-center items-center mt-8 px-1 md:px-6">
       <DynamicForm
         title="Class Information"
         fields={classFields}

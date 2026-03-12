@@ -156,7 +156,13 @@ const Navbar = ({ onToggleSidebar, isSidebarOpen, role = "admin" }) => {
       // Load admin notifications
       setNotifications(getAdminNotifications());
     }
-  }, [role, location.pathname, currentTeacher, currentStudent, superAdminUsername]); // Update on route change too
+  }, [
+    role,
+    location.pathname,
+    currentTeacher,
+    currentStudent,
+    superAdminUsername,
+  ]); // Update on route change too
 
   const { setIsSuperAdmin } = useSettings();
 
@@ -215,7 +221,7 @@ const Navbar = ({ onToggleSidebar, isSidebarOpen, role = "admin" }) => {
   };
 
   return (
-    <nav className="fixed top-0 left-0 right-0 h-14 bg-white shadow-md z-40 transition-all duration-300 lg:left-56 flex items-center px-4 justify-between">
+    <nav className="fixed top-0 left-0 right-0 h-14 bg-white shadow-md z-40 transition-all duration-300 lg:left-56 flex items-center px-1 md:px-6 justify-between">
       {/* Left Side: Hamburger (mobile), Logo, Title */}
       <div className="flex items-center gap-3">
         {/* Animated Hamburger Toggle Button - Only visible on small screens */}

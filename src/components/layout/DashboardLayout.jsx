@@ -242,7 +242,7 @@ const DashboardLayout = () => {
         isSidebarOpen={isSidebarOpen}
       />
       <main className="w-full flex lg:pl-56 pt-14 transition-all duration-300">
-        <div className="px-6 py-4 w-full">
+        <div className="px-1 md:px-6 py-4 w-full">
           <Breadcrumbs role={role} />
           <Outlet />
         </div>

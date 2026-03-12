@@ -165,7 +165,7 @@ const StudentDashboard = () => {
   ];
 
   return (
-    <section className="flex flex-col w-full bg-[#f3f4f6] min-h-screen px-4 pt-4 gap-8">
+    <section className="flex flex-col w-full bg-[#f3f4f6] min-h-screen px-1 md:px-6 pt-4 gap-8">
       {/* WELCOME TOAST / HEADER */}
       <div className="relative min-h-[80px]">
         {showWelcome ? (

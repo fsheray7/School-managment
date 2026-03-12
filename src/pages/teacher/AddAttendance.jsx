@@ -7,7 +7,7 @@ import { useTeacher } from "../../context/TeacherContext";
 const AddAttendance = () => {
   const [teacherInfo, setTeacherInfo] = useState({ class: "", section: "" });
   const [attendanceDate, setAttendanceDate] = useState(
-    new Date().toISOString().split("T")[0]
+    new Date().toISOString().split("T")[0],
   );
   const [filteredStudents, setFilteredStudents] = useState([]);
   const [attendanceRecords, setAttendanceRecords] = useState({});
@@ -76,7 +76,7 @@ const AddAttendance = () => {
     <section className="w-full bg-white flex flex-col items-center">
       {/* CLASS AND DATE BAR (Classic Design) */}
       <div
-        className="flex w-full items-center justify-between mt-4 py-3 px-4 shadow-sm"
+        className="flex w-full items-center justify-between mt-4 py-3 px-1 md:px-6 shadow-sm"
         style={{ backgroundColor: "var(--primary-color)", opacity: 0.9 }}
       >
         <h2 className="text-sm sm:text-base text-white font-bold">
@@ -97,10 +97,10 @@ const AddAttendance = () => {
       </div>
 
       {/* TABLE */}
-      <div className="w-full mt-6 px-0 sm:px-4">
+      <div className="w-full mt-6 px-1 md:px-6">
         {/* Header */}
         <div
-          className="flex justify-between items-center border-b py-3 px-4 text-white text-xs sm:text-sm font-bold shadow-sm"
+          className="flex justify-between items-center border-b py-3 px-1 md:px-6 text-white text-xs sm:text-sm font-bold shadow-sm"
           style={{ backgroundColor: "var(--primary-color)", opacity: 0.9 }}
         >
           <div className="flex items-center gap-2">
@@ -119,7 +119,7 @@ const AddAttendance = () => {
           filteredStudents.map((student) => (
             <div
               key={student.id}
-              className="flex justify-between items-center border-b border-[#C4C4C4] py-3 mt-1 px-4 text-xs sm:text-sm hover:bg-gray-50 transition-all font-medium text-gray-700"
+              className="flex justify-between items-center border-b border-[#C4C4C4] py-3 mt-1 px-1 md:px-6 text-xs sm:text-sm hover:bg-gray-50 transition-all font-medium text-gray-700"
             >
               <div className="flex items-center gap-2">
                 <p className="col-span-1">{student.rollNumber}:</p>

@@ -12,7 +12,7 @@ import RecentActivity from "../../components/cards/admincards/RecentActivity";
 const AdminDashboard = () => {
   const navigate = useNavigate();
   return (
-    <section className="flex flex-col items-center justify-center w-full bg-white gap-8 pb-10 pt-5 transition-all duration-300 px-6 ">
+    <section className="flex flex-col items-center justify-center w-full bg-white gap-8 pb-10 pt-5 transition-all duration-300 px-1 md:px-6 ">
       {/* 1. KPI CARDS */}
       <div className="w-full flex  flex-col gap-6">
         <div className="flex items-center gap-2">

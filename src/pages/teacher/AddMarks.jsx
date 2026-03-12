@@ -186,7 +186,7 @@ const AddMarks = () => {
       {/* CLASS AND DATE BAR (Classic Design - Matching Attendance) */}
 
       <div
-        className="flex w-full items-center justify-between py-3 px-4 shadow-sm"
+        className="flex w-full items-center justify-between py-3 px-1 md:px-6 shadow-sm"
         style={{ backgroundColor: "var(--primary-color)", opacity: 0.9 }}
       >
         <h2 className="text-sm sm:text-base text-white font-bold">
@@ -206,14 +206,14 @@ const AddMarks = () => {
           </div>
         </div>
       </div>
-      <div className=" w-full bg-white flex justify-between items-center items-center px-4">
+      <div className=" w-full bg-white flex justify-between items-center items-center px-1 md:px-6">
         <TeacherSelector
           onSelectionChange={(newSelection) => setSelection(newSelection)}
         />
       </div>
 
       {/* TABLE */}
-      <div className="w-full mt-6 px-4">
+      <div className="w-full mt-6 px-1 md:px-6">
         <DataTable
           columns={[
             {
@@ -340,7 +340,7 @@ const AddMarks = () => {
 
       {/* Action Button */}
       {filteredStudents.length > 0 && (
-        <div className="w-full flex justify-end mt-6  px-4">
+        <div className="w-full flex justify-end mt-6  px-1 md:px-6">
           <Button
             variant="primary"
             className="w-full max-w-[150px] py-1 shadow-md"

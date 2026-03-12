@@ -11,9 +11,9 @@ const DynamicForm = ({
   onSubmit,
   children,
   onClick,
-  className = "grid grid-cols-1 sm:grid-cols-2 gap-x-2 md:gap-x-8 gap-y-4 md:gap-y-6 max-w-2xl bg-white px-1  rounded-lg relative",
+  className = "grid grid-cols-1 sm:grid-cols-2 gap-x-6 md:gap-x-10 gap-y-6 md:gap-y-8 max-w-2xl bg-white px-1 md:px-6 rounded-lg relative",
   showDefaultHeader = true,
-  buttonAreaClassName = "col-span-2 sm:col-span-2 flex gap-4 items-center justify-center mt-6 border-t border-gray-50 pt-4",
+  buttonAreaClassName = "col-span-2 sm:col-span-2 flex gap-4 items-center justify-center mt-8 border-t border-gray-100 pt-6",
   submitButtonClassName = "w-full rounded-2xl shadow-lg font-bold",
   submitButtonVariant = "primary",
   readOnly = false,
@@ -179,17 +179,23 @@ const DynamicForm = ({
                       {/* Floating Label */}
                       <label
                         className={`absolute left-3 transition-all duration-200 pointer-events-none
-                          ${isFocused || fieldHasValue
-                            ? '-top-2.5 text-[12px] bg-white px-1 text-gray-500'
-                            : 'top-2.5 text-[18px] md:text-md text-gray-400'
+                          ${
+                            isFocused || fieldHasValue
+                              ? "-top-2.5 text-[12px] bg-white px-1 text-gray-500"
+                              : "top-3 text-base text-gray-400"
                           }`}
                         style={{
-                          transform: isFocused || fieldHasValue ? 'translateY(0)' : 'translateY(0)',
+                          transform:
+                            isFocused || fieldHasValue
+                              ? "translateY(0)"
+                              : "translateY(0)",
                           zIndex: 5,
                         }}
                       >
                         {field.label}
-                        {field.required && <span className="text-red-500 ml-1">*</span>}
+                        {field.required && (
+                          <span className="text-red-500 ml-1">*</span>
+                        )}
                       </label>
 
                       <input
@@ -214,10 +220,11 @@ const DynamicForm = ({
                         required={field.required}
                         onFocus={() => handleFocus(field.name)}
                         onBlur={handleBlur}
-                        className={`w-full px-3 py-2.5 text-[18px] md:text-[18px] focus:outline-none transition-all bg-transparent
-                          ${isFocused 
-                            ? 'border border-[var(--primary-color)] rounded-md shadow-sm' 
-                            : 'border-0 border-b-2 border-gray-500 rounded-none'
+                        className={`w-full px-3 py-3 text-base focus:outline-none transition-all bg-transparent
+                          ${
+                            isFocused
+                              ? "border border-[var(--primary-color)] rounded-md shadow-sm"
+                              : "border-0 border-b-2 border-gray-500 rounded-none"
                           }`}
                       />
 
@@ -266,13 +273,17 @@ const DynamicForm = ({
                       )}
                     </div>
                   ) : (
-                    <div className={`transition-all ${isFocused ? 'border border-[var(--primary-color)] rounded-md p-3' : 'border-0 border-b-2 border-gray-500 rounded-none'}`}>
+                    <div
+                      className={`transition-all ${isFocused ? "border border-[var(--primary-color)] rounded-md p-3" : "border-0 border-b-2 border-gray-500 rounded-none"}`}
+                    >
                       {/* Floating Label for File Upload */}
                       <label
                         className={`absolute -top-2.5 left-3 text-[10px] bg-white px-1 text-gray-500 transition-all duration-200 z-10`}
                       >
                         {field.label}
-                        {field.required && <span className="text-red-500 ml-1">*</span>}
+                        {field.required && (
+                          <span className="text-red-500 ml-1">*</span>
+                        )}
                       </label>
                       <FileUpload
                         file={formData[field.name]}
@@ -285,7 +296,10 @@ const DynamicForm = ({
                           )
                         }
                         onClear={() =>
-                          setFormData((prev) => ({ ...prev, [field.name]: null }))
+                          setFormData((prev) => ({
+                            ...prev,
+                            [field.name]: null,
+                          }))
                         }
                         helperText=""
                         onFocus={() => handleFocus(field.name)}
@@ -305,7 +319,9 @@ const DynamicForm = ({
                     ) : (
                       <div className="w-full p-3 text-[18px] md:text-[18px] bg-gray-50/50 rounded-md border border-gray-500 text-gray-700 font-medium whitespace-pre-wrap min-h-[100px]">
                         {formData[field.name] || (
-                          <span className="text-gray-300 italic">No content</span>
+                          <span className="text-gray-300 italic">
+                            No content
+                          </span>
                         )}
                       </div>
                     )
@@ -314,27 +330,33 @@ const DynamicForm = ({
                       {/* Floating Label */}
                       <label
                         className={`absolute left-3 transition-all duration-200 pointer-events-none
-                          ${isFocused || fieldHasValue
-                            ? '-top-2.5 text-[10px] bg-white px-1 text-gray-500'
-                            : 'top-2.5 text-[18px] md:text-[18px] text-gray-400'
+                          ${
+                            isFocused || fieldHasValue
+                              ? "-top-2.5 text-[12px] bg-white px-1 text-gray-500"
+                              : "top-3 text-base text-gray-400"
                           }`}
                         style={{ zIndex: 5 }}
                       >
                         {field.label}
-                        {field.required && <span className="text-red-500 ml-1">*</span>}
+                        {field.required && (
+                          <span className="text-red-500 ml-1">*</span>
+                        )}
                       </label>
                       <textarea
                         name={field.name}
                         value={formData[field.name] || ""}
-                        onChange={(e) => handleChange(field.name, e.target.value)}
+                        onChange={(e) =>
+                          handleChange(field.name, e.target.value)
+                        }
                         placeholder={field.placeholder}
                         required={field.required}
                         onFocus={() => handleFocus(field.name)}
                         onBlur={handleBlur}
-                        className={`w-full p-2 pt-4 text-[18px] focus:outline-none min-h-[100px] bg-transparent transition-all
-                          ${isFocused 
-                            ? 'border border-[var(--primary-color)] rounded-md shadow-sm' 
-                            : 'border-0 border-b-2 border-gray-500 rounded-none'
+                        className={`w-full p-2 pt-4 text-base focus:outline-none min-h-[100px] bg-transparent transition-all
+                          ${
+                            isFocused
+                              ? "border border-[var(--primary-color)] rounded-md shadow-sm"
+                              : "border-0 border-b-2 border-gray-500 rounded-none"
                           }`}
                       />
                     </>
@@ -349,7 +371,7 @@ const DynamicForm = ({
                     field.render ? (
                       field.render(formData)
                     ) : (
-                      <div className="w-full px-3 py-2.5 text-[18px] md:text-[18px] bg-gray-50/50 rounded-md border border-gray-100 text-gray-700 font-medium h-10 flex items-center">
+                      <div className="w-full px-3 py-2.5 text-base bg-gray-50/50 rounded-md border border-gray-100 text-gray-700 font-medium h-10 flex items-center">
                         {formData[field.name] ? (
                           Array.isArray(formData[field.name]) ? (
                             formData[field.name].join(", ")
@@ -370,9 +392,11 @@ const DynamicForm = ({
                         className={`absolute -top-2.5 left-3 text-[12px] bg-white px-1 text-gray-500 transition-all duration-200 z-10`}
                       >
                         {field.label}
-                        {field.required && <span className="text-red-500 ml-1">*</span>}
+                        {field.required && (
+                          <span className="text-red-500 ml-1">*</span>
+                        )}
                       </label>
-                      <div >
+                      <div>
                         <CustomDropdown
                           options={
                             typeof field.options === "function"
@@ -383,7 +407,7 @@ const DynamicForm = ({
                           onChange={(val) => handleChange(field.name, val)}
                           placeholder={field.placeholder}
                           containerClassName="w-full"
-                          triggerClassName={`pt-4  bg-transparent transition-all ${isFocused ? 'border border-[var(--primary-color)] rounded-md' : 'border-0 border-b-2 border-gray-500 rounded-none'} ${
+                          triggerClassName={`pt-4  bg-transparent transition-all ${isFocused ? "border border-[var(--primary-color)] rounded-md" : "border-0 border-b-2 border-gray-500 rounded-none"} ${
                             field.inputClassName || ""
                           }`}
                           multiSelect={field.multiSelect}
@@ -410,8 +434,8 @@ const DynamicForm = ({
               variant={submitButtonVariant}
               className={submitButtonClassName}
             >
-               {/* Safe rendering */}
-        {Array.isArray(children) ? children[0] : children}
+              {/* Safe rendering */}
+              {Array.isArray(children) ? children[0] : children}
             </Button>
           )}
           {onClick && (

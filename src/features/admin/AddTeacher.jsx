@@ -80,17 +80,17 @@ const AddTeacher = () => {
           name: "teacherId",
           type: "input",
           inputType: "text",
-          label: "Teacher ID",
+          label: "ID",
           placeholder: "Enter Teacehr ID...",
-          required: true,
+          // required: true,
         },
         {
           name: "fullname",
           type: "input",
           inputType: "text",
-          label: "Full Name",
+          label: "F.Name",
           placeholder: "Enter Full Name...",
-          required: true,
+          // required: true,
         },
         {
           name: "email",
@@ -98,15 +98,15 @@ const AddTeacher = () => {
           inputType: "email",
           label: "Email",
           placeholder: "Enter Email...",
-          required: true,
+          // required: true,
         },
         {
           name: "contact",
           type: "input",
           inputType: "text",
-          label: "Contact",
+          label: "Phone",
           placeholder: "Enter Contact...",
-          required: true,
+          // required: true,
         },
         {
           name: "gender",
@@ -114,15 +114,15 @@ const AddTeacher = () => {
           label: "Gender",
           options: GENDER_OPTIONS,
           placeholder: "Select Gender",
-          required: true,
+          // required: true,
         },
         {
           name: "profilePhoto",
           type: "input",
           inputType: "file",
-          label: "Profile Picture",
+          label: "Picture",
           fullWidth: false,
-          required: true,
+          // required: true,
         },
       ],
     },
@@ -133,9 +133,9 @@ const AddTeacher = () => {
           name: "teacherId",
           type: "input",
           inputType: "text",
-          label: "Teacher ID",
+          label: "ID",
           placeholder: "Enter Teacher ID...",
-          required: true,
+          // required: true,
         },
         {
           name: "qualification",
@@ -143,7 +143,7 @@ const AddTeacher = () => {
           inputType: "text",
           label: "Qualification",
           placeholder: "e.g. Masters in Physics",
-          required: true,
+          // required: true,
         },
         {
           name: "experience",
@@ -151,7 +151,7 @@ const AddTeacher = () => {
           inputType: "text",
           label: "Experience",
           placeholder: "e.g. 5 Years",
-          required: true,
+          // required: true,
         },
         {
           name: "department",
@@ -159,7 +159,7 @@ const AddTeacher = () => {
           label: "Department",
           options: DEPARTMENT_OPTIONS,
           placeholder: "Select Department",
-          required: true,
+          // required: true,
         },
         {
           name: "subject",
@@ -167,7 +167,7 @@ const AddTeacher = () => {
           inputType: "text",
           label: "Subject(s)",
           placeholder: "e.g. Math, Physics",
-          required: true,
+          // required: true,
         },
       ],
     },
@@ -180,7 +180,7 @@ const AddTeacher = () => {
           label: "Class(es)",
           options: CLASS_OPTIONS,
           placeholder: "Select Classes...",
-          required: true,
+          // required: true,
           multiSelect: true,
           searchable: true,
         },
@@ -190,7 +190,7 @@ const AddTeacher = () => {
           label: "Section(s)",
           options: ALL_SECTIONS,
           placeholder: "Select Sections...",
-          required: true,
+          // required: true,
           multiSelect: true,
         },
         {
@@ -199,7 +199,7 @@ const AddTeacher = () => {
           label: "Teacher Role",
           options: ROLE_OPTIONS,
           placeholder: "Select Role",
-          required: true,
+          // required: true,
         },
         {
           name: "type",
@@ -207,7 +207,7 @@ const AddTeacher = () => {
           label: "Teacher Type",
           options: TEACHER_TYPE,
           placeholder: "Select Type",
-          required: true,
+          // required: true,
         },
       ],
     },
@@ -220,7 +220,7 @@ const AddTeacher = () => {
           inputType: "email",
           label: "Login Email",
           placeholder: "Enter Login Email...",
-          required: true,
+          // required: true,
         },
         {
           name: "status",
@@ -228,7 +228,7 @@ const AddTeacher = () => {
           label: "Account Status",
           options: STATUS_OPTIONS,
           placeholder: "Select Status",
-          required: true,
+          // required: true,
         },
         {
           name: "password",
@@ -236,7 +236,7 @@ const AddTeacher = () => {
           inputType: "password",
           label: "Password",
           placeholder: "Enter Password...",
-          required: true,
+          // required: true,
         },
         {
           name: "confirmPassword",
@@ -244,7 +244,7 @@ const AddTeacher = () => {
           inputType: "password",
           label: "Confirm Password",
           placeholder: "Confirm Password...",
-          required: true,
+          // required: true,
         },
       ],
     },
@@ -302,7 +302,7 @@ const AddTeacher = () => {
   const steps = Object.values(tabConfigs);
 
   return (
-    <div className="flex flex-col justify-center items-center px-6 w-full">
+    <div className="flex flex-col justify-center items-center px-1 md:px-6 w-full">
       <ProgressBar currentStep={activeTab} steps={steps} />
       <DynamicForm
         title={`Step ${activeTab}: ${currentConfig.title}`}

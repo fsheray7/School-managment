@@ -91,7 +91,7 @@ const AddCourse = () => {
   };
 
   return (
-    <div className="flex mt-8 justify-start   items-center px-6">
+    <div className="flex mt-8 justify-start items-center px-1 md:px-6">
       <DynamicForm
         title="Course Information"
         fields={courseFields}

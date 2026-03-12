@@ -32,7 +32,7 @@ const WelcomePage = () => {
   }, [navigate]);
 
   return (
-    <section className="relative w-full h-[100dvh] overflow-hidden bg-white flex flex-col items-center justify-center px-4 sm:px-6 md:px-8">
+    <section className="relative w-full h-[100dvh] overflow-hidden bg-white flex flex-col items-center justify-center px-1 md:px-6">
       {/* Decorative Background Circle Top - Responsive */}
       <div
         className="absolute rounded-full bg-[#28C2A0] 
